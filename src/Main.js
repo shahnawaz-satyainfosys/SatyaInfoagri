@@ -2,32 +2,19 @@ import React, { useReducer } from 'react';
 import PropTypes from 'prop-types';
 import AppContext from 'context/Context';
 import { settings } from './config';
-import { getColor, getItemFromStore } from 'helpers/utils';
+import { getItemFromStore } from 'helpers/utils';
 import { configReducer } from './reducers/configReducer';
 import useToggleStyle from './hooks/useToggleStyle';
 
 const Main = props => {
   const configState = {
-    isFluid: getItemFromStore('isFluid', settings.isFluid),
-    isRTL: getItemFromStore('isRTL', settings.isRTL),
-    isDark: getItemFromStore('isDark', settings.isDark),
-    navbarPosition: getItemFromStore('navbarPosition', settings.navbarPosition),
-    isNavbarVerticalCollapsed: getItemFromStore(
-      'isNavbarVerticalCollapsed',
-      settings.isNavbarVerticalCollapsed
-    ),
-    navbarStyle: getItemFromStore('navbarStyle', settings.navbarStyle),
-    currency: settings.currency,
-    showBurgerMenu: settings.showBurgerMenu,
-    showSettingPanel: false,
-    navbarCollapsed: false
+    isRTL: getItemFromStore('isRTL', settings.isRTL)
   };
 
   const [config, configDispatch] = useReducer(configReducer, configState);
 
   const { isLoaded } = useToggleStyle(
     config.isRTL,
-    config.isDark,
     configDispatch
   );
 
@@ -38,12 +25,7 @@ const Main = props => {
         key,
         value,
         setInStore: [
-          'isFluid',
-          'isRTL',
-          'isDark',
-          'navbarPosition',
-          'isNavbarVerticalCollapsed',
-          'navbarStyle'
+          'isRTL'
         ].includes(key)
       }
     });
@@ -57,8 +39,7 @@ const Main = props => {
           top: 0,
           right: 0,
           bottom: 0,
-          left: 0,
-          backgroundColor: getColor('light')
+          left: 0
         }}
       />
     );

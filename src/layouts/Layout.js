@@ -3,8 +3,9 @@ import { Route, Routes } from 'react-router-dom';
 import is from 'is_js';
 import { toast, ToastContainer } from 'react-toastify';
 import Counter from '../counter';
-import CardLogin from 'components/authentication/card/Login';
 import AppContext from 'context/Context';
+import CardLogin from 'components/authentication/card/Login';
+import CardForgetPassword from 'components/authentication/card/ForgetPassword';
 
 const Layout = () => {
   const HTMLClassList = document.getElementsByTagName('html')[0].classList;
@@ -27,6 +28,7 @@ const Layout = () => {
       <Routes>
         <Route path="counter" element={<Counter />} />
         <Route path="/login" element={<CardLogin />} />
+        <Route path="/forgot-password" element={<CardForgetPassword />}/>
       </Routes>
       <ToastContainer icon={false} position={toast.POSITION.TOP_RIGHT} />
     </>

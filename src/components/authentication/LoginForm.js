@@ -1,20 +1,46 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
-const LoginForm = ({ hasLabel, layout }) => {
-  // State
+const LoginForm = ({ hasLabel }) => {
   const [formData, setFormData] = useState({
-    email: '',
+    userId: '',
     password: '',
     remember: false
   });
+  const [validated, setValidated] = useState(false);
+  const navigate = useNavigate();
 
-  // Handler
   const handleSubmit = e => {
     e.preventDefault();
-  };
+    const form = e.currentTarget;
+    if (form.checkValidity() === false) {
+      e.preventDefault();
+      e.stopPropagation();
+    } else {
+    const userData = {
+      userId: formData.userId,
+      loginPassword:formData.password
+    }
+    axios.post( process.env.REACT_APP_API_URL +'/login', userData )
+            .then(res => {
+              if(res.data.status == 200){
+                toast.success(`Logged in as ${formData.userId}`, {
+                  theme: 'colored'
+                });
+                setTimeout(() => {navigate('/')}, 3000);
+              } else{
+                toast.error(res.data.message, {
+                  theme: 'colored'
+                });
+              }
+            })
+  }
+  setValidated(true);
+};
 
   const handleFieldChange = e => {
     setFormData({
@@ -24,27 +50,36 @@ const LoginForm = ({ hasLabel, layout }) => {
   };
 
   return (
-    <Form onSubmit={e => {handleSubmit(e)}}>
+    <Form noValidate validated={validated} onSubmit={e => {handleSubmit(e)}}>
       <Form.Group className="mb-3">
-        {hasLabel && <Form.Label>Email address</Form.Label>}
+        {hasLabel && <Form.Label>username, email or phone number</Form.Label>}
         <Form.Control
-          placeholder={!hasLabel ? 'Email address' : ''}
-          value={formData.email}
-          name="email"
+          placeholder={'Username, email or phone number'}
+          value={formData.userId}
+          name="userId"
           onChange={handleFieldChange}
-          type="email"
+          type="text"
+          required
         />
+        <Form.Control.Feedback type="invalid">
+            Please provide username, email or phone number
+        </Form.Control.Feedback>
       </Form.Group>
 
       <Form.Group className="mb-3">
         {hasLabel && <Form.Label>Password</Form.Label>}
         <Form.Control
-          placeholder={!hasLabel ? 'Password' : ''}
+          placeholder={hasLabel ? 'Password' : ''}
           value={formData.password}
           name="password"
           onChange={handleFieldChange}
           type="password"
+          required
         />
+
+        <Form.Control.Feedback type="invalid">
+            Please enter password
+        </Form.Control.Feedback>
       </Form.Group>
 
       <Row className="justify-content-between align-items-center">
@@ -70,7 +105,7 @@ const LoginForm = ({ hasLabel, layout }) => {
         <Col xs="auto">
           <Link
             className="fs--1 mb-0"
-            to={`/authentication/${layout}/forgot-password`}
+            to={`/forgot-password`}
           >
             Forgot Password?
           </Link>
@@ -82,7 +117,6 @@ const LoginForm = ({ hasLabel, layout }) => {
           type="submit"
           color="primary"
           className="mt-3 w-100"
-          disabled={!formData.email || !formData.password}
         >
           Log in
         </Button>
