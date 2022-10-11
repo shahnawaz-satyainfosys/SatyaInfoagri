@@ -1,9 +1,8 @@
-import changeTheNumber from './incDec';
-
+import loginReducer from './loginReducer';
 import { combineReducers } from 'redux';
 
 const rootReducer = combineReducers({
-  changeTheNumber
+  loginReducer
 });
 
 export default rootReducer;

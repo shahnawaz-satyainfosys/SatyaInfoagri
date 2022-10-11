@@ -1,11 +1,6 @@
-export const incNumber = () => {
+export const loginAction = (payload) => {
   return {
-    type: 'INCREMENT'
-  };
-};
-
-export const decNumber = () => {
-  return {
-    type: 'DECREMENT'
+    type: 'LOGIN',
+    payload
   };
 };

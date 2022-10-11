@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; 
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { loginAction } from '../../actions/index';
 
 const LoginForm = ({ hasLabel }) => {
   const [formData, setFormData] = useState({
@@ -13,6 +15,7 @@ const LoginForm = ({ hasLabel }) => {
   });
   const [validated, setValidated] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -25,6 +28,7 @@ const LoginForm = ({ hasLabel }) => {
       userId: formData.userId,
       loginPassword:formData.password
     }
+    dispatch(loginAction(userData));
     axios.post( process.env.REACT_APP_API_URL +'/login', userData )
             .then(res => {
               if(res.data.status == 200){
@@ -38,7 +42,7 @@ const LoginForm = ({ hasLabel }) => {
                 });
               }
             })
-  }
+  }  
   setValidated(true);
 };
 

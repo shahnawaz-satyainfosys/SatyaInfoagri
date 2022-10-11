@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import is from 'is_js';
 import { toast, ToastContainer } from 'react-toastify';
-import Counter from '../counter';
 import AppContext from 'context/Context';
 import CardLogin from 'components/authentication/card/Login';
 import CardForgetPassword from 'components/authentication/card/ForgetPassword';
@@ -26,7 +25,6 @@ const Layout = () => {
   return (
     <>
       <Routes>
-        <Route path="counter" element={<Counter />} />
         <Route path="/login" element={<CardLogin />} />
         <Route path="/forgot-password" element={<CardForgetPassword />}/>
       </Routes>
