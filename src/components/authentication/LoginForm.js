@@ -82,7 +82,7 @@ const LoginForm = ({ hasLabel }) => {
         />
 
         <Form.Control.Feedback type="invalid">
-            Please enter password
+            Please provide password
         </Form.Control.Feedback>
       </Form.Group>
 
