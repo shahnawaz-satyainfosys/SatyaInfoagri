@@ -4,6 +4,9 @@ import is from 'is_js';
 import { toast, ToastContainer } from 'react-toastify';
 import AppContext from 'context/Context';
 
+import HomeLayout from './HomeLayout';
+import Home from 'components/Home';
+
 import CardLogin from 'components/authentication/card/Login';
 import CardForgetPassword from 'components/authentication/card/ForgetPassword';
 import CardConfirmMail from 'components/authentication/card/ConfirmMail';
@@ -28,10 +31,13 @@ const Layout = () => {
   return (
     <>
       <Routes>
+        <Route element={<HomeLayout />}>
+          <Route path="/" element={<Home />} />
+        </Route>
         <Route path="/login" element={<CardLogin />} />
-        <Route path="/forgot-password" element={<CardForgetPassword />}/>
-        <Route path="/confirm-mail" element={<CardConfirmMail />}/>
-        <Route path="/reset-password/:id" element={<CardPasswordReset />}/>
+        <Route path="/forgot-password" element={<CardForgetPassword />} />
+        <Route path="/confirm-mail" element={<CardConfirmMail />} />
+        <Route path="/reset-password/:id" element={<CardPasswordReset />} />
       </Routes>
       <ToastContainer icon={false} position={toast.POSITION.TOP_RIGHT} />
     </>

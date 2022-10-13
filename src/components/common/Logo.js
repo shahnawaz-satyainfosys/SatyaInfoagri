@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import logo from 'assets/img/illustrations/falcon.png';
+import logo from 'assets/img/illustrations/logo-khalihan.png';
 
-const Logo = ({ at, width, className, textClass, ...rest }) => {
+const Logo = ({ at, width, className, ...rest }) => {
   return (
     <Link
       to="/"
@@ -27,7 +27,6 @@ const Logo = ({ at, width, className, textClass, ...rest }) => {
         )}
       >
         <img className="me-2" src={logo} alt="Logo" width={width} />
-        <span className={classNames('font-sans-serif', textClass)}>falcon</span>
       </div>
     </Link>
   );

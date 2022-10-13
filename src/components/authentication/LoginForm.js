@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom'; 
+import { Link } from 'react-router-dom'; 
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
@@ -14,7 +14,6 @@ const LoginForm = ({ hasLabel }) => {
     remember: false
   });
   const [validated, setValidated] = useState(false);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleSubmit = e => {
@@ -35,7 +34,6 @@ const LoginForm = ({ hasLabel }) => {
                 toast.success(`Logged in as ${formData.userId}`, {
                   theme: 'colored'
                 });
-                setTimeout(() => {navigate('/')}, 3000);
               } else{
                 toast.error(res.data.message, {
                   theme: 'colored'
