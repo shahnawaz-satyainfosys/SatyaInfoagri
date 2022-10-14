@@ -4,3 +4,10 @@ export const loginAction = (payload) => {
     payload
   };
 };
+
+export const resetPasswordAction = (payload) => {
+  return {
+  type: 'RESETPASSWORD',
+  payload
+  };
+};

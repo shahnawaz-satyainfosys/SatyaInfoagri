@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Button, Col, Form, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom'; 
+import {Button, Col, Form, Row, Spinner } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
@@ -14,6 +14,7 @@ const LoginForm = ({ hasLabel }) => {
     remember: false
   });
   const [validated, setValidated] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   const handleSubmit = e => {
@@ -23,26 +24,31 @@ const LoginForm = ({ hasLabel }) => {
       e.preventDefault();
       e.stopPropagation();
     } else {
-    const userData = {
-      userId: formData.userId,
-      loginPassword:formData.password
+      const userData = {
+        userId: formData.userId,
+        loginPassword: formData.password
+      }
+      dispatch(loginAction(userData));
+      setIsLoading(true);
+      axios.post(process.env.REACT_APP_API_URL + '/login', userData)
+        .then(res => {
+          if (res.data.status == 200) {
+            <div className="spinner-grow" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+            setIsLoading(false)
+            toast.success(`Logged in as ${formData.userId}`, {
+              theme: 'colored'
+            });
+          } else {
+            toast.error(res.data.message, {
+              theme: 'colored'
+            });
+          }
+        })
     }
-    dispatch(loginAction(userData));
-    axios.post( process.env.REACT_APP_API_URL +'/login', userData )
-            .then(res => {
-              if(res.data.status == 200){
-                toast.success(`Logged in as ${formData.userId}`, {
-                  theme: 'colored'
-                });
-              } else{
-                toast.error(res.data.message, {
-                  theme: 'colored'
-                });
-              }
-            })
-  }  
-  setValidated(true);
-};
+    setValidated(true);
+  };
 
   const handleFieldChange = e => {
     setFormData({
@@ -52,7 +58,16 @@ const LoginForm = ({ hasLabel }) => {
   };
 
   return (
-    <Form noValidate validated={validated} onSubmit={e => {handleSubmit(e)}}>
+
+    <>
+      {isLoading ? (
+      <Spinner
+          className="position-absolute start-50 loader-color"
+          animation="border"
+        />
+      ) : null}
+    
+    <Form noValidate validated={validated} onSubmit={e => { handleSubmit(e) }}>
       <Form.Group className="mb-3">
         {hasLabel && <Form.Label>username, email or phone number</Form.Label>}
         <Form.Control
@@ -64,7 +79,7 @@ const LoginForm = ({ hasLabel }) => {
           required
         />
         <Form.Control.Feedback type="invalid">
-            Please provide username, email or phone number
+          Please provide username, email or phone number
         </Form.Control.Feedback>
       </Form.Group>
 
@@ -80,7 +95,7 @@ const LoginForm = ({ hasLabel }) => {
         />
 
         <Form.Control.Feedback type="invalid">
-            Please provide password
+          Please provide password
         </Form.Control.Feedback>
       </Form.Group>
 
@@ -124,6 +139,7 @@ const LoginForm = ({ hasLabel }) => {
         </Button>
       </Form.Group>
     </Form>
+    </>
   );
 };
 

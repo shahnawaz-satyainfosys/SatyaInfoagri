@@ -13,7 +13,7 @@ const Login = () => {
           <br />
           <Link
             className="text-white text-decoration-underline"
-            to="/authentication/card/register"
+            href="javascript:void(0);"
           >
             Get started!
           </Link>

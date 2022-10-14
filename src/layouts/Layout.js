@@ -6,11 +6,16 @@ import AppContext from 'context/Context';
 
 import HomeLayout from './HomeLayout';
 import Home from 'components/Home';
+import Error500 from 'components/errors/Error500';
 
 import CardLogin from 'components/authentication/card/Login';
 import CardForgetPassword from 'components/authentication/card/ForgetPassword';
 import CardConfirmMail from 'components/authentication/card/ConfirmMail';
 import CardPasswordReset from 'components/authentication/card/PasswordReset';
+
+import Spinners from 'components/doc-components/Spinners';
+
+import 'assets/css/custom.css';
 
 const Layout = () => {
   const HTMLClassList = document.getElementsByTagName('html')[0].classList;
@@ -33,11 +38,14 @@ const Layout = () => {
       <Routes>
         <Route element={<HomeLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/error" element={<Error500 />} />
         </Route>
         <Route path="/login" element={<CardLogin />} />
         <Route path="/forgot-password" element={<CardForgetPassword />} />
         <Route path="/confirm-mail" element={<CardConfirmMail />} />
         <Route path="/reset-password/:id" element={<CardPasswordReset />} />
+
+        <Route path="/spinners" element={<Spinners />} />
       </Routes>
       <ToastContainer icon={false} position={toast.POSITION.TOP_RIGHT} />
     </>
