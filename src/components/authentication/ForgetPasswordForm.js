@@ -40,6 +40,7 @@ const ForgetPasswordForm = () => {
           placeholder={'Username, email or phone number'}
           value={userId}
           name="userId"
+          maxLength="50"
           onChange={({ target }) => setUserId(target.value)}
           type="text"
           required

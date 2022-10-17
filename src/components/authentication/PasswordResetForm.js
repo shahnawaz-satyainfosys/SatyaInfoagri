@@ -16,12 +16,10 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   const [formHasError, setFormError] = useState(false);
-  const [isPwdEmpty, setPwdEmptyStatus] = useState(false);
-  const [isPwdInvalid, setPwdValidated] = useState(false);
-  const [isConfPwdEmpty, setConfPwdEmptyStatus] = useState(false);
-  const [isConfPwdInvalid, setConfPwdValidated] = useState(false);
+  const [passwordErr, setPasswordErr] = useState({});
+  const [confPasswordErr, setConfPasswordErr] = useState({});
 
   useEffect(() => {
     axios.get(process.env.REACT_APP_API_URL + '/validate-client/' + encryptedClientCode)
@@ -30,68 +28,68 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
       });
   }, []);
 
+  const handleValidation = () => {
+    const passwordErr = {};
+    const confPasswordErr = {};
+    let isValid = true;
+    if (formData.password.length <= 0) {
+      passwordErr.passwordEmpty = "Please provide password";
+      isValid = false;
+      setFormError(true);
+    }
+    else if (!validatePassword(formData.password)) {
+      passwordErr.pwdNotValid = "Password must be of minimum 6 and maximum 16 characters including one special character, one number and one alphabet";
+      isValid = false;
+    }
+
+    if (formData.confirmPassword.length <= 0) {
+      confPasswordErr.confPasswordEmpty = "Please provide confirm password";
+      isValid = false;
+      setFormError(true);
+    }
+    else if (formData.password != formData.confirmPassword) {
+      confPasswordErr.confPwdNotMatch = "Password and confirm password should be same";
+      isValid = false;
+    }
+
+    if (!isValid) {
+      setPasswordErr(passwordErr);
+      setConfPasswordErr(confPasswordErr);
+    }
+
+    return isValid;
+  }
+
   const validatePassword = (value) => {
     return /^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/.test(value);
   }
 
   const handleSubmit = e => {
     e.preventDefault();
-      if (formData.password.length <= 0) {
-        setFormError(true);
-        setPwdEmptyStatus(true);
-      }
-      else{
-        setFormError(false);
-        setPwdEmptyStatus(false);
-      }
-      
-      if (formData.confirmPassword.length <= 0) {
-        setFormError(true);
-        setConfPwdEmptyStatus(true);
-      }
-      else{
-        setFormError(false);
-        setConfPwdEmptyStatus(false);
-      }
+    if (handleValidation()) {
 
-      if(!validatePassword(formData.password))
-      {
-        setPwdValidated(true);
+      const reqParams = {
+        NewPassword: formData.password,
+        EncryptedClientCode: encryptedClientCode
       }
-
-      if(formData.password != formData.confirmPassword)
-      {
-        setConfPwdValidated(true);
-      }
-
-        if (!formHasError &&
-          !isPwdEmpty &&
-          !isConfPwdEmpty &&
-          !isPwdInvalid &&
-          !isConfPwdInvalid) {
-        
-        const reqParam = {
-          NewPassword: formData.password,
-          EncryptedClientCode: encryptedClientCode
-        }
-        dispatch(resetPasswordAction(formData.password));
-        axios.post(process.env.REACT_APP_API_URL + '/reset-password', reqParam)
-          .then(res => {
-            if (res.data.status == 200) {
-              toast.success(
-                'Login with your new password, redirecting to login page', {
-                theme: 'colored'
-              });
-              setTimeout(() => {
-                navigate('/login');
-              }, 3000);
-            } else {
-              toast.error(res.data.message, {
-                theme: 'colored'
-              });
-            }
-          });
-      }
+      dispatch(resetPasswordAction(formData.password));
+      axios.post(process.env.REACT_APP_API_URL + '/reset-password', reqParams)
+        .then(res => {
+          if (res.data.status == 200) {
+            toast.success(
+              res.data.message, {
+              theme: 'colored'
+            });
+            setTimeout(() => {
+              navigate('/login');
+            }, 3000);
+          } else {
+            toast.error(res.data.message, {
+              theme: 'colored'
+            });
+          }
+        });
+    }
   };
 
   const handleFieldChange = e => {
@@ -120,16 +118,15 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
           pattern="^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$"
           required
         />
-        {isPwdEmpty ? 
-            <Form.Control.Feedback type="invalid">
-              Please provide password
-            </Form.Control.Feedback> : null }
-
-            {!isPwdEmpty && isPwdInvalid ?
-            <Form.Control.Feedback type="invalid">
-              Password must be of minimum 6 and maximum 16 characters including one special character, one number and one alphabet
-            </Form.Control.Feedback>
-        : null}
+        {Object.keys(passwordErr).map((key) => {
+          return (
+            <>
+              <Form.Control.Feedback type="invalid">
+                {passwordErr[key]}
+              </Form.Control.Feedback>
+            </>
+          );
+        })}
       </Form.Group>
 
       <Form.Group className="mb-3">
@@ -144,15 +141,14 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
           pattern={formData.password}
           required
         />
-        {isConfPwdEmpty ?
-            <Form.Control.Feedback type="invalid">
-              Please provide confirm password
-            </Form.Control.Feedback> : null }
-         {!isConfPwdEmpty && isConfPwdInvalid ?
-            <Form.Control.Feedback type="invalid">
-              Password and confirm password should be same
-            </Form.Control.Feedback> 
-          :null}
+        {Object.keys(confPasswordErr).map((key) => {
+          return (
+            <>
+              <Form.Control.Feedback type="invalid">
+                {confPasswordErr[key]}
+              </Form.Control.Feedback>
+            </>);
+        })}
       </Form.Group>
 
       <Button type="submit" className="w-100">Set password</Button>

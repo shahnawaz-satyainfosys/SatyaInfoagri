@@ -74,6 +74,7 @@ const LoginForm = ({ hasLabel }) => {
           placeholder={'Username, email or phone number'}
           value={formData.userId}
           name="userId"
+          maxLength="50"
           onChange={handleFieldChange}
           type="text"
           required
