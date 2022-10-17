@@ -3,7 +3,9 @@ import { Route, Routes } from 'react-router-dom';
 import is from 'is_js';
 import { toast, ToastContainer } from 'react-toastify';
 import AppContext from 'context/Context';
+import 'assets/css/custom.css';
 
+import MainLayout from './MainLayout';
 import HomeLayout from './HomeLayout';
 import Home from 'components/Home';
 import Error500 from 'components/errors/Error500';
@@ -14,8 +16,7 @@ import CardConfirmMail from 'components/authentication/card/ConfirmMail';
 import CardPasswordReset from 'components/authentication/card/PasswordReset';
 
 import Spinners from 'components/doc-components/Spinners';
-
-import 'assets/css/custom.css';
+import Dashboard from 'components/dashboards/default';
 
 const Layout = () => {
   const HTMLClassList = document.getElementsByTagName('html')[0].classList;
@@ -46,6 +47,10 @@ const Layout = () => {
         <Route path="/reset-password/:id" element={<CardPasswordReset />} />
 
         <Route path="/spinners" element={<Spinners />} />
+
+        <Route element={<MainLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
       </Routes>
       <ToastContainer icon={false} position={toast.POSITION.TOP_RIGHT} />
     </>

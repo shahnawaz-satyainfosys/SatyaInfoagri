@@ -23,3 +23,53 @@ export const camelize = str => {
     return index === 0 ? match.toLowerCase() : match.toUpperCase();
   });
 };
+
+export const capitalize = str =>
+  (str.charAt(0).toUpperCase() + str.slice(1)).replace(/-/g, ' ');
+
+export const flatRoutes = childrens => {
+  const allChilds = [];
+
+  const flatChild = childrens => {
+    childrens.forEach(child => {
+      if (child.children) {
+        flatChild(child.children);
+      } else {
+        allChilds.push(child);
+      }
+    });
+  };
+  flatChild(childrens);
+
+  return allChilds;
+};
+
+export const getFlatRoutes = children =>
+  children.reduce(
+    (acc, val) => {
+      if (val.children) {
+        return {
+          ...acc,
+          [camelize(val.name)]: flatRoutes(val.children)
+        };
+      } else {
+        return {
+          ...acc,
+          unTitled: [...acc.unTitled, val]
+        };
+      }
+    },
+    { unTitled: [] }
+  );
+
+
+export const breakpoints = {
+  xs: 0,
+  sm: 576,
+  md: 768,
+  lg: 992,
+  xl: 1200,
+  xxl: 1540
+};
+
+export const isIterableArray = array => Array.isArray(array) && !!array.length;
