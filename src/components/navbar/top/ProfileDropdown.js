@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
-import team3 from 'assets/img/team/3.jpg';
+import defaultAvatar from 'assets/img/default-avatar.jpg';
 import Avatar from 'components/common/Avatar';
 
 const ProfileDropdown = () => {
   return (
     <Dropdown navbar={true} as="li">
       <Dropdown.Toggle bsPrefix="toggle" as={Link} to="#!" className="pe-0 ps-2 nav-link">
-        <Avatar src={team3} />
+        <Avatar src={defaultAvatar} />
       </Dropdown.Toggle>
 
       <Dropdown.Menu className="dropdown-caret dropdown-menu-card  dropdown-menu-end">

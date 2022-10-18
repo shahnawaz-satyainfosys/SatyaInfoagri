@@ -112,7 +112,7 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
           placeholder={'New Password'}
           value={formData.password}
           name="password"
-          maxLength="20"
+          maxLength="16"
           onChange={handleFieldChange}
           type="password"
           pattern="^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$"
@@ -135,7 +135,7 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
           placeholder={'Confirm Password'}
           value={formData.confirmPassword}
           name="confirmPassword"
-          maxLength="20"
+          maxLength="16"
           onChange={handleFieldChange}
           type="password"
           pattern={formData.password}
