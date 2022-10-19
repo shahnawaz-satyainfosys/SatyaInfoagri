@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { loginAction } from '../../actions/index';
 
 const LoginForm = ({ hasLabel }) => {
@@ -17,7 +16,6 @@ const LoginForm = ({ hasLabel }) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -41,7 +39,7 @@ const LoginForm = ({ hasLabel }) => {
             });
             setLocalStorages(res.data.data);
             setTimeout(() => {
-              navigate('/dashboard');
+              window.location.href = "/dashboard";
             }, 3000);
           } else {
             toast.error(res.data.message, {

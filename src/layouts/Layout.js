@@ -34,17 +34,15 @@ const Layout = () => {
     if (is.firefox()) {
       HTMLClassList.add('firefox');
     }
-  }, [HTMLClassList]);
-
-  useEffect(() => {
+    
     const encryptedClientCode = localStorage.getItem("EncryptedClientCode");
     axios.get(process.env.REACT_APP_API_URL + '/get-menu-tree/' + encryptedClientCode)
       .then(res => {
         if (res.data.status == 200) {
           var menuHtml = '';
           for (let i = 0; i < res.data.data.length; i++) {
-            const name = res.data.data[i].menU_ITEM_NAME;
-            const menuUrl = res.data.data[i].menU_ITEM_PAGE_URL;
+            const name = res.data.data[i].menuItemName;
+            const menuUrl = res.data.data[i].menuItemPageURL;
 
             menuHtml += `<li class="nav-item">
             <a aria-current="page" class="nav-link" href="${menuUrl}">
@@ -58,7 +56,7 @@ const Layout = () => {
           $('.navbar-vertical-content .navbar-nav').append(menuHtml);
         }
       });
-  }, []);
+  }, [HTMLClassList]);
 
   return (
     <>
