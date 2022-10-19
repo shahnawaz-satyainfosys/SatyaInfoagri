@@ -3,7 +3,6 @@ import { Navbar, Nav } from 'react-bootstrap';
 import classNames from 'classnames';
 import AppContext from 'context/Context';
 import Logo from 'components/common/Logo';
-import NavbarTopDropDownMenus from './NavbarTopDropDownMenus';
 import { navbarBreakPoint, topNavbarBreakpoint } from 'config';
 import TopNavRightSideNavItem from './TopNavRightSideNavItem';
 
@@ -73,9 +72,6 @@ const NavbarTop = () => {
           in={navbarCollapsed}
           className="scrollbar pb-3 pb-lg-0"
         >
-          <Nav navbar>
-            <NavbarTopDropDownMenus />
-          </Nav>
         </Navbar.Collapse>
       ) : (
         <Nav

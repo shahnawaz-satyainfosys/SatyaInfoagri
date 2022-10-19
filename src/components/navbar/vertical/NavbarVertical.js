@@ -10,7 +10,6 @@ import NavbarVerticalMenu from './NavbarVerticalMenu';
 import ToggleButton from './ToggleButton';
 import routes from 'routes/routes';
 import { capitalize } from 'helpers/utils';
-import NavbarTopDropDownMenus from 'components/navbar/top/NavbarTopDropDownMenus';
 
 const NavbarVertical = () => {
   const {
@@ -103,9 +102,6 @@ const NavbarVertical = () => {
                 <div className="navbar-vertical-divider">
                   <hr className="navbar-vertical-hr my-2" />
                 </div>
-                <Nav navbar>
-                  <NavbarTopDropDownMenus />
-                </Nav>
               </div>
             )}
           </>

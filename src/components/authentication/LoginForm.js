@@ -39,7 +39,7 @@ const LoginForm = ({ hasLabel }) => {
             toast.success(`Logged in as ${formData.userId}`, {
               theme: 'colored'
             });
-            setLocalStorages(res.data);
+            setLocalStorages(res.data.data);
             setTimeout(() => {
               navigate('/dashboard');
             }, 3000);
@@ -54,7 +54,7 @@ const LoginForm = ({ hasLabel }) => {
   };
 
   const setLocalStorages = (data) => {
-    localStorage.setItem('ClientCode', data.clientCode);
+    localStorage.setItem('EncryptedClientCode', data.encryptedClientCode);
     localStorage.setItem('ClientName', data.clientName);
     localStorage.setItem('LoginUserName', data.loginUserName);
     localStorage.setItem('LoginUserEmailId', data.loginUserEmailId);

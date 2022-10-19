@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Flex from 'components/common/Flex';
 
 const NavbarVerticalMenuItem = ({ route }) => {
-  debugger // eslint-disable-line no-debugger
   return (
     <Flex alignItems="center">
       {route.icon && (

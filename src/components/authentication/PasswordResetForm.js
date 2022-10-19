@@ -40,6 +40,7 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
     else if (!validatePassword(formData.password)) {
       passwordErr.pwdNotValid = "Password must be of minimum 6 and maximum 16 characters including one special character, one number and one alphabet";
       isValid = false;
+      setFormError(true);
     }
 
     if (formData.confirmPassword.length <= 0) {
@@ -50,6 +51,7 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
     else if (formData.password != formData.confirmPassword) {
       confPasswordErr.confPwdNotMatch = "Password and confirm password should be same";
       isValid = false;
+      setFormError(true);
     }
 
     if (!isValid) {
