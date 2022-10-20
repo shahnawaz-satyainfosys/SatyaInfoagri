@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const setItemToStore = (key, payload, store = localStorage) =>
   store.setItem(key, payload);
 
@@ -73,3 +75,58 @@ export const breakpoints = {
 };
 
 export const isIterableArray = array => Array.isArray(array) && !!array.length;
+
+export const getMenuTree = () => {
+  const encryptedClientCode = localStorage.getItem("EncryptedClientCode");
+  axios.get(process.env.REACT_APP_API_URL + '/get-menu-tree/' + encryptedClientCode)
+    .then(res => {
+      if (res.data.status == 200) {
+
+        var menuTreeHtml = '<li class="nav-item">';
+        var parentMenus = res.data.data.filter(x => x.parentId == 0);
+
+        for (let i = 0; i < parentMenus.length; i++) {
+          const name = parentMenus[i].menuItemName;
+          const childId = parentMenus[i].childId;
+          const menuUrl = parentMenus[i].menuItemPageURL;
+
+          var childMenus = res.data.data.filter(x => x.parentId == childId);
+
+          menuTreeHtml += `<a id="parent_${childId}" aria-current="page" class="nav-link ${childMenus.length > 0 ? 'dropdown-indicator collapsed\" aria-expanded="false' : ''}">
+                                <div class="d-flex align-items-center"`;
+
+          menuTreeHtml += childMenus.length > 0 ? `onClick="sidebarMenuClick('parent_${childId}', 'children_${childId}');"` : '';
+
+          menuTreeHtml += `>
+                            <span class="nav-link-icon"></span>
+                            <span class="nav-link-text ps-1">${name}</span>
+                          </div>
+                      </a>`;
+
+          if (childMenus.length > 0) {
+            menuTreeHtml += `<ul id="children_${childId}" class="nav collapse">`;
+
+            for (let j = 0; j < childMenus.length; j++) {
+              const childId = childMenus[j].childId;
+              const name = childMenus[j].menuItemName;
+              const menuUrl = childMenus[j].menuItemPageURL;
+
+              menuTreeHtml += `<li id="child_${childId}" class="nav-item">
+                                      <a class="nav-link" href="${menuUrl}" data-bs-toggle="" aria-expanded="false">
+                                        <div class="d-flex align-items-center">
+                                         <span class="nav-link-text ps-1">${name}</span>
+                                        </div>
+                                      </a>
+                                    </li>`;
+            }
+
+            menuTreeHtml += '</ul>';
+          }
+        }
+        menuTreeHtml += '</li>';
+
+        $('.navbar-vertical-content .navbar-nav .nav-item:not(:first-child)').remove();
+        $('.navbar-vertical-content .navbar-nav').append(menuTreeHtml);
+      }
+    });
+}

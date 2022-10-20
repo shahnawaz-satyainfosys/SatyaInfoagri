@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Spinner} from 'react-bootstrap';
 import classNames from 'classnames';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +16,8 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  
+  const [isLoading, setIsLoading] = useState(false);
   const [formHasError, setFormError] = useState(false);
   const [passwordErr, setPasswordErr] = useState({});
   const [confPasswordErr, setConfPasswordErr] = useState({});
@@ -75,8 +76,10 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
         EncryptedClientCode: encryptedClientCode
       }
       dispatch(resetPasswordAction(formData.password));
+      setIsLoading(true);
       axios.post(process.env.REACT_APP_API_URL + '/reset-password', reqParams)
         .then(res => {
+          setIsLoading(false);
           if (res.data.status == 200) {
             toast.success(
               res.data.message, {
@@ -102,6 +105,13 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
   };
 
   return (
+    <>
+    {isLoading ? (
+      <Spinner
+        className="position-absolute start-50 loader-color"
+        animation="border"
+      />
+    ) : null}
     <Form
       noValidate
       validated={formHasError}
@@ -155,6 +165,7 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
 
       <Button type="submit" className="w-100">Set password</Button>
     </Form>
+    </>
   );
 };
 

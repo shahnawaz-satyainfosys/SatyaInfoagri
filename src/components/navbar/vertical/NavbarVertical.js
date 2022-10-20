@@ -9,7 +9,7 @@ import Logo from 'components/common/Logo';
 import NavbarVerticalMenu from './NavbarVerticalMenu';
 import ToggleButton from './ToggleButton';
 import routes from 'routes/routes';
-import { capitalize } from 'helpers/utils';
+import { capitalize, getMenuTree } from 'helpers/utils';
 
 const NavbarVertical = () => {
   const {
@@ -24,6 +24,7 @@ const NavbarVertical = () => {
   const HTMLClassList = document.getElementsByTagName('html')[0].classList;
 
   useEffect(() => {
+    getMenuTree();
     if (isNavbarVerticalCollapsed) {
       HTMLClassList.add('navbar-vertical-collapsed');
     } else {

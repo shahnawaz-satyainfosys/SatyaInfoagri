@@ -34,8 +34,8 @@ const LoginForm = ({ hasLabel }) => {
       setIsLoading(true);
       axios.post(process.env.REACT_APP_API_URL + '/login', userData)
         .then(res => {
+          setIsLoading(false)
           if (res.data.status == 200) {
-            setIsLoading(false)
             toast.success(`Logged in as ${formData.userId}`, {
               theme: 'colored'
             });

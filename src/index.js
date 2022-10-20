@@ -4,6 +4,7 @@ import App from './App';
 import Main from './Main';
 import store from './store';
 import { Provider } from 'react-redux';
+import 'helpers/initFA';
 
 store.subscribe(() => store.getState());
 

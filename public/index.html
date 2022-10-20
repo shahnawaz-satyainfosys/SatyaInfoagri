@@ -2,8 +2,8 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta charset="utf-8" /> 
-  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />  
+  <meta charset="utf-8" />
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
   <!-- TO-DO: Add favicon -->
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#88c431" />
@@ -11,13 +11,31 @@
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700|Poppins:100,200,300,400,500,600,700,800,900&display=swap" />
-
   <title>Agriculture ERP</title>
+
+  <script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"
+    integrity="sha256-w8CvhFs7iHNVUtnSP0YKEg00p9Ih13rlL9zGqvLdePA=" crossorigin="anonymous">
+  </script>
 </head>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <main class="main" id="main"></main>
 </body>
+
+<script>
+  function sidebarMenuClick(parentMenuElementId, childMenuContainerId) {
+    if ($('#' + parentMenuElementId).hasClass('collapsed')) {
+      $('#' + parentMenuElementId).removeClass('collapsed');
+      $('#' + parentMenuElementId).attr('aria-expanded', 'true');
+      $('#' + childMenuContainerId).addClass('show');
+    }
+    else {
+      $('#' + parentMenuElementId).addClass('collapsed');
+      $('#' + parentMenuElementId).attr('aria-expanded', 'false');
+      $('#' + childMenuContainerId).removeClass('show');
+    }
+  }
+</script>
 
 </html>
