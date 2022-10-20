@@ -1,4 +1,5 @@
 import axios from 'axios';
+import $ from 'jquery';
 
 export const setItemToStore = (key, payload, store = localStorage) =>
   store.setItem(key, payload);
@@ -88,7 +89,6 @@ export const getMenuTree = () => {
         for (let i = 0; i < parentMenus.length; i++) {
           const name = parentMenus[i].menuItemName;
           const childId = parentMenus[i].childId;
-          const menuUrl = parentMenus[i].menuItemPageURL;
 
           var childMenus = res.data.data.filter(x => x.parentId == childId);
 
