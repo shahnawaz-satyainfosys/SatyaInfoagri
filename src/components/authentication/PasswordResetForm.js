@@ -87,7 +87,7 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
             });
             setTimeout(() => {
               navigate('/login');
-            }, 3000);
+            }, 1000);
           } else {
             toast.error(res.data.message, {
               theme: 'colored'

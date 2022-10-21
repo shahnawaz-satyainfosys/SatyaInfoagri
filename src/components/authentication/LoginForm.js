@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -17,6 +17,9 @@ const LoginForm = ({ hasLabel }) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
   const handleSubmit = e => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -40,7 +43,7 @@ const LoginForm = ({ hasLabel }) => {
             setLocalStorages(res.data.data);
             setTimeout(() => {
               window.location.href = "/dashboard";
-            }, 3000);
+            }, 1000);
           } else {
             toast.error(res.data.message, {
               theme: 'colored'

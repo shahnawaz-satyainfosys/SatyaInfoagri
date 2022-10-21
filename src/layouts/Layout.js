@@ -13,6 +13,7 @@ import CardLogin from 'components/authentication/card/Login';
 import CardForgetPassword from 'components/authentication/card/ForgetPassword';
 import CardConfirmMail from 'components/authentication/card/ConfirmMail';
 import CardPasswordReset from 'components/authentication/card/PasswordReset';
+import Logout from 'components/authentication/card/Logout';
 
 import Spinners from 'components/doc-components/Spinners';
 import Dashboard from 'components/dashboards/default/dashboard';
@@ -43,6 +44,7 @@ const Layout = () => {
         <Route path="/forgot-password" element={<CardForgetPassword />} />
         <Route path="/confirm-mail" element={<CardConfirmMail />} />
         <Route path="/reset-password/:id" element={<CardPasswordReset />} />
+        <Route path="/logout" element={<Logout />} />
 
         <Route path="/spinners" element={<Spinners />} />
 

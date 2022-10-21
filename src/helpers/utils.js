@@ -89,6 +89,7 @@ export const getMenuTree = () => {
           const name = parentMenus[i].menuItemName;
           const childId = parentMenus[i].childId;
           const menuUrl = parentMenus[i].menuItemPageURL;
+          const icon = parentMenus[i].menuItemIcon;
 
           var childMenus = res.data.data.filter(x => x.parentId == childId);
 
@@ -98,7 +99,9 @@ export const getMenuTree = () => {
           menuTreeHtml += childMenus.length > 0 ? `onClick="sidebarMenuClick('parent_${childId}', 'children_${childId}');"` : '';
 
           menuTreeHtml += `>
-                            <span class="nav-link-icon"></span>
+                            <span class="nav-link-icon">
+                              <span class="${icon}"></span>
+                            </span>
                             <span class="nav-link-text ps-1">${name}</span>
                           </div>
                       </a>`;
@@ -129,4 +132,12 @@ export const getMenuTree = () => {
         $('.navbar-vertical-content .navbar-nav').append(menuTreeHtml);
       }
     });
+}
+
+// validate user logged in
+export const isLoggedIn = () => {
+  if (!localStorage.getItem('EncryptedClientCode')) {
+    localStorage.clear();
+    window.location.href ='/login';
+  }
 }

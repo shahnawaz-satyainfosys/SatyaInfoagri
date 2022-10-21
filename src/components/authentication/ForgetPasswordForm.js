@@ -25,7 +25,7 @@ const ForgetPasswordForm = () => {
         .then(res => {
           setIsLoading(false);
           if (res.data.status == 200) {
-            setTimeout(() => { navigate('/confirm-mail') }, 3000);
+            setTimeout(() => { navigate('/confirm-mail') }, 1000);
           } else {
             toast.error(res.data.message, {
               theme: 'colored'
