@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
+  let token = localStorage.getItem('Token');
   return (
     <Card className="text-center">
       <Card.Body className="p-5">
@@ -12,12 +13,18 @@ const Home = () => {
         </p>
         <hr />
         <p>
-          Site is in under construction, for now please click below Login button to continue.
+          Site is in under construction, for now please click below button to continue.
         </p>
-        <Link className="btn btn-primary btn-sm mt-3" to="/login">
-          <FontAwesomeIcon className="me-2" />
-          Login
-        </Link>
+
+        {token ?
+          <Link className="btn btn-primary btn-sm mt-3" to="/dashboard">
+            Dashboard
+          </Link>
+          :
+          <Link className="btn btn-primary btn-sm mt-3" to="/login">
+            Login
+          </Link>
+        }
       </Card.Body>
     </Card>
   );

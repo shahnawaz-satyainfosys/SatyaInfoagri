@@ -101,7 +101,7 @@ export const getMenuTree = () => {
 
           menuTreeHtml += `>
                             <span class="nav-link-icon">
-                              <span class="${icon}"></span>
+                              <span class="${icon ? icon : "fas fa-chart-pie"}"></span>
                             </span>
                             <span class="nav-link-text ps-1">${name}</span>
                           </div>
@@ -137,8 +137,19 @@ export const getMenuTree = () => {
 
 // validate user logged in
 export const isLoggedIn = () => {
-  if (!localStorage.getItem('EncryptedClientCode')) {
+  let token = localStorage.getItem('Token');
+
+  if (!token ||
+    JSON.parse(token).expiry < new Date()) {
     localStorage.clear();
-    window.location.href ='/login';
+    window.location.href = '/login';
+  }
+  else if(JSON.parse(token).expiry < (new Date().getTime() + 7200000))  // if user is interacting with system then we are updating Token localstorage to keep it alive for one hour from current time
+  {
+    const config = {
+      value: JSON.parse(token).value,
+      expiry: new Date().getTime() + 3600000
+    }
+    localStorage.setItem('Token', JSON.stringify(config));
   }
 }

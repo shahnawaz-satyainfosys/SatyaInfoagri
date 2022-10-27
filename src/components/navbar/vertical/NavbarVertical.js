@@ -10,6 +10,7 @@ import NavbarVerticalMenu from './NavbarVerticalMenu';
 import ToggleButton from './ToggleButton';
 import routes from 'routes/routes';
 import { capitalize, getMenuTree, isLoggedIn } from 'helpers/utils';
+import $ from 'jquery';
 
 const NavbarVertical = () => {
   const {
@@ -25,7 +26,10 @@ const NavbarVertical = () => {
 
   useEffect(() => {
     isLoggedIn();
-    getMenuTree();
+    let menuTreeItemCount = $('.navbar-vertical-content .navbar-nav .nav-item').length;
+    if (menuTreeItemCount <= 1) {
+      getMenuTree();
+    }
     if (isNavbarVerticalCollapsed) {
       HTMLClassList.add('navbar-vertical-collapsed');
     } else {

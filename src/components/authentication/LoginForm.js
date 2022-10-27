@@ -53,8 +53,14 @@ const LoginForm = ({ hasLabel }) => {
     }
     setValidated(true);
   };
-
   const setLocalStorages = (data) => {
+    let isRememberMe = $('#rememberMe').prop('checked');
+    let expiration = isRememberMe ? 31556952000 : 3600000;  // if remember me checked then user will be logged in for 1 year otherwise user will be loggout every hour.
+    const config = {
+      value: data.token,
+      expiry: new Date().getTime() + expiration,
+    }
+    localStorage.setItem('Token', JSON.stringify(config));
     localStorage.setItem('EncryptedClientCode', data.encryptedClientCode);
     localStorage.setItem('ClientName', data.clientName);
     localStorage.setItem('LoginUserName', data.loginUserName);

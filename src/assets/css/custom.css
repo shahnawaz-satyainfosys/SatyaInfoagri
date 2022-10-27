@@ -2,3 +2,7 @@
     --falcon-spinner-width: 10rem !important;
     --falcon-spinner-height: 10rem !important;
 }
+
+.navbar-vertical .navbar-nav .nav-item .nav-link {
+    cursor: pointer;
+}
