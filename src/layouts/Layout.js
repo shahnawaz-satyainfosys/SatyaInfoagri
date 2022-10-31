@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import is from 'is_js';
 import { toast, ToastContainer } from 'react-toastify';
 import 'assets/css/custom.css';
+import 'assets/css/responsive.css';
 
 import MainLayout from './MainLayout';
 import HomeLayout from './HomeLayout';
