@@ -6,3 +6,10 @@
 .navbar-vertical .navbar-nav .nav-item .nav-link {
     cursor: pointer;
 }
+
+.form-error {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 75%;
+    color: #e63757;
+}
