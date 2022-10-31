@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { loginAction } from '../../actions/index';
+import ReCAPTCHA from "react-google-recaptcha";
 
 const LoginForm = ({ hasLabel }) => {
   const [formData, setFormData] = useState({
@@ -15,42 +16,62 @@ const LoginForm = ({ hasLabel }) => {
   });
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [captchaErr, setCaptchaErr] = useState('');
   const dispatch = useDispatch();
 
   useEffect(() => {
     localStorage.clear();
   }, []);
+
+  const handleCaptchaValidation = () => {
+    let isValid = true;
+    var captchaResponse = $("form").find("[name='g-recaptcha-response']").first().val();
+
+    if (!captchaResponse) {
+      isValid = false;
+      setValidated(true);
+      setCaptchaErr("Please verify captcha");
+    }
+    else
+      setCaptchaErr('');
+
+    return isValid;
+  }
+
   const handleSubmit = e => {
     e.preventDefault();
-    const form = e.currentTarget;
-    if (form.checkValidity() === false) {
-      e.preventDefault();
-      e.stopPropagation();
-    } else {
-      const userData = {
-        userId: formData.userId,
-        loginPassword: formData.password
+    
+      const form = e.currentTarget;
+      if (form.checkValidity() === false || 
+          !handleCaptchaValidation()) {
+        e.preventDefault();
+        e.stopPropagation();
+      } else {
+        const userData = {
+          userId: formData.userId,
+          loginPassword: formData.password
+        }
+        dispatch(loginAction(userData));
+        setIsLoading(true);
+        axios.post(process.env.REACT_APP_API_URL + '/login', userData)
+          .then(res => {
+            setIsLoading(false)
+            if (res.data.status == 200) {
+              toast.success(`Logged in as ${formData.userId}`, {
+                theme: 'colored'
+              });
+              setLocalStorages(res.data.data);
+              setTimeout(() => {
+                window.location.href = "/dashboard";
+              }, 1000);
+            } else {
+              toast.error(res.data.message, {
+                theme: 'colored'
+              });
+            }
+          })
       }
-      dispatch(loginAction(userData));
-      setIsLoading(true);
-      axios.post(process.env.REACT_APP_API_URL + '/login', userData)
-        .then(res => {
-          setIsLoading(false)
-          if (res.data.status == 200) {
-            toast.success(`Logged in as ${formData.userId}`, {
-              theme: 'colored'
-            });
-            setLocalStorages(res.data.data);
-            setTimeout(() => {
-              window.location.href = "/dashboard";
-            }, 1000);
-          } else {
-            toast.error(res.data.message, {
-              theme: 'colored'
-            });
-          }
-        })
-    }
+    
     setValidated(true);
   };
   const setLocalStorages = (data) => {
@@ -148,12 +169,15 @@ const LoginForm = ({ hasLabel }) => {
           </Col>
         </Row>
 
+        <Form.Group className="mt-3">
+          <ReCAPTCHA
+            sitekey={process.env.REACT_APP_SITE_KEY}
+          />
+          { captchaErr ? <p className="form-error">{captchaErr} </p> : null }
+        </Form.Group>
+        
         <Form.Group>
-          <Button
-            type="submit"
-            color="primary"
-            className="mt-3 w-100"
-          >
+          <Button type="submit" color="primary" className="mt-3 w-100">
             Log in
           </Button>
         </Form.Group>
