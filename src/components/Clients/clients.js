@@ -10,7 +10,7 @@ const tabList = {
 const Client = () => {
   return (
     <>
-      <TabPage tab={tabList} />
+      <TabPage tabList={tabList} />
     </>
   );
 };
