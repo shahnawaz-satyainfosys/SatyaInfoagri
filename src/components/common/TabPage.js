@@ -1,16 +1,62 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Tabs, Tab } from 'react-bootstrap';
+//Datatable Modules
+import 'datatables.net-dt/js/dataTables.dataTables';
+import 'datatables.net-dt/css/jquery.dataTables.min.css';
 
-const TabPage = ({ tabList }) => {
+import $ from 'jquery';
+
+const TabPage = ({ listData, listColumnArray, tabArray }) => {
+  useEffect(() => {
+    setTimeout(function () {
+      $('#paginatedTable').DataTable({
+        aoColumnDefs: [{ bSortable: false, aTargets: ['_all'] }],
+        bLengthChange: true,
+        lengthMenu: [
+          [10, 50, 100, 250, -1],
+          [10, 50, 100, 250, 'All']
+        ],
+        iDisplayLength: 10
+      });
+    }, 1000);
+  }, []);
+
   return (
     <>
-      <Tabs variant='pills' defaultActiveKey="profile" id="uncontrolled-tab-example" className='mb-3'>
-        {Object.values(tabList).map(tab => {
+      <Tabs
+        variant="pills"
+        defaultActiveKey="profile"
+        id="uncontrolled-tab-example"
+        className="mb-3"
+      >
+        {Object.values(tabArray).map((tab, index) => {
           return (
-            <Tab eventKey={tab} title={tab} className='border p-3'>
-              <p>
-                Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone.
-              </p>
+            <Tab eventKey={tab} title={tab} className="border p-3">
+               {index == 0 && listData && (
+              <table
+                id="paginatedTable"
+                style={{ width: 900, float: 'center' }}
+                className="table table-bordered table-stripeds"
+              >
+                    <thead>
+                      <tr>
+                        {listColumnArray.map(col => (
+                          <th>{col.heading}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {listData.map((object, srno) => (
+                          <tr>
+                            <td>{++srno}</td>
+                            {listColumnArray.filter(column => column.property != 'sno').map(column => (                              
+                              <td>{object[column.property]}</td>
+                            ))}
+                          </tr>
+                        ))}
+                    </tbody>
+              </table>
+              )}
             </Tab>
           );
         })}

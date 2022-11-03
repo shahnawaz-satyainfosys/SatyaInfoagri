@@ -171,7 +171,7 @@ const LoginForm = ({ hasLabel }) => {
 
         <Form.Group className="mt-3">
           <ReCAPTCHA
-            sitekey={process.env.REACT_APP_SITE_KEY}
+            sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
           />
           { captchaErr ? <p className="form-error">{captchaErr} </p> : null }
         </Form.Group>
