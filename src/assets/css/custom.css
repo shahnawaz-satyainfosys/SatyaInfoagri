@@ -13,3 +13,7 @@
     font-size: 75%;
     color: #e63757;
 }
+
+.details-form label {
+    padding-left: 0px !important;
+}

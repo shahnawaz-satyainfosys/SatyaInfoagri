@@ -21,9 +21,9 @@ const listColumnArray = [
 ];
 
 const detailsForm =
-  `<Form>
+  `<Form className="details-form">
       <Row>
-        <Col className="me-5 ms-3">
+        <Col className="me-5 ms-5">
           <Row className="mb-3">
             <Form.Label>Customer Name *</Form.Label>
             <Form.Control placeholder="Customer Name" />
