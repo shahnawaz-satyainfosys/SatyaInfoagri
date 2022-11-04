@@ -78,8 +78,11 @@ export const breakpoints = {
 export const isIterableArray = array => Array.isArray(array) && !!array.length;
 
 export const getMenuTree = () => {
+  let token = localStorage.getItem('Token');
   const encryptedClientCode = localStorage.getItem("EncryptedClientCode");
-  axios.get(process.env.REACT_APP_API_URL + '/get-menu-tree/' + encryptedClientCode)
+  axios.get(process.env.REACT_APP_API_URL + '/get-menu-tree/' + encryptedClientCode,
+    { headers: { "Authorization": `Bearer ${JSON.parse(token).value}` } }
+  )
     .then(res => {
       if (res.data.status == 200) {
 
@@ -144,7 +147,7 @@ export const isLoggedIn = () => {
     localStorage.clear();
     window.location.href = '/login';
   }
-  else if(JSON.parse(token).expiry < (new Date().getTime() + 7200000))  // if user is interacting with system then we are updating Token localstorage to keep it alive for one hour from current time
+  else if (JSON.parse(token).expiry < (new Date().getTime() + 7200000))  // if user is interacting with system then we are updating Token localstorage to keep it alive for one hour from current time
   {
     const config = {
       value: JSON.parse(token).value,
