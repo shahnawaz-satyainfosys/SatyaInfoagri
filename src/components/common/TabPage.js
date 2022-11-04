@@ -3,10 +3,12 @@ import { Tabs, Tab } from 'react-bootstrap';
 //Datatable Modules
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
+import FalconComponentCard from 'components/common/FalconComponentCard';
 
 import $ from 'jquery';
 
-const TabPage = ({ listData, listColumnArray, tabArray }) => {
+const TabPage = ({ listData, listColumnArray, tabArray, detailsForm }) => {
+
   useEffect(() => {
     setTimeout(function () {
       $('#paginatedTable').DataTable({
@@ -19,6 +21,7 @@ const TabPage = ({ listData, listColumnArray, tabArray }) => {
         iDisplayLength: 10
       });
     }, 1000);
+    $('[data-rr-ui-event-key*="List"]').trigger('click');
   }, []);
 
   return (
@@ -32,30 +35,35 @@ const TabPage = ({ listData, listColumnArray, tabArray }) => {
         {Object.values(tabArray).map((tab, index) => {
           return (
             <Tab eventKey={tab} title={tab} className="border p-3">
-               {index == 0 && listData && (
-              <table
-                id="paginatedTable"
-                style={{ width: 900, float: 'center' }}
-                className="table table-bordered table-stripeds"
-              >
-                    <thead>
+              {index == 0 && listData && (
+                <table
+                  id="paginatedTable"
+                  style={{ width: 900, float: 'center' }}
+                  className="table table-bordered table-stripeds"
+                >
+                  <thead>
+                    <tr>
+                      {listColumnArray.map(col => (
+                        <th>{col.heading}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {listData.map((object, srno) => (
                       <tr>
-                        {listColumnArray.map(col => (
-                          <th>{col.heading}</th>
+                        <td>{++srno}</td>
+                        {listColumnArray.filter(column => column.property != 'sno').map(column => (
+                          <td>{object[column.property]}</td>
                         ))}
                       </tr>
-                    </thead>
-                    <tbody>
-                        {listData.map((object, srno) => (
-                          <tr>
-                            <td>{++srno}</td>
-                            {listColumnArray.filter(column => column.property != 'sno').map(column => (                              
-                              <td>{object[column.property]}</td>
-                            ))}
-                          </tr>
-                        ))}
-                    </tbody>
-              </table>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+              {index == 1 && detailsForm && (
+                <FalconComponentCard>
+                  <FalconComponentCard.Body code={detailsForm} language="jsx" />
+                </FalconComponentCard>
               )}
             </Tab>
           );
