@@ -4,10 +4,11 @@ import { Tabs, Tab } from 'react-bootstrap';
 import 'datatables.net-dt/js/dataTables.dataTables';
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import FalconComponentCard from 'components/common/FalconComponentCard';
+import ClientDetails from '../Clients/ClientDetails';
 
 import $ from 'jquery';
 
-const TabPage = ({ listData, listColumnArray, tabArray, detailsForm }) => {
+const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
 
   useEffect(() => {
     setTimeout(function () {
@@ -60,9 +61,11 @@ const TabPage = ({ listData, listColumnArray, tabArray, detailsForm }) => {
                   </tbody>
                 </table>
               )}
-              {index == 1 && detailsForm && (
+              {index == 1 && ClientDetails && (
                 <FalconComponentCard>
-                  <FalconComponentCard.Body code={detailsForm} language="jsx" />
+                  <FalconComponentCard.Body language="jsx">
+                    <ClientDetails />
+                  </FalconComponentCard.Body>
                 </FalconComponentCard>
               )}
             </Tab>
