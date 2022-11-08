@@ -3,6 +3,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 
 //Datatable Modules
 import FalconComponentCard from 'components/common/FalconComponentCard';
+import ClientDetails from '../Clients/ClientDetails';
 
 import AdvanceTableWrapper from 'components/common/advance-table/AdvanceTableWrapper';
 import AdvanceTable from 'components/common/advance-table/AdvanceTable';
@@ -11,7 +12,8 @@ import AdvanceTableSearchBox from 'components/common/advance-table/AdvanceTableS
 
 import $ from 'jquery';
 
-const TabPage = ({ listData, listColumnArray, tabArray, detailsForm }) => {
+const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
+
   useEffect(() => {
     $('[data-rr-ui-event-key*="List"]').trigger('click');
   }, []);
@@ -95,9 +97,11 @@ const TabPage = ({ listData, listColumnArray, tabArray, detailsForm }) => {
                   />
                 </FalconComponentCard>
               )}
-              {index == 1 && detailsForm && (
+              {index == 1 && ClientDetails && (
                 <FalconComponentCard>
-                  <FalconComponentCard.Body code={detailsForm} language="jsx" />
+                  <FalconComponentCard.Body language="jsx">
+                    <ClientDetails />
+                  </FalconComponentCard.Body>
                 </FalconComponentCard>
               )}
             </Tab>
