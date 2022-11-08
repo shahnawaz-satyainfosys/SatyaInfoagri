@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { loginAction } from '../../actions/index';
 import ReCAPTCHA from "react-google-recaptcha";
+import $ from 'jquery';
 
 const LoginForm = ({ hasLabel }) => {
   const [formData, setFormData] = useState({
