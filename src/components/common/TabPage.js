@@ -1,28 +1,66 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tabs, Tab } from 'react-bootstrap';
+
 //Datatable Modules
-import 'datatables.net-dt/js/dataTables.dataTables';
-import 'datatables.net-dt/css/jquery.dataTables.min.css';
 import FalconComponentCard from 'components/common/FalconComponentCard';
+
+import AdvanceTableWrapper from 'components/common/advance-table/AdvanceTableWrapper';
+import AdvanceTable from 'components/common/advance-table/AdvanceTable';
+import AdvanceTableFooter from 'components/common/advance-table/AdvanceTableFooter';
+import AdvanceTableSearchBox from 'components/common/advance-table/AdvanceTableSearchBox';
 
 import $ from 'jquery';
 
 const TabPage = ({ listData, listColumnArray, tabArray, detailsForm }) => {
-
   useEffect(() => {
-    setTimeout(function () {
-      $('#paginatedTable').DataTable({
-        aoColumnDefs: [{ bSortable: false, aTargets: ['_all'] }],
-        bLengthChange: true,
-        lengthMenu: [
-          [10, 50, 100, 250, -1],
-          [10, 50, 100, 250, 'All']
-        ],
-        iDisplayLength: 10
-      });
-    }, 1000);
     $('[data-rr-ui-event-key*="List"]').trigger('click');
   }, []);
+
+  const data = `const columns = ${JSON.stringify(listColumnArray)};
+  
+  const data = ${JSON.stringify(listData)};`;
+
+  const searchableTableCode = `${data}
+
+  function AdvanceTableExample() {
+  
+    return (
+      <AdvanceTableWrapper
+        columns={columns}
+        data={data}
+        sortable
+        pagination
+        perPage={5}
+      >
+        <Row className="flex-end-center mb-3">
+          <Col xs="auto" sm={6} lg={4}>
+            <AdvanceTableSearchBox table/>
+          </Col>
+        </Row>
+        <AdvanceTable
+          table
+          headerClassName="bg-200 text-900 text-nowrap align-middle"
+          rowClassName="align-middle white-space-nowrap"
+          tableProps={{
+            bordered: true,
+            striped: true,
+            className: 'fs--1 mb-0 overflow-hidden'
+          }}
+        />
+        <div className="mt-3">
+          <AdvanceTableFooter
+            rowCount={data.length}
+            table
+            rowInfo
+            navButtons
+            rowsPerPageSelection
+          />
+        </div>
+      </AdvanceTableWrapper>
+    );
+  }
+  
+  render(<AdvanceTableExample />)`;
 
   return (
     <>
@@ -36,29 +74,26 @@ const TabPage = ({ listData, listColumnArray, tabArray, detailsForm }) => {
           return (
             <Tab eventKey={tab} title={tab} className="border p-3">
               {index == 0 && listData && (
-                <table
-                  id="paginatedTable"
-                  style={{ width: 900, float: 'center' }}
-                  className="table table-bordered table-stripeds"
-                >
-                  <thead>
-                    <tr>
-                      {listColumnArray.map(col => (
-                        <th>{col.heading}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {listData.map((object, srno) => (
-                      <tr>
-                        <td>{++srno}</td>
-                        {listColumnArray.filter(column => column.property != 'sno').map(column => (
-                          <td>{object[column.property]}</td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <FalconComponentCard>
+                  <FalconComponentCard.Header
+                    title="List"
+                    light={false}
+                    className="border-bottom border-200"
+                    noPreview={true}
+                  />
+                  <FalconComponentCard.Body
+                    code={searchableTableCode}
+                    scope={{
+                      AdvanceTableWrapper,
+                      AdvanceTable,
+                      AdvanceTableFooter,
+                      AdvanceTableSearchBox
+                    }}
+                    language="jsx"
+                    noInline
+                    noLight
+                  />
+                </FalconComponentCard>
               )}
               {index == 1 && detailsForm && (
                 <FalconComponentCard>
