@@ -79,8 +79,8 @@ export const isIterableArray = array => Array.isArray(array) && !!array.length;
 
 export const getMenuTree = () => {
   let token = localStorage.getItem('Token');
-  const encryptedClientCode = localStorage.getItem("EncryptedClientCode");
-  axios.get(process.env.REACT_APP_API_URL + '/get-menu-tree/' + encryptedClientCode,
+  const encryptedSecurityUserId = localStorage.getItem("EncryptedSecurityUserId");
+  axios.get(process.env.REACT_APP_API_URL + '/get-menu-tree/' + encryptedSecurityUserId,
     { headers: { "Authorization": `Bearer ${JSON.parse(token).value}` } }
   )
     .then(res => {
