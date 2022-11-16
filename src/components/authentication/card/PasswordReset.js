@@ -8,7 +8,7 @@ const PasswordReset = () => {
   return (
     <AuthCardLayout>
       <h3>Reset password</h3>
-      <PasswordResetForm layout="card" hasLabel encryptedClientCode={id} />
+      <PasswordResetForm layout="card" hasLabel encryptedSecurityUserId={id} />
     </AuthCardLayout>
   );
 };

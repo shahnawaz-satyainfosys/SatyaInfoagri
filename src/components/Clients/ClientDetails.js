@@ -55,32 +55,32 @@ export const ClientDetails = () => {
         <Col className="me-5 ms-5">
           <Row className="mb-3">
             <Form.Label>Customer Name *</Form.Label>
-            <Form.Control placeholder="Customer Name" />
+            <Form.Control id="txtCustomerName" placeholder="Customer Name" />
           </Row>
           <Row className="mb-3">
             <Form.Label>Customer Address *</Form.Label>
-            <Form.Control className="mb-1" placeholder="Address" />
-            <Form.Control className="mb-1" placeholder="Address 2" />
-            <Form.Control className="mb-1" placeholder="Address 3" />
+            <Form.Control id="txtCustomerAddress" className="mb-1" placeholder="Address" />
+            <Form.Control id="txtCustomerAddress2" className="mb-1" placeholder="Address 2" />
+            <Form.Control id="txtCustomerAddress3" className="mb-1" placeholder="Address 3" />
           </Row>
           <Row className="mb-3">
             <Form.Label>Pincode</Form.Label>
-            <Form.Control placeholder="Pincode" />
+            <Form.Control id="txtPincode" placeholder="Pincode" />
           </Row>
           <Row className="mb-3">
             <Form.Label>Country *</Form.Label>
-            <Form.Select>
-              <option value=''>--Select country--</option>
+            <Form.Select id="txtCountry">
+              <option value=''>Select country</option>
               {countryList.map((option, index) => (
                 <option key={index} value={option.value}>{option.key}</option>
               ))}
             </Form.Select>
           </Row>
-          
+
           <Row className="mb-3">
             <Form.Label>State *</Form.Label>
-            <Form.Select>
-              <option value=''>--Select state--</option>
+            <Form.Select id="txtState">
+              <option value=''>Select state</option>
               {stateList.map((option, index) => (
                 <option key={index} value={option.value}>{option.key}</option>
               ))}
@@ -90,18 +90,18 @@ export const ClientDetails = () => {
         <Col className="me-5 ms-5">
           <Row className="mb-3">
             <Form.Label>Billing Address *</Form.Label>
-            <Form.Control className="mb-1" placeholder="Billing Address" />
-            <Form.Control className="mb-1" placeholder="Billing Address 2" />
-            <Form.Control className="mb-1" placeholder="Billing Address 3" />
+            <Form.Control id="txtBillingAddress" className="mb-1" placeholder="Billing Address" />
+            <Form.Control id="txtBillingAddress2" className="mb-1" placeholder="Billing Address 2" />
+            <Form.Control id="txtBillingAddress3" className="mb-1" placeholder="Billing Address 3" />
           </Row>
           <Row className="mb-3">
             <Form.Label>Pincode</Form.Label>
-            <Form.Control placeholder="Pincode" />
+            <Form.Control id="txtBillingPincode" placeholder="Pincode" />
           </Row>
           <Row className="mb-3">
             <Form.Label>Country *</Form.Label>
-            <Form.Select>
-              <option value=''>--Select country--</option>
+            <Form.Select id="txtBillingCountry">
+              <option value=''>Select country</option>
               {countryList.map((option, index) => (
                 <option key={index} value={option.value}>{option.key}</option>
               ))}
@@ -109,8 +109,8 @@ export const ClientDetails = () => {
           </Row>
           <Row className="mb-3">
             <Form.Label>State *</Form.Label>
-            <Form.Select>
-              <option value=''>--Select state--</option>
+            <Form.Select id="txtBillingState">
+              <option value=''>Select state</option>
               {stateList.map((option, index) => (
                 <option key={index} value={option.value}>{option.key}</option>
               ))}
@@ -120,27 +120,27 @@ export const ClientDetails = () => {
         <Col className="me-5 ms-5">
           <Row className="mb-3">
             <Form.Label>PAN No. *</Form.Label>
-            <Form.Control placeholder="PAN No." />
+            <Form.Control id="txtPAN" placeholder="PAN No." />
           </Row>
           <Row className="mb-3">
             <Form.Label>GST No *</Form.Label>
-            <Form.Control placeholder="GST No." />
+            <Form.Control id="txtGST" placeholder="GST No." />
           </Row>
           <Row className="mb-3">
             <Form.Label>Status</Form.Label>
-            <Form.Select>
-              <option value=''>--Select status--</option>
+            <Form.Select id="txtStatus">
+              <option value=''>Select status</option>
               <option value="Active">Active</option>
               <option value="Expired">Expired</option>
             </Form.Select>
           </Row>
           <Row className="mb-3">
             <Form.Label>User Id</Form.Label>
-            <Form.Control placeholder="User Id" />
+            <Form.Control id="txtUserId" placeholder="User Id" />
           </Row>
           <Row className="mb-3">
             <Form.Label>Password</Form.Label>
-            <Form.Control placeholder="password" />
+            <Form.Control id="txtPassword" placeholder="Password" />
           </Row>
           <Row className="mb-3">
             <Button variant="primary" type="submit">

@@ -82,8 +82,9 @@ const LoginForm = ({ hasLabel }) => {
       expiry: new Date().getTime() + expiration,
     }
     localStorage.setItem('Token', JSON.stringify(config));
+    localStorage.setItem('EncryptedSecurityUserId', data.encryptedSecurityUserId);
     localStorage.setItem('EncryptedClientCode', data.encryptedClientCode);
-    localStorage.setItem('ClientName', data.clientName);
+    // localStorage.setItem('ClientName', data.clientName);
     localStorage.setItem('LoginUserName', data.loginUserName);
     localStorage.setItem('LoginUserEmailId', data.loginUserEmailId);
     localStorage.setItem('LoginUserMobileNumber', data.loginUserMobileNumber);

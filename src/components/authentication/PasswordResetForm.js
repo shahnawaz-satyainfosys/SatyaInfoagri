@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { resetPasswordAction } from '../../actions/index';
 
-const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
+const PasswordResetForm = ({ hasLabel, encryptedSecurityUserId }) => {
 
   const [formData, setFormData] = useState({
     password: '',
@@ -23,7 +23,7 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
   const [confPasswordErr, setConfPasswordErr] = useState({});
 
   useEffect(() => {
-    axios.get(process.env.REACT_APP_API_URL + '/validate-client/' + encryptedClientCode)
+    axios.get(process.env.REACT_APP_API_URL + '/validate-client/' + encryptedSecurityUserId)
       .then(res => {
         if (res.data.status !== 200) navigate('/error')
       });
@@ -73,7 +73,7 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
 
       const reqParams = {
         NewPassword: formData.password,
-        EncryptedClientCode: encryptedClientCode
+        EncryptedSecurityUserId: encryptedSecurityUserId
       }
       dispatch(resetPasswordAction(formData.password));
       setIsLoading(true);
@@ -171,7 +171,7 @@ const PasswordResetForm = ({ hasLabel, encryptedClientCode }) => {
 
 PasswordResetForm.propTypes = {
   hasLabel: PropTypes.bool,
-  encryptedClientCode: PropTypes.string
+  encryptedSecurityUserId: PropTypes.string
 };
 
 export default PasswordResetForm;
