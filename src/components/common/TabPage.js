@@ -4,6 +4,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 //Datatable Modules
 import FalconComponentCard from 'components/common/FalconComponentCard';
 import ClientDetails from '../Clients/ClientDetails';
+import ContactDetails from '../Clients/ContactDetails';
 
 import AdvanceTableWrapper from 'components/common/advance-table/AdvanceTableWrapper';
 import AdvanceTable from 'components/common/advance-table/AdvanceTable';
@@ -98,11 +99,19 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
                 </FalconComponentCard>
               )}
               {index == 1 && ClientDetails && (
-                <FalconComponentCard>
-                  <FalconComponentCard.Body language="jsx">
-                    <ClientDetails />
-                  </FalconComponentCard.Body>
-                </FalconComponentCard>
+                <>
+                  <FalconComponentCard>
+                    <FalconComponentCard.Body language="jsx">
+                      <ClientDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard>
+                    <FalconComponentCard.Body language="jsx">
+                      <ContactDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+                </>
               )}
             </Tab>
           );

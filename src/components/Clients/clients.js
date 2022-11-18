@@ -17,9 +17,9 @@ const listColumnArray = [
   { accessor: 'status', Header: 'Status' }
 ];
 
-const Client = () => {
+export const Client = () => {
   const [listData, setListData] = useState([]);
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(15);
 
   const fetchUsers = async (page, size = perPage) => {
     let token = localStorage.getItem('Token');
