@@ -24,10 +24,11 @@ export const ClientDetails = () => {
     GstNo: '',
     status: '',
     noOfCompanies: 1,
-    noOfUsers: 1,
+    noOfUsers: 1
   });
   const [countryList, setCountryList] = useState([]);
   const [stateList, setStateList] = useState([]);
+  const [billingStateList, setBillingStateList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [formHasError, setFormError] = useState(false);
   const [customerNameErr, setCustomerNameErr] = useState({});
@@ -44,7 +45,6 @@ export const ClientDetails = () => {
 
   useEffect(() => {
     getCountries();
-    getStates();
   }, []);
 
   const getCountries = async () => {
@@ -65,21 +65,32 @@ export const ClientDetails = () => {
       });
   }
 
-  const getStates = async () => {
+  const getStates = async (EncryptedClientCountryCode, isBillingCountry) => {
+    const userData = {
+      EncryptedCountryCode: EncryptedClientCountryCode
+    }
+    
     axios
-      .get(process.env.REACT_APP_API_URL + '/state-list')
+      .post(process.env.REACT_APP_API_URL + '/state-list', userData)
       .then(res => {
+
+        let stateData = [];
+
         if (res.data.status == 200) {
-          let stateData = [];
-          if (res.data && res.data.data.length > 0)
+          if (res.data && res.data.data.length > 0) {
             res.data.data.forEach(state => {
               stateData.push({
                 key: state.stateName,
                 value: state.encryptedStateCode
               });
             });
-          setStateList(stateData);
+          }
         }
+
+        if (isBillingCountry)
+              setBillingStateList(stateData);  
+        else
+          setStateList(stateData);
       });
   }
 
@@ -99,67 +110,67 @@ export const ClientDetails = () => {
     let isValid = true;
 
     if (!formData.customerName) {
-      customerNameErr.nameEmpty = "Enter customer name.";
+      customerNameErr.nameEmpty = "Enter customer name";
       isValid = false;
       setFormError(true);
     }
 
     if (!formData.clientAddress) {
-      clientAddressErr.addressEmpty = "Enter address.";
+      clientAddressErr.addressEmpty = "Enter address";
       isValid = false;
       setFormError(true);
     }
 
     if (!formData.country) {
-      countryErr.countrySelect = "Select valid country.";
+      countryErr.countrySelect = "Select valid country";
       isValid = false;
       setFormError(true);
     }
 
     if (!formData.state) {
-      stateErr.stateSelect = "Select valid state.";
+      stateErr.stateSelect = "Select valid state";
       isValid = false;
       setFormError(true);
     }
 
     if (!formData.billingAddress) {
-      billingAddressErr.billAddressEmpty = "Enter billing address.";
+      billingAddressErr.billAddressEmpty = "Enter billing address";
       isValid = false;
       setFormError(true);
     }
 
     if (!formData.billingCountry) {
-      billingCountryErr.billCountryEmpty = "Select valid billing country.";
+      billingCountryErr.billCountryEmpty = "Select valid billing country";
       isValid = false;
       setFormError(true);
     }
 
     if (!formData.billingState) {
-      billingStateErr.billStateEmpty = "Select valid billing state.";
+      billingStateErr.billStateEmpty = "Select valid billing state";
       isValid = false;
       setFormError(true);
     }
 
     if (!formData.PanNo) {
-      panNoErr.panNoEmpty = "Enter PAN number.";
+      panNoErr.panNoEmpty = "Enter PAN number";
       isValid = false;
       setFormError(true);
     }
 
     if (!formData.GstNo) {
-      gstNoErr.gstNoEmpty = "Enter GST number.";
+      gstNoErr.gstNoEmpty = "Enter GST number";
       isValid = false;
       setFormError(true);
     }
 
     if (formData.noOfCompanies <= 0) {
-      noOfCompaniesErr.noOfCompaniesEmpty = "Number of companies must be greater than 0.";
+      noOfCompaniesErr.noOfCompaniesEmpty = "Number of companies must be greater than 0";
       isValid = false;
       setFormError(true);
     }
 
     if (formData.noOfUsers <= 0) {
-      noOfUsersErr.noOfUsersEmpty = "Number of users must be greater than 0.";
+      noOfUsersErr.noOfUsersEmpty = "Number of users must be greater than 0";
       isValid = false;
       setFormError(true);
     }
@@ -218,8 +229,8 @@ export const ClientDetails = () => {
             toast.success(res.data.message, {
               theme: 'colored'
             });
+            document.getElementById("ContactDetails").style.display = "block";
             localStorage.setItem('EncryptedResponseClientCode', res.data.data.encryptedClientCode);
-            setFormData();
           } else {
             toast.error(res.data.message, {
               theme: 'colored'
@@ -234,6 +245,20 @@ export const ClientDetails = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
+
+    if (e.target.name == "country") {
+      if(e.target.value == '')
+        setStateList([]);
+      else
+        getStates(e.target.value);
+    }
+
+    if (e.target.name == "billingCountry") {  
+      if(e.target.value == '')
+        setBillingStateList([]);
+      else
+        getStates(e.target.value, true);
+    }
   };
 
   return (
@@ -249,17 +274,17 @@ export const ClientDetails = () => {
         <Row>
           <Col className="me-5 ms-5">
             <Row className="mb-3">
-              <Form.Label>Customer Name *</Form.Label>
+              <Form.Label>Customer Name<span className="text-danger">*</span></Form.Label>
               <Form.Control id="txtCustomerName" name="customerName" maxLength={50} onChange={handleFieldChange} placeholder="Customer Name" required />
               {Object.keys(customerNameErr).map((key) => {
-                return <span style={{ color: "red", paddingLeft: "0px", fontSize: "15px" }}>{customerNameErr[key]}</span>
+                return <span className="error-message">{customerNameErr[key]}</span>
               })}
             </Row>
             <Row className="mb-3">
-              <Form.Label>Customer Address *</Form.Label>
+              <Form.Label>Customer Address<span className="text-danger">*</span></Form.Label>
               <Form.Control id="txtCustomerAddress" name="clientAddress" maxLength={50} onChange={handleFieldChange} className="mb-1" placeholder="Address" required />
               {Object.keys(clientAddressErr).map((key) => {
-                return <span style={{ color: "red", paddingLeft: "0px", fontSize: "15px" }}>{clientAddressErr[key]}</span>
+                return <span className="error-message">{clientAddressErr[key]}</span>
               })}
               <Form.Control id="txtCustomerAddress2" name="clientAddress2" maxLength={50} onChange={handleFieldChange} className="mb-1" placeholder="Address 2" />
               <Form.Control id="txtCustomerAddress3" name="clientAddress3" maxLength={50} onChange={handleFieldChange} className="mb-1" placeholder="Address 3" />
@@ -269,7 +294,7 @@ export const ClientDetails = () => {
               <Form.Control id="txtPincode" name="pincode" maxLength={10} onChange={handleFieldChange} placeholder="Pincode" />
             </Row>
             <Row className="mb-3">
-              <Form.Label>Country *</Form.Label>
+              <Form.Label>Country<span className="text-danger">*</span></Form.Label>
               <Form.Select id="txtCountry" name="country" onChange={handleFieldChange} required>
                 <option value=''>Select country</option>
                 {countryList.map((option, index) => (
@@ -277,12 +302,11 @@ export const ClientDetails = () => {
                 ))}
               </Form.Select>
               {Object.keys(countryErr).map((key) => {
-                return <span style={{ color: "red", paddingLeft: "0px", fontSize: "15px" }}>{countryErr[key]}</span>
+                return <span className="error-message">{countryErr[key]}</span>
               })}
             </Row>
-
             <Row className="mb-3">
-              <Form.Label>State *</Form.Label>
+              <Form.Label>State<span className="text-danger">*</span></Form.Label>
               <Form.Select id="txtState" name="state" onChange={handleFieldChange} required>
                 <option value=''>Select state</option>
                 {stateList.map((option, index) => (
@@ -290,16 +314,17 @@ export const ClientDetails = () => {
                 ))}
               </Form.Select>
               {Object.keys(stateErr).map((key) => {
-                return <span style={{ color: "red", paddingLeft: "0px", fontSize: "15px" }}>{stateErr[key]}</span>
+                return <span className="error-message">{stateErr[key]}</span>
               })}
             </Row>
           </Col>
+
           <Col className="me-5 ms-5">
             <Row className="mb-3">
-              <Form.Label>Billing Address *</Form.Label>
+              <Form.Label>Billing Address<span className="text-danger">*</span></Form.Label>
               <Form.Control id="txtBillingAddress" name="billingAddress" maxLength={50} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address" required />
               {Object.keys(billingAddressErr).map((key) => {
-                return <span style={{ color: "red", paddingLeft: "0px", fontSize: "15px" }}>{billingAddressErr[key]}</span>
+                return <span className="error-message">{billingAddressErr[key]}</span>
               })}
               <Form.Control id="txtBillingAddress2" name="billingAddress2" maxLength={50} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address 2" />
               <Form.Control id="txtBillingAddress3" name="billingAddress3" maxLength={50} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address 3" />
@@ -309,7 +334,7 @@ export const ClientDetails = () => {
               <Form.Control id="txtBillingPincode" name="billingPincode" maxLength={10} onChange={handleFieldChange} placeholder="Pincode" />
             </Row>
             <Row className="mb-3">
-              <Form.Label>Country *</Form.Label>
+              <Form.Label>Country<span className="text-danger">*</span></Form.Label>
               <Form.Select id="txtBillingCountry" name="billingCountry" onChange={handleFieldChange} required>
                 <option value=''>Select country</option>
                 {countryList.map((option, index) => (
@@ -317,35 +342,36 @@ export const ClientDetails = () => {
                 ))}
               </Form.Select>
               {Object.keys(billingCountryErr).map((key) => {
-                return <span style={{ color: "red", paddingLeft: "0px", fontSize: "15px" }}>{billingCountryErr[key]}</span>
+                return <span className="error-message">{billingCountryErr[key]}</span>
               })}
             </Row>
             <Row className="mb-3">
-              <Form.Label>State *</Form.Label>
+              <Form.Label>State<span className="text-danger">*</span></Form.Label>
               <Form.Select id="txtBillingState" name="billingState" onChange={handleFieldChange} required>
                 <option value=''>Select state</option>
-                {stateList.map((option, index) => (
+                {billingStateList.map((option, index) => (
                   <option key={index} value={option.value}>{option.key}</option>
                 ))}
               </Form.Select>
               {Object.keys(billingStateErr).map((key) => {
-                return <span style={{ color: "red", paddingLeft: "0px", fontSize: "15px" }}>{billingStateErr[key]}</span>
+                return <span className="error-message">{billingStateErr[key]}</span>
               })}
             </Row>
           </Col>
+
           <Col className="me-5 ms-5">
             <Row className="mb-3">
-              <Form.Label>PAN No. *</Form.Label>
+              <Form.Label>PAN No.<span className="text-danger">*</span></Form.Label>
               <Form.Control id="txtPAN" name="PanNo" maxLength={20} onChange={handleFieldChange} placeholder="PAN No." required />
               {Object.keys(panNoErr).map((key) => {
-                return <span style={{ color: "red", paddingLeft: "0px", fontSize: "15px" }}>{panNoErr[key]}</span>
+                return <span className="error-message">{panNoErr[key]}</span>
               })}
             </Row>
             <Row className="mb-3">
-              <Form.Label>GST No *</Form.Label>
+              <Form.Label>GST No.<span className="text-danger">*</span></Form.Label>
               <Form.Control id="txtGST" name="GstNo" maxLength={20} onChange={handleFieldChange} placeholder="GST No." required />
               {Object.keys(gstNoErr).map((key) => {
-                return <span style={{ color: "red", paddingLeft: "0px", fontSize: "15px" }}>{gstNoErr[key]}</span>
+                return <span className="error-message">{gstNoErr[key]}</span>
               })}
             </Row>
             <Row className="mb-3">
@@ -360,14 +386,14 @@ export const ClientDetails = () => {
               <Form.Label>No. of Companies</Form.Label>
               <Form.Control type='number' min={1} id="txtUserId" max={9999} value={formData.noOfCompanies} name="noOfCompanies" onChange={handleFieldChange} placeholder="No. of Companies" required />
               {Object.keys(noOfCompaniesErr).map((key) => {
-                return <span style={{ color: "red", paddingLeft: "0px", fontSize: "15px" }}>{noOfCompaniesErr[key]}</span>
+                return <span className="error-message">{noOfCompaniesErr[key]}</span>
               })}
             </Row>
             <Row className="mb-3">
               <Form.Label>No. of Users</Form.Label>
               <Form.Control type='number' min={1} id="txtPassword" max={9999} value={formData.noOfUsers} name="noOfUsers" onChange={handleFieldChange} placeholder="No. of Users" required />
               {Object.keys(noOfUsersErr).map((key) => {
-                return <span style={{ color: "red", paddingLeft: "0px", fontSize: "15px" }}>{noOfUsersErr[key]}</span>
+                return <span className="error-message">{noOfUsersErr[key]}</span>
               })}
             </Row>
             <Row className="mb-3">
@@ -377,7 +403,7 @@ export const ClientDetails = () => {
             </Row>
           </Col>
         </Row>
-      </Form>      
+      </Form>
     </>
   )
 }

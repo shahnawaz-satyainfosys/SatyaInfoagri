@@ -17,3 +17,9 @@
 .details-form label {
     padding-left: 0px !important;
 }
+
+.error-message {
+    color: #e63757;
+    padding-left: 0px !important;
+    font-size: 15px;
+}

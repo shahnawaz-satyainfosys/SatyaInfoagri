@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab, Form, Row, Col, Button } from 'react-bootstrap';
 
 //Datatable Modules
 import FalconComponentCard from 'components/common/FalconComponentCard';
+
 import ClientDetails from '../Clients/ClientDetails';
 import ContactDetails from '../Clients/ContactDetails';
+import ContactDetailsList from '../Clients/ContactDetailsList';
 
 import AdvanceTableWrapper from 'components/common/advance-table/AdvanceTableWrapper';
 import AdvanceTable from 'components/common/advance-table/AdvanceTable';
@@ -67,6 +69,18 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
 
   return (
     <>
+      <Form>
+        <Row>
+          <Col>
+            <div style={{ display: "flex", justifyContent: "end" }}>
+              <Button className='btn btn-primary mr-4' size="sm">New</Button>
+              <Button className='btn btn-info mr-4' size="sm">Save</Button>
+              <Button className='btn btn-danger mr-4' size="sm">Cancel</Button>
+            </div>
+          </Col>
+        </Row>
+      </Form>
+      <br />
       <Tabs
         variant="pills"
         defaultActiveKey="profile"
@@ -106,9 +120,15 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard>
+                  <FalconComponentCard style={{ display: 'none' }} id='ContactDetails'>
                     <FalconComponentCard.Body language="jsx">
                       <ContactDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard style={{ display: 'none' }} id='ContactDetailsTable'>
+                    <FalconComponentCard.Body language="jsx">
+                      <ContactDetailsList />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
                 </>

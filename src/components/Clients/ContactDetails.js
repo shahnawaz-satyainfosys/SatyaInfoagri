@@ -14,10 +14,30 @@ const ContactDetails = () => {
     activeStatus: ''
   });
 
+  const [formHasError, setFormError] = useState(false);
+  const [contactNameErr, setContactNameErr] = useState({});
+
+  const handleValidation = () => {
+    const contactNameErr = {};
+
+    let isValid = true;
+
+    if (!formData.contactPersonName) {
+      contactNameErr.nameEmpty = "Enter contact person name";
+      isValid = false;
+      setFormError(true);
+    }
+    if (!isValid) {
+      setContactNameErr(contactNameErr);
+    }
+    return isValid;
+  }
+
   const handleSubmit = e => {
     e.preventDefault();
 
     const form = e.currentTarget;
+    if (handleValidation()){
     const userData = {
       EncryptedClientCode: localStorage.getItem("EncryptedResponseClientCode"),
       contactPerson: formData.contactPersonName,
@@ -27,20 +47,23 @@ const ContactDetails = () => {
       activeStatus: formData.activeStatus,
       AddUser: localStorage.getItem("LoginUserName")
     }
-    console.log(userData);
     axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', userData)
       .then(res => {
-        debugger   
+        debugger
         if (res.data.status == 200) {
           toast.success(res.data.message, {
             theme: 'colored'
           });
+          document.getElementById("ContactDetailsTable").style.display = "block";
+          document.getElementById("ContactDetails").style.display = "none";
+          //getClientContactDetailsList();
         } else {
           toast.error(res.data.message, {
             theme: 'colored'
           });
         }
       })
+    }
   };
 
   const handleFieldChange = e => {
@@ -50,19 +73,27 @@ const ContactDetails = () => {
     });
   };
 
+  const hideForm = () => {
+    document.getElementById("ContactDetails").style.display = "none";
+    document.getElementById("btnAdd").style.display = "block";
+  }
+
   return (
     <>
-      <Form className="contact-details-form" onSubmit={e => { handleSubmit(e) }}>
+      <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }}>
         <Row>
           <Col className="me-5 ms-5">
             <Row className="mb-3">
-              <Form.Label>Contact Person*</Form.Label>
-              <Form.Control id="txtContactPerson" name="contactPersonName" maxLength={50} onChange={handleFieldChange} placeholder="Contact person name" required />            
+              <Form.Label className='details-form'>Contact Person<span className="text-danger">*</span></Form.Label>
+              <Form.Control id="txtContactPerson" name="contactPersonName" maxLength={50} onChange={handleFieldChange} placeholder="Contact person name" required />
+              {Object.keys(contactNameErr).map((key) => {
+                return <span className="error-message">{contactNameErr[key]}</span>
+              })}
             </Row>
 
             <Row className="mb-3">
               <Form.Label>Mobile No</Form.Label>
-              <Form.Control id="txtMobileno" name="mobileNo" maxLength={10} onChange={handleFieldChange} placeholder="Mobile No" required />
+              <Form.Control id="txtMobileno" name="mobileNo" maxLength={10} onChange={handleFieldChange} placeholder="Mobile No" />
             </Row>
 
             <Row className="mb-3">
@@ -91,6 +122,11 @@ const ContactDetails = () => {
             <Row className="mb-3">
               <Button variant="primary" type="submit">
                 Add
+              </Button>
+            </Row>
+            <Row className="mb-3">
+              <Button variant="danger" type="submit" onClick={() => hideForm()}>
+                Cancel
               </Button>
             </Row>
           </Col>

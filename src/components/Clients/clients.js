@@ -18,6 +18,9 @@ const listColumnArray = [
 ];
 
 export const Client = () => {
+
+  localStorage.setItem('EncryptedResponseClientCode', '');
+
   const [listData, setListData] = useState([]);
   const [perPage, setPerPage] = useState(15);
 
