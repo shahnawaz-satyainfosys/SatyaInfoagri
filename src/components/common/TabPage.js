@@ -91,8 +91,8 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
         <Row>
           <Col>
             <div style={{ display: "flex", justifyContent: "end" }}>
-              <Button className='btn btn-primary mr-4' id='btnNew'>New</Button>
-              <Button className='btn btn-info mr-4' id='btnSave'>Save</Button>
+              <Button className='btn btn-primary me-2' id='btnNew'>New</Button>
+              <Button className='btn btn-info me-2' id='btnSave'>Save</Button>
               <Button className='btn btn-danger mr-4' id='btnCancel'>Cancel</Button>
             </div>
           </Col>
