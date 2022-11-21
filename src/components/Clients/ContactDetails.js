@@ -16,6 +16,7 @@ const ContactDetails = () => {
 
   const [formHasError, setFormError] = useState(false);
   const [contactNameErr, setContactNameErr] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleValidation = () => {
     const contactNameErr = {};
@@ -37,32 +38,35 @@ const ContactDetails = () => {
     e.preventDefault();
 
     const form = e.currentTarget;
-    if (handleValidation()){
-    const userData = {
-      EncryptedClientCode: localStorage.getItem("EncryptedResponseClientCode"),
-      contactPerson: formData.contactPersonName,
-      mobileNo: formData.mobileNo,
-      emailId: formData.emailId,
-      sendMail: formData.sendMail,
-      activeStatus: formData.activeStatus,
-      AddUser: localStorage.getItem("LoginUserName")
-    }
-    axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', userData)
-      .then(res => {
-        debugger
-        if (res.data.status == 200) {
-          toast.success(res.data.message, {
-            theme: 'colored'
-          });
-          document.getElementById("ContactDetailsTable").style.display = "block";
-          document.getElementById("ContactDetails").style.display = "none";
-          //getClientContactDetailsList();
-        } else {
-          toast.error(res.data.message, {
-            theme: 'colored'
-          });
-        }
-      })
+
+    if (handleValidation()) {
+      const userData = {
+        EncryptedClientCode: localStorage.getItem("EncryptedResponseClientCode"),
+        contactPerson: formData.contactPersonName,
+        mobileNo: formData.mobileNo,
+        emailId: formData.emailId,
+        sendMail: formData.sendMail,
+        activeStatus: formData.activeStatus,
+        AddUser: localStorage.getItem("LoginUserName")
+      }
+
+      setIsLoading(true);
+
+      axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', userData)
+        .then(res => {
+          setIsLoading(false);
+          if (res.data.status == 200) {
+            toast.success(res.data.message, {
+              theme: 'colored'
+            });
+            $("#ContactDetailsTable").show();
+            $("#AddContactDetailsForm").hide();            
+          } else {
+            toast.error(res.data.message, {
+              theme: 'colored'
+            });
+          }
+        })
     }
   };
 
@@ -74,12 +78,18 @@ const ContactDetails = () => {
   };
 
   const hideForm = () => {
-    document.getElementById("ContactDetails").style.display = "none";
-    document.getElementById("btnAdd").style.display = "block";
+    $("#AddContactDetailsForm").hide();
+    $("#btnAdd").show();
   }
 
   return (
     <>
+      {isLoading ? (
+        <Spinner
+          className="position-absolute start-50 loader-color"
+          animation="border"
+        />
+      ) : null}
       <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }}>
         <Row>
           <Col className="me-5 ms-5">

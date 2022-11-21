@@ -8,6 +8,9 @@ import ClientDetails from '../Clients/ClientDetails';
 import ContactDetails from '../Clients/ContactDetails';
 import ContactDetailsList from '../Clients/ContactDetailsList';
 
+import TransactionDetails from '../Clients/TransactionDetails';
+import TransactionDetailList from '../Clients/TransactionDetailList';
+
 import AdvanceTableWrapper from 'components/common/advance-table/AdvanceTableWrapper';
 import AdvanceTable from 'components/common/advance-table/AdvanceTable';
 import AdvanceTableFooter from 'components/common/advance-table/AdvanceTableFooter';
@@ -19,7 +22,22 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
 
   useEffect(() => {
     $('[data-rr-ui-event-key*="List"]').trigger('click');
+    $("#btnNew").show();
+    $("#btnSave").hide();
+    $("#btnCancel").hide();
   }, []);
+
+  $('[data-rr-ui-event-key*="List"]').click(function(){
+    $("#btnNew").show();
+    $("#btnSave").hide();
+    $("#btnCancel").hide();
+  })
+
+  $('[data-rr-ui-event-key*="Customer Details"]').click(function(){
+    $("#btnNew").hide();
+    $("#btnSave").show();
+    $("#btnCancel").show();
+  })
 
   const data = `const columns = ${JSON.stringify(listColumnArray)};
   
@@ -73,9 +91,9 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
         <Row>
           <Col>
             <div style={{ display: "flex", justifyContent: "end" }}>
-              <Button className='btn btn-primary mr-4' size="sm">New</Button>
-              <Button className='btn btn-info mr-4' size="sm">Save</Button>
-              <Button className='btn btn-danger mr-4' size="sm">Cancel</Button>
+              <Button className='btn btn-primary mr-4' id='btnNew'>New</Button>
+              <Button className='btn btn-info mr-4' id='btnSave'>Save</Button>
+              <Button className='btn btn-danger mr-4' id='btnCancel'>Cancel</Button>
             </div>
           </Col>
         </Row>
@@ -120,7 +138,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard style={{ display: 'none' }} id='ContactDetails'>
+                  <FalconComponentCard style={{ display: 'none' }} id='AddContactDetailsForm'>
                     <FalconComponentCard.Body language="jsx">
                       <ContactDetails />
                     </FalconComponentCard.Body>
@@ -131,6 +149,21 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
                       <ContactDetailsList />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
+                </>
+              )}
+              {index == 2 && TransactionDetails && (
+                <>
+                  <FalconComponentCard style={{ display: 'none' }} id='TransactionDetailsTable'>
+                    <FalconComponentCard.Body language="jsx">
+                      <TransactionDetailList />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard>
+                    <FalconComponentCard.Body language="jsx">
+                      <TransactionDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>                  
                 </>
               )}
             </Tab>

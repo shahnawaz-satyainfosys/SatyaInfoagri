@@ -69,7 +69,7 @@ export const ClientDetails = () => {
     const userData = {
       EncryptedCountryCode: EncryptedClientCountryCode
     }
-    
+
     axios
       .post(process.env.REACT_APP_API_URL + '/state-list', userData)
       .then(res => {
@@ -88,7 +88,7 @@ export const ClientDetails = () => {
         }
 
         if (isBillingCountry)
-              setBillingStateList(stateData);  
+          setBillingStateList(stateData);
         else
           setStateList(stateData);
       });
@@ -155,10 +155,19 @@ export const ClientDetails = () => {
       panNoErr.panNoEmpty = "Enter PAN number";
       isValid = false;
       setFormError(true);
+    }else if (!(/[A-Z]{3}[CPHFATBLJG][A-Z]\d{4}[A-Z]/.test(formData.PanNo))) {
+      panNoErr.panNoInvalid = "Enter valid PAN number";
+      isValid = false;
+      setFormError(true);
     }
 
     if (!formData.GstNo) {
       gstNoErr.gstNoEmpty = "Enter GST number";
+      isValid = false;
+      setFormError(true);
+    }
+    else if (!(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(formData.GstNo))) {
+      gstNoErr.gstNoInvalid = "Enter valid GST number";
       isValid = false;
       setFormError(true);
     }
@@ -229,8 +238,9 @@ export const ClientDetails = () => {
             toast.success(res.data.message, {
               theme: 'colored'
             });
-            document.getElementById("ContactDetails").style.display = "block";
+            $("#AddContactDetailsForm").show();
             localStorage.setItem('EncryptedResponseClientCode', res.data.data.encryptedClientCode);
+            $("#AddClientDetailsForm :input").prop("disabled", true);
           } else {
             toast.error(res.data.message, {
               theme: 'colored'
@@ -247,14 +257,14 @@ export const ClientDetails = () => {
     });
 
     if (e.target.name == "country") {
-      if(e.target.value == '')
+      if (e.target.value == '')
         setStateList([]);
       else
         getStates(e.target.value);
     }
 
-    if (e.target.name == "billingCountry") {  
-      if(e.target.value == '')
+    if (e.target.name == "billingCountry") {
+      if (e.target.value == '')
         setBillingStateList([]);
       else
         getStates(e.target.value, true);
@@ -270,7 +280,7 @@ export const ClientDetails = () => {
         />
       ) : null}
 
-      <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }}>
+      <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }} id='AddClientDetailsForm'>
         <Row>
           <Col className="me-5 ms-5">
             <Row className="mb-3">

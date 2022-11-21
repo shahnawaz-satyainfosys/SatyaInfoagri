@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const ContactDetails = () => {
+const ContactDetailsList = () => {
 
   const [formData, setFormData] = useState({
     contactPersonName: '',
@@ -17,17 +17,17 @@ const ContactDetails = () => {
   const [contactList, setContactList] = useState([]);
 
   useEffect(() => {
-    //getClientContactDetailsList();
+    // getClientContactDetailsList();
 
     const count = $('#ContactDetailsTable tr').length;    
     if (count > 1) {
-      document.getElementById("ContactDetailsTable").style.display = "block";
+      $("ContactDetailsTable").show();
     }
   }, []);
 
   const showForm = () => {
-    document.getElementById("ContactDetails").style.display = "block";
-    document.getElementById("btnAdd").style.display = "none";
+    $("#AddContactDetailsForm").show();
+    $("#btnAdd").hide();
   }
 
   const getClientContactDetailsList = async () => {
@@ -83,4 +83,4 @@ const ContactDetails = () => {
   )
 };
 
-export default ContactDetails;
+export default ContactDetailsList;
