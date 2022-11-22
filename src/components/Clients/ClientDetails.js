@@ -394,14 +394,14 @@ export const ClientDetails = () => {
             </Row>
             <Row className="mb-3">
               <Form.Label>No. of Companies</Form.Label>
-              <Form.Control type='number' min={1} id="txtUserId" max={9999} value={formData.noOfCompanies} name="noOfCompanies" onChange={handleFieldChange} placeholder="No. of Companies" required />
+              <Form.Control type='number' min={1} id="numNoOfCompanies" max={9999} value={formData.noOfCompanies} name="noOfCompanies" onChange={handleFieldChange} placeholder="No. of Companies" required />
               {Object.keys(noOfCompaniesErr).map((key) => {
                 return <span className="error-message">{noOfCompaniesErr[key]}</span>
               })}
             </Row>
             <Row className="mb-3">
               <Form.Label>No. of Users</Form.Label>
-              <Form.Control type='number' min={1} id="txtPassword" max={9999} value={formData.noOfUsers} name="noOfUsers" onChange={handleFieldChange} placeholder="No. of Users" required />
+              <Form.Control type='number' min={1} id="numNoOfUsers" max={9999} value={formData.noOfUsers} name="noOfUsers" onChange={handleFieldChange} placeholder="No. of Users" required />
               {Object.keys(noOfUsersErr).map((key) => {
                 return <span className="error-message">{noOfUsersErr[key]}</span>
               })}

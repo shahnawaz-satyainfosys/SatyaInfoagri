@@ -31,6 +31,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
     $("#btnNew").show();
     $("#btnSave").hide();
     $("#btnCancel").hide();
+    // $('[data-rr-ui-event-key*="Customer Details"]').hide();
   })
 
   $('[data-rr-ui-event-key*="Customer Details"]').click(function(){
@@ -63,6 +64,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
         <AdvanceTable
           table
           headerClassName="bg-200 text-900 text-nowrap align-middle"
+          style = "padding-top : 0px"
           rowClassName="align-middle white-space-nowrap"
           tableProps={{
             bordered: true,
@@ -111,7 +113,6 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
               {index == 0 && listData && (
                 <FalconComponentCard>
                   <FalconComponentCard.Header
-                    title="List"
                     light={false}
                     className="border-bottom border-200"
                     noPreview={true}

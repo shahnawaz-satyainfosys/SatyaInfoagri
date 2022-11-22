@@ -14,10 +14,11 @@ export const TransactionDetails = () => {
         chequeNo: '',
         chequeDate: '',
         chequeBank: '',
-        amount: '',
-        gstPercentage: '',
+        amount: 0,
+        gstPercentage: 0,
         status: ''
     });
+    const [amountPayable, setAmountPayable] = useState(0);
     const [moduleList, setModuleList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [formHasError, setFormError] = useState(false);
@@ -105,8 +106,8 @@ export const TransactionDetails = () => {
                 ChequeNo: formData.chequeNo,
                 ChequeDate: formData.chequeDate,
                 ChequeBank: formData.chequeBank,
-                GSTPercent: formData.gstPercentage,
-                Amount: formData.amount,
+                GSTPercent: parseFloat(formData.gstPercentage),
+                Amount: parseFloat(formData.amount),
                 ActiveStatus: formData.status,
                 AddUser: localStorage.getItem("LoginUserName")
             }
@@ -120,7 +121,7 @@ export const TransactionDetails = () => {
                         toast.success(res.data.message, {
                             theme: 'colored'
                         });
-                        $("#TransactionDetailsTable").show();                                          
+                        $("#TransactionDetailsTable").show();
                     } else {
                         toast.error(res.data.message, {
                             theme: 'colored'
@@ -136,6 +137,37 @@ export const TransactionDetails = () => {
             [e.target.name]: e.target.value
         });
     };
+
+    const handleAmountChange = e => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+        if (e.target.value > 0) {
+            getTotalAmountWithGST(e.target.value, formData.gstPercentage);
+        }
+        else {
+            setAmountPayable(0)
+        }
+    }
+
+    const handleGstChange = e => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+        if (e.target.value > 0) {
+            getTotalAmountWithGST(formData.amount, e.target.value);
+        }
+        else {
+            getTotalAmountWithGST(formData.amount);
+        }
+    }
+
+    const getTotalAmountWithGST = (amount, gstPercentage = 0) => {
+        var gstAmount = gstPercentage > 0 ? parseFloat((amount * gstPercentage) / 100) : 0;
+        setAmountPayable(parseFloat(amount) + gstAmount);
+    }
 
     return (
         <>
@@ -197,21 +229,21 @@ export const TransactionDetails = () => {
                         </Row>
                         <Row className="mb-3">
                             <Form.Label>Cheque Bank</Form.Label>
-                            <Form.Control id="txtChequeBank" name="chequeBank" onChange={handleFieldChange} placeholder="Enter cheque bank name" />                
+                            <Form.Control id="txtChequeBank" name="chequeBank" onChange={handleFieldChange} placeholder="Enter cheque bank name" />
                         </Row>
                     </Col>
 
                     <Col className="me-5 ms-5">
                         <Row className="mb-3">
                             <Form.Label>Amount</Form.Label>
-                            <Form.Control type='number' id="txtAmount" name="amount" onChange={handleFieldChange} placeholder="Enter amount" required />
+                            <Form.Control type='number' id="txtAmount" name="amount" min={0} onChange={handleAmountChange} placeholder="Enter amount" required />
                             {Object.keys(amountErr).map((key) => {
                                 return <span className="error-message">{amountErr[key]}</span>
                             })}
                         </Row>
                         <Row className="mb-3">
-                            <Form.Label>GST Percentage1</Form.Label>
-                            <Form.Control id="numGstPercent" name="gstPercentage" onChange={handleFieldChange} placeholder="Enter gst percentage" />                        
+                            <Form.Label>GST Percentage</Form.Label>
+                            <Form.Control type='number' id="numGstPercent" name="gstPercentage" min={0} onChange={handleGstChange} placeholder="Enter gst percentage" />
                         </Row>
                         <Row className="mb-3">
                             <Form.Label>Status</Form.Label>
@@ -223,7 +255,7 @@ export const TransactionDetails = () => {
                         </Row>
                         <Row className="mb-3">
                             <Form.Label>Total Amount Payable</Form.Label>
-                            <Form.Control id="numAmountPayable" name="gstPercentage" onChange={handleFieldChange} placeholder="Enter gst percentage" />
+                            <Form.Control type='number' id="numAmountPayable" name="amountPayable" value={amountPayable} onChange={handleFieldChange} placeholder="Total amount" />
                         </Row>
                         <Row className="mb-3">
                             <Button variant="primary" type="submit">

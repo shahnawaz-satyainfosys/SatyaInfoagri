@@ -12,6 +12,27 @@ const AdvanceTable = ({
   rowClassName,
   tableProps
 }) => {
+  const toTabPage = (rowData) => {  
+    $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
+    $("#txtCustomerName").val(rowData.original.customerName);
+    $("#txtCustomerAddress").val(rowData.original.address1);
+    $("#txtCustomerAddress2").val(rowData.original.address2);
+    $("#txtCustomerAddress3").val(rowData.original.address3);
+    $("#txtPincode").val(rowData.original.pinCode);
+    $("#txtCountry").find(':rowData.original.country').val(rowData.original.encryptedCountryCode);
+    $("#txtState").val(rowData.original.state);
+    $("#txtBillingAddress").val(rowData.original.billingAddress1);
+    $("#txtBillingAddress2").val(rowData.original.billingAddress2);
+    $("#txtBillingAddress3").val(rowData.original.billingAddress3);
+    $("#txtBillingPincode").val(rowData.original.billingPinCode);
+    $("#txtBillingCountry").val(rowData.original.billingCountry);
+    $("#txtBillingState").val(rowData.original.billingState);
+    $("#txtPAN").val(rowData.original.panNumber);
+    $("#txtGST").val(rowData.original.gstNumber);
+    $("#txtStatus").val(rowData.original.status);
+    $("#numNoOfCompanies").val(rowData.original.noOfComapnies);
+    $("#numNoOfUsers").val(rowData.original.noOfUsers);
+  }
   return (
     <SimpleBarReact>
       <Table {...getTableProps(tableProps)}>
@@ -46,7 +67,7 @@ const AdvanceTable = ({
           {page.map((row, i) => {
             prepareRow(row);
             return (
-              <tr key={i} className={rowClassName} {...row.getRowProps()}>
+              <tr key={i} className={rowClassName} {...row.getRowProps()} onDoubleClick={() => toTabPage(row)}>
                 {row.cells.map((cell, index) => {
                   return (
                     <td

@@ -19,10 +19,10 @@ const TransactionDetailList = () => {
   const [transactionList, setTransactionList] = useState([]);
 
   useEffect(() => {
-    getTransactionDetailsList();
+    //getTransactionDetailsList();
 
     const count = $('#TransactionDetailsTable tr').length;
-    if (count > 0) {
+    if (count > 1) {
       $("#TransactionDetailsTable").show();
     }
   }, []);
