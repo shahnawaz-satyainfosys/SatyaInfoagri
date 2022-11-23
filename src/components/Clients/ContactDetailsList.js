@@ -1,53 +1,19 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Button } from 'react-bootstrap';
-import axios from 'axios';
-import { toast } from 'react-toastify';
 
 const ContactDetailsList = () => {
 
-  const [formData, setFormData] = useState({
-    contactPersonName: '',
-    mobileNo: '',
-    emailId: '',
-    sendMail: '',
-    activeStatus: ''
-  });
-
-  const [contactList, setContactList] = useState([]);
-
   useEffect(() => {
-    // getClientContactDetailsList();
-
     const count = $('#ContactDetailsTable tr').length;    
     if (count > 1) {
-      $("ContactDetailsTable").show();
+      $("#ContactDetailsTable").show();
     }
   }, []);
 
   const showForm = () => {
     $("#AddContactDetailsForm").show();
     $("#btnAdd").hide();
-  }
-
-  const getClientContactDetailsList = async () => {
-    const clientData = {
-      EncryptedClientCode: localStorage.getItem("EncryptedResponseClientCode")
-    }
-    axios
-      .post(process.env.REACT_APP_API_URL + '/get-client-contact-detail-list', clientData)
-      .then(res => {
-        if (res.data.status == 200) {
-          let contactDetailsData = [];
-          if (res.data && res.data.data.length > 0)
-            contactDetailsData = res.data.data;
-          setContactList(contactDetailsData);
-        } else {
-          toast.error(res.data.message, {
-            theme: 'colored'
-          });
-        }
-      });
   }
 
   return (
@@ -57,7 +23,7 @@ const ContactDetailsList = () => {
           Add Contact Detail
         </Button>
       </div>
-      <table className='table table-striped' id="ContactDetailsList">
+      <table className='table table-striped' id="ClientContactDetailsTable">
         <thead>
           <tr>
             <th>Contact Person</th>
@@ -67,16 +33,6 @@ const ContactDetailsList = () => {
           </tr>
         </thead>
         <tbody id='tableContactPerson'>
-          {contactList.map((contact) => {
-            return (
-              <tr>
-                <td>{contact.contactPerson}</td>
-                <td>{contact.mobileNo}</td>
-                <td>{contact.emailId}</td>
-                <td>{contact.sendMail}</td>
-              </tr>
-            )
-          })}
         </tbody>
       </table>
     </>

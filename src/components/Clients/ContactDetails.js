@@ -135,7 +135,7 @@ const ContactDetails = () => {
               </Button>
             </Row>
             <Row className="mb-3">
-              <Button variant="danger" type="submit" onClick={() => hideForm()}>
+              <Button variant="danger" onClick={() => hideForm()}>
                 Cancel
               </Button>
             </Row>

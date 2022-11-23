@@ -1,7 +1,11 @@
-import React from 'react';
+// import React from 'react';
 import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
 import { Table } from 'react-bootstrap';
+import axios from 'axios';
+import React from 'react';
+import { toast } from 'react-toastify';
+import Moment from "moment";
 
 const AdvanceTable = ({
   getTableProps,
@@ -12,8 +16,9 @@ const AdvanceTable = ({
   rowClassName,
   tableProps
 }) => {
-  const toTabPage = (rowData) => {  
+  const toTabPage = (rowData) => {
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
+    $('#addClient').hide();
     $("#txtCustomerName").val(rowData.original.customerName);
     $("#txtCustomerAddress").val(rowData.original.address1);
     $("#txtCustomerAddress2").val(rowData.original.address2);
@@ -32,6 +37,79 @@ const AdvanceTable = ({
     $("#txtStatus").val(rowData.original.status);
     $("#numNoOfCompanies").val(rowData.original.noOfComapnies);
     $("#numNoOfUsers").val(rowData.original.noOfUsers);
+    getContactDetailsList(rowData.original.encryptedClientCode);
+    getTransactionDetailsList(rowData.original.encryptedClientCode)
+  }
+
+  const getContactDetailsList = async (encryptedClientCode) => {
+
+    const requestParams = {
+      EncryptedClientCode: encryptedClientCode
+    }
+
+    axios
+      .post(process.env.REACT_APP_API_URL + '/get-client-contact-detail-list', requestParams)
+      .then(res => {
+        if (res.data.status == 200) {
+          let contactDetailsData = [];
+          if (res.data && res.data.data.length > 0) {
+            if ($('#ContactDetailsTable tbody tr').length > 1) {
+              $('#ContactDetailsTable tbody tr').remove();
+            }
+            $("#ContactDetailsTable").show();
+            contactDetailsData = res.data.data;
+            $(function () {
+              $.each(contactDetailsData, function (c, contactDetails) {
+                var tr = $('<tr>').append(
+                  $('<td>').text(contactDetails.contactPerson),
+                  $('<td>').text(contactDetails.mobileNo),
+                  $('<td>').text(contactDetails.emailId),
+                  $('<td>').text(contactDetails.sendMail == 'Y' ? "Yes" : "No")
+                ).appendTo('#ClientContactDetailsTable');
+              });
+            });
+
+          }
+        } else {
+          toast.error(res.data.message, {
+            theme: 'colored'
+          });
+        }
+      });
+  }
+
+  const getTransactionDetailsList = async (encryptedClientCode) => {
+    const requestParams = {
+      EncryptedClientCode: encryptedClientCode
+    }
+
+    axios
+      .post(process.env.REACT_APP_API_URL + '/client-registration-authorization-list', requestParams)
+      .then(res => {
+        if (res.data.status == 200) {
+          if (res.data && res.data.data.length > 0) {
+            if ($('#TransactionTableDetails tbody tr').length > 1) {
+              $('#TransactionTableDetails tbody tr').remove();
+            }
+
+            $("#TransactionDetailsTable").show();
+            
+            $(function () {
+              $.each(res.data.data, function (t, transactionDetails) {
+                var tr = $('<tr>').append(
+                  $('<td>').text(transactionDetails.moduleName),
+                  $('<td>').text(Moment(transactionDetails.startDate).format("DD/MM/YYYY")),
+                  $('<td>').text(Moment(transactionDetails.endDate).format("DD/MM/YYYY")),
+                  $('<td>').text(transactionDetails.paymentType == "CQ" ? "Cheque" : transactionDetails.paymentType == "CS" ? "Cash" : "TT"),
+                  $('<td>').text(transactionDetails.amount),
+                  $('<td>').text(transactionDetails.gstPercent),
+                  $('<td>').text(transactionDetails.totalAmount)
+                ).appendTo('#TransactionTableDetails');
+              });
+            });
+          }
+        }
+      });
   }
   return (
     <SimpleBarReact>

@@ -16,7 +16,7 @@ export const TransactionDetails = () => {
         chequeBank: '',
         amount: 0,
         gstPercentage: 0,
-        status: ''
+        status: 'A'
     });
     const [amountPayable, setAmountPayable] = useState(0);
     const [moduleList, setModuleList] = useState([]);
@@ -244,14 +244,6 @@ export const TransactionDetails = () => {
                         <Row className="mb-3">
                             <Form.Label>GST Percentage</Form.Label>
                             <Form.Control type='number' id="numGstPercent" name="gstPercentage" min={0} onChange={handleGstChange} placeholder="Enter gst percentage" />
-                        </Row>
-                        <Row className="mb-3">
-                            <Form.Label>Status</Form.Label>
-                            <Form.Select id="txtStatus" name="status" onChange={handleFieldChange}>
-                                <option value=''>Select status</option>
-                                <option value="A">Active</option>
-                                <option value="S">Expired</option>
-                            </Form.Select>
                         </Row>
                         <Row className="mb-3">
                             <Form.Label>Total Amount Payable</Form.Label>

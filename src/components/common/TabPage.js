@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Tabs, Tab, Form, Row, Col, Button } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 //Datatable Modules
 import FalconComponentCard from 'components/common/FalconComponentCard';
@@ -27,14 +29,13 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
     $("#btnCancel").hide();
   }, []);
 
-  $('[data-rr-ui-event-key*="List"]').click(function(){
+  $('[data-rr-ui-event-key*="List"]').click(function () {
     $("#btnNew").show();
     $("#btnSave").hide();
     $("#btnCancel").hide();
-    // $('[data-rr-ui-event-key*="Customer Details"]').hide();
   })
 
-  $('[data-rr-ui-event-key*="Customer Details"]').click(function(){
+  $('[data-rr-ui-event-key*="Customer Details"]').click(function () {
     $("#btnNew").hide();
     $("#btnSave").show();
     $("#btnCancel").show();
@@ -164,7 +165,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
                     <FalconComponentCard.Body language="jsx">
                       <TransactionDetails />
                     </FalconComponentCard.Body>
-                  </FalconComponentCard>                  
+                  </FalconComponentCard>
                 </>
               )}
             </Tab>
