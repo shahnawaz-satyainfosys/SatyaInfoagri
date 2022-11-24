@@ -15,8 +15,7 @@ export const TransactionDetails = () => {
         chequeDate: '',
         chequeBank: '',
         amount: 0,
-        gstPercentage: 0,
-        status: 'A'
+        gstPercentage: 0
     });
     const [amountPayable, setAmountPayable] = useState(0);
     const [moduleList, setModuleList] = useState([]);
@@ -107,8 +106,7 @@ export const TransactionDetails = () => {
                 ChequeDate: formData.chequeDate,
                 ChequeBank: formData.chequeBank,
                 GSTPercent: parseFloat(formData.gstPercentage),
-                Amount: parseFloat(formData.amount),
-                ActiveStatus: formData.status,
+                Amount: parseFloat(formData.amount),                
                 AddUser: localStorage.getItem("LoginUserName")
             }
 
