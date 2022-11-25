@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Tabs, Tab, Form, Row, Col, Button } from 'react-bootstrap';
-import { toast } from 'react-toastify';
-import axios from 'axios';
 
 //Datatable Modules
 import FalconComponentCard from 'components/common/FalconComponentCard';
@@ -33,12 +31,29 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
     $("#btnNew").show();
     $("#btnSave").hide();
     $("#btnCancel").hide();
+    $('#AddClientDetailsForm')[0].reset();
+    $('#ContactDetailsTable tbody tr').remove();
+    $('#TransactionDetailsTable tbody tr').remove();
   })
 
   $('[data-rr-ui-event-key*="Customer Details"]').click(function () {
     $("#btnNew").hide();
     $("#btnSave").show();
     $("#btnCancel").show();
+  })
+
+  $('[data-rr-ui-event-key*="Transaction Details"]').click(function () {
+    $("#btnNew").hide();
+    $("#btnSave").show();
+    $("#btnCancel").show();
+  })
+
+  $('#btnNew').click(function () {
+    $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
+  })
+
+  $('#btnCancel').click(function () {
+    $('[data-rr-ui-event-key*="List"]').trigger('click');
   })
 
   const data = `const columns = ${JSON.stringify(listColumnArray)};
@@ -95,7 +110,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
           <Col>
             <div style={{ display: "flex", justifyContent: "end" }}>
               <Button className='btn btn-primary me-2' id='btnNew'>New</Button>
-              <Button className='btn btn-info me-2' id='btnSave'>Save</Button>
+              <Button className='btn btn-success me-2' id='btnSave'>Save</Button>
               <Button className='btn btn-danger mr-4' id='btnCancel'>Cancel</Button>
             </div>
           </Col>
@@ -140,7 +155,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard style={{ display: 'none' }} id='AddContactDetailsForm'>
+                  <FalconComponentCard id='AddContactDetailsForm'>
                     <FalconComponentCard.Body language="jsx">
                       <ContactDetails />
                     </FalconComponentCard.Body>

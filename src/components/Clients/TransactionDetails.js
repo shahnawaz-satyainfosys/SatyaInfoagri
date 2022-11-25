@@ -17,7 +17,7 @@ export const TransactionDetails = () => {
         amount: 0,
         gstPercentage: 0
     });
-    const [amountPayable, setAmountPayable] = useState(0);
+    const [amountPayable, setAmountPayable] = useState();
     const [moduleList, setModuleList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [formHasError, setFormError] = useState(false);

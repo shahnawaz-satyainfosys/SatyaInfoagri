@@ -86,7 +86,7 @@ const AdvanceTable = ({
                   $('<td>').text(contactDetails.mobileNo),
                   $('<td>').text(contactDetails.emailId),
                   $('<td>').text(contactDetails.sendMail == 'Y' ? "Yes" : "No"),
-                  $('<tr>').append("<button className='btn btn-danger' value='Delete' />")
+                  $('<td>').html("<i class='fa fa-pencil me-2' /><i class='fa fa-trash' />")
                 ).appendTo('#ClientContactDetailsTable');
               });
             });

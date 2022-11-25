@@ -100,33 +100,22 @@ const ContactDetails = () => {
                 return <span className="error-message">{contactNameErr[key]}</span>
               })}
             </Row>
-
             <Row className="mb-3">
               <Form.Label>Mobile No</Form.Label>
               <Form.Control id="txtMobileno" name="mobileNo" maxLength={10} onChange={handleFieldChange} placeholder="Mobile No" />
             </Row>
-
-            <Row className="mb-3">
+          </Col>
+          <Col>
+          <Row className="mb-3">
               <Form.Label>Email Id</Form.Label>
               <Form.Control id="txtEmailId" name="emailId" maxLength={50} onChange={handleFieldChange} placeholder="Email Id" />
             </Row>
-          </Col>
-          <Col>
             <Row className="mb-3">
               <Form.Label>Send Mail</Form.Label>
               <Form.Select id="txtSendMail" name="sendMail" onChange={handleFieldChange}>
                 <option value=''>Select</option>
                 <option value="Y">Yes</option>
                 <option value="N">No</option>
-              </Form.Select>
-            </Row>
-
-            <Row className="mb-3">
-              <Form.Label>Active Status</Form.Label>
-              <Form.Select id="txtActiveStatus" name="activeStatus" onChange={handleFieldChange}>
-                <option value=''>Select</option>
-                <option value="A">Active</option>
-                <option value="S">Suspended</option>
               </Form.Select>
             </Row>
             <Row className="mb-3">

@@ -412,11 +412,6 @@ export const ClientDetails = () => {
                 return <span className="error-message">{noOfUsersErr[key]}</span>
               })}
             </Row>
-            <Row className="mb-3">
-              <Button variant="primary" id='addClient' onClick={() => showForm()} >
-                Add
-              </Button>
-            </Row>
           </Col>
         </Row>
       </Form>
