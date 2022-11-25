@@ -41,6 +41,27 @@ const AdvanceTable = ({
     getTransactionDetailsList(rowData.original.encryptedClientCode)
   }
 
+
+  const deleteContactDetails = () => {
+    const deleteRequest = {
+      EncryptedClientContactDetailsId: encryptedClientContactDetailsId
+    }
+
+    axios
+      .delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', deleteRequest)
+      .then(res => {
+        if (res.data.status == 200) {
+          toast.success(res.data.message, {
+            theme: 'colored'
+          });
+        }
+        else{
+          toast.error(res.data.message, {
+            theme: 'colored'
+          });
+        }
+      })
+  }
   const getContactDetailsList = async (encryptedClientCode) => {
 
     const requestParams = {
@@ -64,7 +85,8 @@ const AdvanceTable = ({
                   $('<td>').text(contactDetails.contactPerson),
                   $('<td>').text(contactDetails.mobileNo),
                   $('<td>').text(contactDetails.emailId),
-                  $('<td>').text(contactDetails.sendMail == 'Y' ? "Yes" : "No")
+                  $('<td>').text(contactDetails.sendMail == 'Y' ? "Yes" : "No"),
+                  $('<tr>').append("<button className='btn btn-danger' value='Delete' />")
                 ).appendTo('#ClientContactDetailsTable');
               });
             });
@@ -93,7 +115,7 @@ const AdvanceTable = ({
             }
 
             $("#TransactionDetailsTable").show();
-            
+
             $(function () {
               $.each(res.data.data, function (t, transactionDetails) {
                 var tr = $('<tr>').append(

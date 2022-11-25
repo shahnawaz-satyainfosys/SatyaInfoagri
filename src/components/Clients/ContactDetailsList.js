@@ -30,6 +30,7 @@ const ContactDetailsList = () => {
             <th>Mobile No</th>
             <th>Email Id</th>
             <th>Send Mail</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody id='tableContactPerson'>

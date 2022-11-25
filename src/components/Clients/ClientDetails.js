@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+// import TabPage from 'components/common/TabPage';
 
 export const ClientDetails = () => {
 
@@ -155,7 +156,7 @@ export const ClientDetails = () => {
       panNoErr.panNoEmpty = "Enter PAN number";
       isValid = false;
       setFormError(true);
-    }else if (!(/[A-Z]{3}[CPHFATBLJG][A-Z]\d{4}[A-Z]/.test(formData.PanNo))) {
+    } else if (!(/[A-Z]{3}[CPHFATBLJG][A-Z]\d{4}[A-Z]/.test(formData.PanNo))) {
       panNoErr.panNoInvalid = "Enter valid PAN number";
       isValid = false;
       setFormError(true);
@@ -229,24 +230,24 @@ export const ClientDetails = () => {
         AddUser: localStorage.getItem("LoginUserName")
       }
 
-      setIsLoading(true);
+      // setIsLoading(true);
 
-      axios.post(process.env.REACT_APP_API_URL + '/add-client', userData)
-        .then(res => {
-          setIsLoading(false);
-          if (res.data.status == 200) {
-            toast.success(res.data.message, {
-              theme: 'colored'
-            });
-            $("#AddContactDetailsForm").show();
-            localStorage.setItem('EncryptedResponseClientCode', res.data.data.encryptedClientCode);
-            $("#AddClientDetailsForm :input").prop("disabled", true);
-          } else {
-            toast.error(res.data.message, {
-              theme: 'colored'
-            });
-          }
-        })
+      // axios.post(process.env.REACT_APP_API_URL + '/add-client', userData)
+      //   .then(res => {
+      //     setIsLoading(false);
+      //     if (res.data.status == 200) {
+      //       toast.success(res.data.message, {
+      //         theme: 'colored'
+      //       });
+      //       $("#AddContactDetailsForm").show();
+      //       localStorage.setItem('EncryptedResponseClientCode', res.data.data.encryptedClientCode);
+      //       $("#AddClientDetailsForm :input").prop("disabled", true);
+      //     } else {
+      //       toast.error(res.data.message, {
+      //         theme: 'colored'
+      //       });
+      //     }
+      //   })
     }
   };
 
@@ -271,6 +272,10 @@ export const ClientDetails = () => {
     }
   };
 
+  const showForm = () => {
+    $("#AddContactDetailsForm").show();
+  }
+
   return (
     <>
       {isLoading ? (
@@ -280,6 +285,7 @@ export const ClientDetails = () => {
         />
       ) : null}
 
+      {/* <TabPage handleSubmit = {formData}/> */}
       <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }} id='AddClientDetailsForm'>
         <Row>
           <Col className="me-5 ms-5">
@@ -407,7 +413,7 @@ export const ClientDetails = () => {
               })}
             </Row>
             <Row className="mb-3">
-              <Button variant="primary" type="submit" id='addClient'>
+              <Button variant="primary" id='addClient' onClick={() => showForm()} >
                 Add
               </Button>
             </Row>
