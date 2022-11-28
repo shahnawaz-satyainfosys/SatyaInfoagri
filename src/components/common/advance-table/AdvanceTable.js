@@ -8,6 +8,9 @@ import Moment from "moment";
 import Modal from 'react-bootstrap/Modal';
 import { useEffect } from 'react';
 
+import { useDispatch } from 'react-redux';
+import { clientContactDetailsAction } from '../../../actions/index';
+
 const AdvanceTable = ({
   getTableProps,
   headers,
@@ -17,6 +20,9 @@ const AdvanceTable = ({
   rowClassName,
   tableProps
 }) => {
+
+  const dispatch = useDispatch();
+
   const toTabPage = (rowData) => {
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
     $('#addClient').hide();
@@ -119,6 +125,7 @@ const AdvanceTable = ({
     axios
       .post(process.env.REACT_APP_API_URL + '/get-client-contact-detail-list', requestParams)
       .then(res => {
+        
         if (res.data.status == 200) {
           let contactDetailsData = [];
           if (res.data && res.data.data.length > 0) {
@@ -127,24 +134,27 @@ const AdvanceTable = ({
             }
             $("#ContactDetailsTable").show();
             contactDetailsData = res.data.data;
-            $(function () {
-              $.each(contactDetailsData, function (c, contactDetails) {
-                var tr = $('<tr>').append(
-                  $('<td>').text(contactDetails.contactPerson),
-                  $('<td>').text(contactDetails.mobileNo),
-                  $('<td>').text(contactDetails.emailId),
-                  $('<td>').text(contactDetails.designation),
-                  $('<td>').text(contactDetails.sendMail == 'Y' ? "Yes" : "No"),
-                  $('<td>').html('<i class="fa fa-pencil me-2"/> <i class="fa fa-trash" onclick="" />')
-                ).appendTo('#ClientContactDetailsTable');
-                $('#txtContactPerson').val(contactDetails.contactPerson);
-                $('#txtMobileno').val(contactDetails.mobileNo);
-                $('#txtEmailId').val(contactDetails.emailId);
-                $('#txtDesignation').val(contactDetails.designation);
-                $('#txtSendMail').val(contactDetails.sendMail);
-                localStorage.setItem('EncryptedContactId', contactDetails.encryptedClientContactDetailsId)
-              });
-            });
+
+            dispatch(clientContactDetailsAction(contactDetailsData));
+
+            // $(function () {
+            //   $.each(contactDetailsData, function (c, contactDetails) {
+            //     var tr = $('<tr>').append(
+            //       $('<td>').text(contactDetails.contactPerson),
+            //       $('<td>').text(contactDetails.mobileNo),
+            //       $('<td>').text(contactDetails.emailId),
+            //       $('<td>').text(contactDetails.designation),
+            //       $('<td>').text(contactDetails.sendMail == 'Y' ? "Yes" : "No"),
+            //       $('<td>').html('<i class="fa fa-pencil me-2"/> <i class="fa fa-trash" onclick="" />')
+            //     ).appendTo('#ClientContactDetailsTable');
+            //     $('#txtContactPerson').val(contactDetails.contactPerson);
+            //     $('#txtMobileno').val(contactDetails.mobileNo);
+            //     $('#txtEmailId').val(contactDetails.emailId);
+            //     $('#txtDesignation').val(contactDetails.designation);
+            //     $('#txtSendMail').val(contactDetails.sendMail);
+            //     localStorage.setItem('EncryptedContactId', contactDetails.encryptedClientContactDetailsId)
+            //   });
+            // });
           }
         } else {
           toast.error(res.data.message, {

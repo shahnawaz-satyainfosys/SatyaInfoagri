@@ -6,7 +6,7 @@ import store from './store';
 import { Provider } from 'react-redux';
 import 'helpers/initFA';
 
-store.subscribe(() => store.getState());
+store.subscribe(() => console.log(store.getState()));
 
 ReactDOM.render(
   <React.StrictMode>

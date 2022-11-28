@@ -11,3 +11,10 @@ export const resetPasswordAction = (payload) => {
   payload
   };
 };
+
+export const clientContactDetailsAction = (payload) => {
+  return {
+    type: 'CLIENTCONTACTDETAILSLIST',
+    payload
+  };
+};
