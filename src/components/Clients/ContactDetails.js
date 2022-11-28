@@ -10,8 +10,8 @@ const ContactDetails = () => {
     contactPersonName: '',
     mobileNo: '',
     emailId: '',
-    sendMail: '',
-    activeStatus: ''
+    designation: '',
+    sendMail: ''
   });
 
   const [formHasError, setFormError] = useState(false);
@@ -45,8 +45,8 @@ const ContactDetails = () => {
         contactPerson: formData.contactPersonName,
         mobileNo: formData.mobileNo,
         emailId: formData.emailId,
+        designation: formData.designation,
         sendMail: formData.sendMail,
-        activeStatus: formData.activeStatus,
         AddUser: localStorage.getItem("LoginUserName")
       }
 
@@ -60,7 +60,7 @@ const ContactDetails = () => {
               theme: 'colored'
             });
             $("#ContactDetailsTable").show();
-            $("#AddContactDetailsForm").hide();            
+            $("#AddContactDetailsForm").hide();
           } else {
             toast.error(res.data.message, {
               theme: 'colored'
@@ -68,6 +68,36 @@ const ContactDetails = () => {
           }
         })
     }
+  };
+
+  const updateContactDetails = () => {
+    const contactDetail = {
+      EncryptedClientContactDetailsId: localStorage.getItem("EncryptedContactId"),
+      ContactPersonName: formData.contactPersonName,
+      MobileNo: formData.mobileNo,
+      EmailId: formData.emailId,
+      Designation: formData.designation,
+      SendMail: formData.sendMail,
+      ModifyUser: localStorage.getItem("LoginUserName")
+    }
+
+    setIsLoading(true);
+
+    axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetail)
+      .then(res => {
+        setIsLoading(false);
+        if (res.data.status == 200) {
+          toast.success(res.data.message, {
+            theme: 'colored'
+          });
+          $("#ContactDetailsTable").show();
+          $("#AddContactDetailsForm").hide();
+        } else {
+          toast.error(res.data.message, {
+            theme: 'colored'
+          });
+        }
+      })
   };
 
   const handleFieldChange = e => {
@@ -90,7 +120,7 @@ const ContactDetails = () => {
           animation="border"
         />
       ) : null}
-      <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }}>
+      <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e)}} id='AddContactDetailsForm'>
         <Row>
           <Col className="me-5 ms-5">
             <Row className="mb-3">
@@ -104,11 +134,15 @@ const ContactDetails = () => {
               <Form.Label>Mobile No</Form.Label>
               <Form.Control id="txtMobileno" name="mobileNo" maxLength={10} onChange={handleFieldChange} placeholder="Mobile No" />
             </Row>
-          </Col>
-          <Col>
-          <Row className="mb-3">
+            <Row className="mb-3">
               <Form.Label>Email Id</Form.Label>
               <Form.Control id="txtEmailId" name="emailId" maxLength={50} onChange={handleFieldChange} placeholder="Email Id" />
+            </Row>
+          </Col>
+          <Col>
+            <Row className="mb-3">
+              <Form.Label>Designation</Form.Label>
+              <Form.Control id="txtDesignation" name="designation" maxLength={50} onChange={handleFieldChange} placeholder="Designation" />
             </Row>
             <Row className="mb-3">
               <Form.Label>Send Mail</Form.Label>
@@ -119,8 +153,13 @@ const ContactDetails = () => {
               </Form.Select>
             </Row>
             <Row className="mb-3">
-              <Button variant="primary" type="submit">
+              <Button variant="primary" id='addContactDetail' type="submit">
                 Add
+              </Button>
+            </Row>
+            <Row className="mb-3">
+              <Button variant="primary" id='updateContactDetail' style={{ display: 'none' }} onClick={() => updateContactDetails()}>
+                Update
               </Button>
             </Row>
             <Row className="mb-3">

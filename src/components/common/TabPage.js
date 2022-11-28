@@ -176,7 +176,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard>
+                  <FalconComponentCard  id='AddContactDetailsForm'>
                     <FalconComponentCard.Body language="jsx">
                       <TransactionDetails />
                     </FalconComponentCard.Body>

@@ -29,6 +29,7 @@ const ContactDetailsList = () => {
             <th>Contact Person</th>
             <th>Mobile No</th>
             <th>Email Id</th>
+            <th>Designation</th>
             <th>Send Mail</th>
             <th>Action</th>
           </tr>

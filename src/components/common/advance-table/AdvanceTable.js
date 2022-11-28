@@ -1,11 +1,12 @@
-// import React from 'react';
 import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
-import { Table } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 import axios from 'axios';
 import React from 'react';
 import { toast } from 'react-toastify';
 import Moment from "moment";
+import Modal from 'react-bootstrap/Modal';
+import { useEffect } from 'react';
 
 const AdvanceTable = ({
   getTableProps,
@@ -19,6 +20,9 @@ const AdvanceTable = ({
   const toTabPage = (rowData) => {
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
     $('#addClient').hide();
+    $('#addContactDetail').hide();
+    $('#updateContactDetail').show();
+    localStorage.setItem('EncryptedResponseClientCode', rowData.original.encryptedClientCode);
     $("#txtCustomerName").val(rowData.original.customerName);
     $("#txtCustomerAddress").val(rowData.original.address1);
     $("#txtCustomerAddress2").val(rowData.original.address2);
@@ -38,30 +42,74 @@ const AdvanceTable = ({
     $("#numNoOfCompanies").val(rowData.original.noOfComapnies);
     $("#numNoOfUsers").val(rowData.original.noOfUsers);
     getContactDetailsList(rowData.original.encryptedClientCode);
-    getTransactionDetailsList(rowData.original.encryptedClientCode)
+    getTransactionDetailsList(rowData.original.encryptedClientCode);
   }
 
+  // function deleteModal() {
+  //   const [modalShow, setModalShow] = React.useState(false);
+  //   return (
+  //     <Modal
+  //       show={modalShow}
+  //       onHide={() => setModalShow(false)}
+  //       size="lg"
+  //       aria-labelledby="contained-modal-title-vcenter"
+  //       centered
+  //     >
+  //       <Modal.Header closeButton>
+  //         <Modal.Title id="contained-modal-title-vcenter">Delete contact detail</Modal.Title>
+  //       </Modal.Header>
+  //       <Modal.Body>
+  //         <p>
+  //           Are you sure you want to delete this contact detail.
+  //         </p>
+  //       </Modal.Body>
+  //       <Modal.Footer>
+  //         <Button onClick={() => deleteContactDetails}>Delete</Button>
+  //         <Button onClick={() => setModalShow(false)}>Cancel</Button>
+  //       </Modal.Footer>
+  //     </Modal>
+  //   );
+  // }
 
-  const deleteContactDetails = () => {
-    const deleteRequest = {
-      EncryptedClientContactDetailsId: encryptedClientContactDetailsId
-    }
+  // useEffect(() => {
+  //   const data = { "encryptedClientContactDetailsId": "CfDJ8E1VfBCbVHNLmqjO89Q1MV0Kajm9UyarTuAMbhJnM2gHDnSoCZN58sOD_LhO_A0oZiJD0IBrTSWQ-sfWBMiF6P0ik23-0eCi2Xfbwm2uNxB86e0vO6oU6KmXzh_DsisQTQ" };
+  //   axios
+  //     .delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', {data})
+  //     .then(res => {
+  //       if (res.data.status == 200) {
+  //         toast.success(res.data.message, {
+  //           theme: 'colored'
+  //         });
+  //       }
+  //       else {
+  //         toast.error(res.data.message, {
+  //           theme: 'colored'
+  //         });
+  //       }
+  //     })
+  // });
 
-    axios
-      .delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', deleteRequest)
-      .then(res => {
-        if (res.data.status == 200) {
-          toast.success(res.data.message, {
-            theme: 'colored'
-          });
-        }
-        else{
-          toast.error(res.data.message, {
-            theme: 'colored'
-          });
-        }
-      })
-  }
+  // const deleteContactDetails = (encryptedClientContactDetailsId) => {
+  //   const deleteRequest = {
+  //     EncryptedClientContactDetailsId: encryptedClientContactDetailsId
+  //   }
+
+  //   axios
+  //     .delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', deleteRequest)
+  //     .then(res => {
+  //       if (res.data.status == 200) {
+  //         toast.success(res.data.message, {
+  //           theme: 'colored'
+  //         });
+  //       }
+  //       else {
+  //         toast.error(res.data.message, {
+  //           theme: 'colored'
+  //         });
+  //       }
+  //     })
+  // }
+
   const getContactDetailsList = async (encryptedClientCode) => {
 
     const requestParams = {
@@ -85,12 +133,18 @@ const AdvanceTable = ({
                   $('<td>').text(contactDetails.contactPerson),
                   $('<td>').text(contactDetails.mobileNo),
                   $('<td>').text(contactDetails.emailId),
+                  $('<td>').text(contactDetails.designation),
                   $('<td>').text(contactDetails.sendMail == 'Y' ? "Yes" : "No"),
-                  $('<td>').html("<i class='fa fa-pencil me-2' /><i class='fa fa-trash' />")
+                  $('<td>').html('<i class="fa fa-pencil me-2"/> <i class="fa fa-trash" onclick="" />')
                 ).appendTo('#ClientContactDetailsTable');
+                $('#txtContactPerson').val(contactDetails.contactPerson);
+                $('#txtMobileno').val(contactDetails.mobileNo);
+                $('#txtEmailId').val(contactDetails.emailId);
+                $('#txtDesignation').val(contactDetails.designation);
+                $('#txtSendMail').val(contactDetails.sendMail);
+                localStorage.setItem('EncryptedContactId', contactDetails.encryptedClientContactDetailsId)
               });
             });
-
           }
         } else {
           toast.error(res.data.message, {
@@ -133,57 +187,60 @@ const AdvanceTable = ({
         }
       });
   }
+
   return (
-    <SimpleBarReact>
-      <Table {...getTableProps(tableProps)}>
-        <thead className={headerClassName}>
-          <tr>
-            {headers.map((column, index) => (
-              <th
-                key={index}
-                {...column.getHeaderProps(
-                  column.getSortByToggleProps(column.headerProps)
-                )}
-              >
-                {column.render('Header')}
-                {column.canSort ? (
-                  column.isSorted ? (
-                    column.isSortedDesc ? (
-                      <span className="sort desc" />
+    <>
+      <SimpleBarReact>
+        <Table {...getTableProps(tableProps)}>
+          <thead className={headerClassName}>
+            <tr>
+              {headers.map((column, index) => (
+                <th
+                  key={index}
+                  {...column.getHeaderProps(
+                    column.getSortByToggleProps(column.headerProps)
+                  )}
+                >
+                  {column.render('Header')}
+                  {column.canSort ? (
+                    column.isSorted ? (
+                      column.isSortedDesc ? (
+                        <span className="sort desc" />
+                      ) : (
+                        <span className="sort asc" />
+                      )
                     ) : (
-                      <span className="sort asc" />
+                      <span className="sort" />
                     )
                   ) : (
-                    <span className="sort" />
-                  )
-                ) : (
-                  ''
-                )}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {page.map((row, i) => {
-            prepareRow(row);
-            return (
-              <tr key={i} className={rowClassName} {...row.getRowProps()} onDoubleClick={() => toTabPage(row)}>
-                {row.cells.map((cell, index) => {
-                  return (
-                    <td
-                      key={index}
-                      {...cell.getCellProps(cell.column.cellProps)}
-                    >
-                      {cell.render('Cell')}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
-    </SimpleBarReact>
+                    ''
+                  )}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {page.map((row, i) => {
+              prepareRow(row);
+              return (
+                <tr key={i} className={rowClassName} {...row.getRowProps()} onDoubleClick={() => toTabPage(row)}>
+                  {row.cells.map((cell, index) => {
+                    return (
+                      <td
+                        key={index}
+                        {...cell.getCellProps(cell.column.cellProps)}
+                      >
+                        {cell.render('Cell')}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      </SimpleBarReact>
+    </>
   );
 };
 AdvanceTable.propTypes = {
