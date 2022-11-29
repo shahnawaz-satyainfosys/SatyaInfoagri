@@ -44,6 +44,7 @@ const AdvanceTable = ({
     $("#txtStatus").val(rowData.original.status);
     $("#numNoOfCompanies").val(rowData.original.noOfComapnies);
     $("#numNoOfUsers").val(rowData.original.noOfUsers);
+    $("#AddContactDetailsForm").hide();
     getContactDetailsList(rowData.original.encryptedClientCode);
     getTransactionDetailsList(rowData.original.encryptedClientCode);
   }
@@ -60,19 +61,21 @@ const AdvanceTable = ({
 
         if (res.data.status == 200) {
           let contactDetailsData = [];
-          if (res.data && res.data.data.length > 0) {
-            if ($('#ContactDetailsTable tbody tr').length > 1) {
-              $('#ContactDetailsTable tbody tr').remove();
-            }
-            $("#ContactDetailsTable").show();
-            contactDetailsData = res.data.data;
-
-            dispatch(clientContactDetailsAction(contactDetailsData));
+          if ($('#ContactDetailsTable tbody tr').length > 1) {
+            $('#ContactDetailsTable tbody tr').remove();
           }
-        } else {
-          toast.error(res.data.message, {
-            theme: 'colored'
-          });
+
+          contactDetailsData = res.data.data;
+          dispatch(clientContactDetailsAction(contactDetailsData));
+          
+          if (res.data && res.data.data.length > 0) {
+            $("#ClientContactDetailsTable").show();
+          } else {
+            $("#ClientContactDetailsTable").hide();
+          }
+        }
+        else{
+          $("#ClientContactDetailsTable").hide();
         }
       });
   }

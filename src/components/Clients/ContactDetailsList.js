@@ -24,6 +24,7 @@ const ContactDetailsList = () => {
   }, []);
 
   const editContactDetails = (data) => {
+    $("#AddContactDetailsForm").show();
     dispatch(updateClientContactDetailsAction(data));
   }
 
