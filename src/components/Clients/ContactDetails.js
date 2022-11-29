@@ -1,8 +1,9 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useSelector, useDispatch } from 'react-redux';
 
 const ContactDetails = () => {
 
@@ -14,6 +15,8 @@ const ContactDetails = () => {
     sendMail: ''
   });
 
+  const dispatch = useDispatch();
+  const updateClientContactDetailReducer = useSelector((state) => state.rootReducer.updateClientContactDetailReducer)
   const [formHasError, setFormError] = useState(false);
   const [contactNameErr, setContactNameErr] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -61,6 +64,7 @@ const ContactDetails = () => {
             });
             $("#ContactDetailsTable").show();
             $("#AddContactDetailsForm").hide();
+            //dispatch(updateClientContactDetailsAction(userData));
           } else {
             toast.error(res.data.message, {
               theme: 'colored'
@@ -70,9 +74,12 @@ const ContactDetails = () => {
     }
   };
 
+  const contactDetailData = updateClientContactDetailReducer.updateClientContactDetails;
+
   const updateContactDetails = () => {
+
     const contactDetail = {
-      EncryptedClientContactDetailsId: localStorage.getItem("EncryptedContactId"),
+      EncryptedClientContactDetailsId: contactDetailData.encryptedClientContactDetailsId,
       ContactPersonName: formData.contactPersonName,
       MobileNo: formData.mobileNo,
       EmailId: formData.emailId,
@@ -120,33 +127,33 @@ const ContactDetails = () => {
           animation="border"
         />
       ) : null}
-      <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e)}} id='AddContactDetailsForm'>
+      <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }} id='AddContactDetailsForm'>
         <Row>
           <Col className="me-5 ms-5">
             <Row className="mb-3">
               <Form.Label className='details-form'>Contact Person<span className="text-danger">*</span></Form.Label>
-              <Form.Control id="txtContactPerson" name="contactPersonName" maxLength={50} onChange={handleFieldChange} placeholder="Contact person name" required />
+              <Form.Control id="txtContactPerson" name="contactPersonName" maxLength={50} defaultValue={contactDetailData.contactPerson} onChange={handleFieldChange} placeholder="Contact person name" required />
               {Object.keys(contactNameErr).map((key) => {
                 return <span className="error-message">{contactNameErr[key]}</span>
               })}
             </Row>
             <Row className="mb-3">
               <Form.Label>Mobile No</Form.Label>
-              <Form.Control id="txtMobileno" name="mobileNo" maxLength={10} onChange={handleFieldChange} placeholder="Mobile No" />
+              <Form.Control id="txtMobileno" name="mobileNo" maxLength={10} defaultValue={contactDetailData.mobileNo} onChange={handleFieldChange} placeholder="Mobile No" />
             </Row>
             <Row className="mb-3">
               <Form.Label>Email Id</Form.Label>
-              <Form.Control id="txtEmailId" name="emailId" maxLength={50} onChange={handleFieldChange} placeholder="Email Id" />
+              <Form.Control id="txtEmailId" name="emailId" maxLength={50} defaultValue={contactDetailData.emailId} onChange={handleFieldChange} placeholder="Email Id" />
             </Row>
           </Col>
           <Col>
             <Row className="mb-3">
               <Form.Label>Designation</Form.Label>
-              <Form.Control id="txtDesignation" name="designation" maxLength={50} onChange={handleFieldChange} placeholder="Designation" />
+              <Form.Control id="txtDesignation" name="designation" maxLength={50} defaultValue={contactDetailData.designation} onChange={handleFieldChange} placeholder="Designation" />
             </Row>
             <Row className="mb-3">
               <Form.Label>Send Mail</Form.Label>
-              <Form.Select id="txtSendMail" name="sendMail" onChange={handleFieldChange}>
+              <Form.Select id="txtSendMail" name="sendMail" defaultValue={contactDetailData.sendMail} onChange={handleFieldChange}>
                 <option value=''>Select</option>
                 <option value="Y">Yes</option>
                 <option value="N">No</option>

@@ -7,14 +7,21 @@ export const loginAction = (payload) => {
 
 export const resetPasswordAction = (payload) => {
   return {
-  type: 'RESETPASSWORD',
-  payload
+    type: 'RESETPASSWORD',
+    payload
   };
 };
 
 export const clientContactDetailsAction = (payload) => {
   return {
     type: 'CLIENTCONTACTDETAILSLIST',
+    payload
+  };
+};
+
+export const updateClientContactDetailsAction = (payload) => {
+  return {
+    type: 'UPDATECLIENTCONTACTDETAILS',
     payload
   };
 };
