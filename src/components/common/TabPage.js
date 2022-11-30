@@ -40,6 +40,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
     $("#btnNew").hide();
     $("#btnSave").show();
     $("#btnCancel").show();
+    $("#AddContactDetailsForm").hide();
   })
 
   $('[data-rr-ui-event-key*="Transaction Details"]').click(function () {
@@ -176,7 +177,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard  id='AddContactDetailsForm'>
+                  <FalconComponentCard  id='AddTransactionDetailsForm'>
                     <FalconComponentCard.Body language="jsx">
                       <TransactionDetails />
                     </FalconComponentCard.Body>

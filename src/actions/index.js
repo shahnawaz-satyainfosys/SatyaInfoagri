@@ -25,3 +25,17 @@ export const updateClientContactDetailsAction = (payload) => {
     payload
   };
 };
+
+export const transactionDetailsAction = (payload) => {
+  return {
+    type: 'TRANSACTIONLIST',
+    payload
+  };
+};
+
+export const clientDetailsAction = (payload) => {
+  return {
+    type: 'CLIENTDETAILS',
+    payload
+  };
+};

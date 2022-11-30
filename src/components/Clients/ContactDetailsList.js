@@ -11,7 +11,7 @@ import { updateClientContactDetailsAction } from '../../actions/index';
 const ContactDetailsList = () => {
 
   const dispatch = useDispatch();
-  const contactDetailReducer = useSelector((state) => state.rootReducer.clientContactDetailsReducer)
+  const contactDetailReducer = useSelector((state) => state.rootReducer.clientContactDetailsReducer)  
   const [modalShow, setModalShow] = useState(false);
   const [encryptedClientContactDetailId, setEncryptedClientContactDetailId] = useState('');
 
@@ -25,6 +25,8 @@ const ContactDetailsList = () => {
 
   const editContactDetails = (data) => {
     $("#AddContactDetailsForm").show();
+    $("#updateContactDetail").show();
+    $("#btnAddContactDetail").hide();
     dispatch(updateClientContactDetailsAction(data));
   }
 
@@ -51,6 +53,9 @@ const ContactDetailsList = () => {
 
   const showForm = () => {
     $("#AddContactDetailsForm").show();
+    $("#AddContactForm")[0].reset();
+    $("#btnAddContactDetail").show();
+    $("#updateContactDetail").hide();
     $("#btnAdd").hide();
   }
 

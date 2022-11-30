@@ -4,19 +4,15 @@ import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
+import { updateClientContactDetailsAction } from '../../actions/index';
 
 const ContactDetails = () => {
 
-  const [formData, setFormData] = useState({
-    contactPersonName: '',
-    mobileNo: '',
-    emailId: '',
-    designation: '',
-    sendMail: ''
-  });
-
   const dispatch = useDispatch();
+
   const updateClientContactDetailReducer = useSelector((state) => state.rootReducer.updateClientContactDetailReducer)
+  const contactDetailData = updateClientContactDetailReducer.updateClientContactDetails;
+
   const [formHasError, setFormError] = useState(false);
   const [contactNameErr, setContactNameErr] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +22,7 @@ const ContactDetails = () => {
 
     let isValid = true;
 
-    if (!formData.contactPersonName) {
+    if (!contactDetailData.contactPersonName) {
       contactNameErr.nameEmpty = "Enter contact person name";
       isValid = false;
       setFormError(true);
@@ -40,16 +36,14 @@ const ContactDetails = () => {
   const handleSubmit = e => {
     e.preventDefault();
 
-    const form = e.currentTarget;
-
     if (handleValidation()) {
       const userData = {
         EncryptedClientCode: localStorage.getItem("EncryptedResponseClientCode"),
-        contactPerson: formData.contactPersonName,
-        mobileNo: formData.mobileNo,
-        emailId: formData.emailId,
-        designation: formData.designation,
-        sendMail: formData.sendMail,
+        contactPerson: contactDetailData.contactPerson,
+        mobileNo: contactDetailData.mobileNo,
+        emailId: contactDetailData.emailId,
+        designation: contactDetailData.designation,
+        sendMail: contactDetailData.sendMail,
         AddUser: localStorage.getItem("LoginUserName")
       }
 
@@ -63,8 +57,7 @@ const ContactDetails = () => {
               theme: 'colored'
             });
             $("#ContactDetailsTable").show();
-            $("#AddContactDetailsForm").hide();
-            //dispatch(updateClientContactDetailsAction(userData));
+            $("#AddContactDetailsForm").hide();            
           } else {
             toast.error(res.data.message, {
               theme: 'colored'
@@ -74,17 +67,14 @@ const ContactDetails = () => {
     }
   };
 
-  const contactDetailData = updateClientContactDetailReducer.updateClientContactDetails;
-
   const updateContactDetails = () => {
-
     const contactDetail = {
       EncryptedClientContactDetailsId: contactDetailData.encryptedClientContactDetailsId,
-      ContactPersonName: formData.contactPersonName,
-      MobileNo: formData.mobileNo,
-      EmailId: formData.emailId,
-      Designation: formData.designation,
-      SendMail: formData.sendMail,
+      ContactPersonName: contactDetailData.contactPerson,
+      MobileNo: contactDetailData.mobileNo,
+      EmailId: contactDetailData.emailId,
+      Designation: contactDetailData.designation,
+      SendMail: contactDetailData.sendMail,
       ModifyUser: localStorage.getItem("LoginUserName")
     }
 
@@ -108,10 +98,10 @@ const ContactDetails = () => {
   };
 
   const handleFieldChange = e => {
-    setFormData({
-      ...formData,
+    dispatch(updateClientContactDetailsAction({
+      ...contactDetailData,
       [e.target.name]: e.target.value
-    });
+    }));
   };
 
   const hideForm = () => {
@@ -127,7 +117,7 @@ const ContactDetails = () => {
           animation="border"
         />
       ) : null}
-      <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }} id='AddContactDetailsForm'>
+      <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }} id='AddContactForm'>
         <Row>
           <Col className="me-5 ms-5">
             <Row className="mb-3">
@@ -160,7 +150,7 @@ const ContactDetails = () => {
               </Form.Select>
             </Row>
             <Row className="mb-3">
-              <Button variant="primary" id='addContactDetail' type="submit">
+              <Button variant="primary" id='btnAddContactDetail' type="submit">
                 Add
               </Button>
             </Row>

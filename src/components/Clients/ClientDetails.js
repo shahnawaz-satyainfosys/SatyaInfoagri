@@ -3,30 +3,16 @@ import { useEffect, useState } from 'react';
 import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useSelector, useDispatch } from 'react-redux';
+import {clientDetailsAction} from '../../actions/index';
 // import TabPage from 'components/common/TabPage';
 
 export const ClientDetails = () => {
 
-  const [formData, setFormData] = useState({
-    customerName: '',
-    clientAddress: '',
-    clientAddress2: '',
-    clientAddress3: '',
-    pincode: '',
-    country: '',
-    state: '',
-    billingAddress: '',
-    billingAddress2: '',
-    billingAddress3: '',
-    billingPincode: '',
-    billingCountry: '',
-    billingState: '',
-    PanNo: '',
-    GstNo: '',
-    status: '',
-    noOfCompanies: 1,
-    noOfUsers: 1
-  });
+  const dispatch = useDispatch();
+
+  const clientDetailsReducer = useSelector((state) => state.rootReducer.clientDetailsReducer)
+  const clientData = clientDetailsReducer.clientDetails;
   const [countryList, setCountryList] = useState([]);
   const [stateList, setStateList] = useState([]);
   const [billingStateList, setBillingStateList] = useState([]);
@@ -110,76 +96,76 @@ export const ClientDetails = () => {
 
     let isValid = true;
 
-    if (!formData.customerName) {
+    if (!clientData.customerName) {
       customerNameErr.nameEmpty = "Enter customer name";
       isValid = false;
       setFormError(true);
     }
 
-    if (!formData.clientAddress) {
+    if (!clientData.clientAddress) {
       clientAddressErr.addressEmpty = "Enter address";
       isValid = false;
       setFormError(true);
     }
 
-    if (!formData.country) {
+    if (!clientData.country) {
       countryErr.countrySelect = "Select valid country";
       isValid = false;
       setFormError(true);
     }
 
-    if (!formData.state) {
+    if (!clientData.state) {
       stateErr.stateSelect = "Select valid state";
       isValid = false;
       setFormError(true);
     }
 
-    if (!formData.billingAddress) {
+    if (!clientData.billingAddress) {
       billingAddressErr.billAddressEmpty = "Enter billing address";
       isValid = false;
       setFormError(true);
     }
 
-    if (!formData.billingCountry) {
+    if (!clientData.billingCountry) {
       billingCountryErr.billCountryEmpty = "Select valid billing country";
       isValid = false;
       setFormError(true);
     }
 
-    if (!formData.billingState) {
+    if (!clientData.billingState) {
       billingStateErr.billStateEmpty = "Select valid billing state";
       isValid = false;
       setFormError(true);
     }
 
-    if (!formData.PanNo) {
+    if (!clientData.PanNo) {
       panNoErr.panNoEmpty = "Enter PAN number";
       isValid = false;
       setFormError(true);
-    } else if (!(/[A-Z]{3}[CPHFATBLJG][A-Z]\d{4}[A-Z]/.test(formData.PanNo))) {
+    } else if (!(/[A-Z]{3}[CPHFATBLJG][A-Z]\d{4}[A-Z]/.test(clientData.PanNo))) {
       panNoErr.panNoInvalid = "Enter valid PAN number";
       isValid = false;
       setFormError(true);
     }
 
-    if (!formData.GstNo) {
+    if (!clientData.GstNo) {
       gstNoErr.gstNoEmpty = "Enter GST number";
       isValid = false;
       setFormError(true);
     }
-    else if (!(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(formData.GstNo))) {
+    else if (!(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(clientData.GstNo))) {
       gstNoErr.gstNoInvalid = "Enter valid GST number";
       isValid = false;
       setFormError(true);
     }
 
-    if (formData.noOfCompanies <= 0) {
+    if (clientData.noOfCompanies <= 0) {
       noOfCompaniesErr.noOfCompaniesEmpty = "Number of companies must be greater than 0";
       isValid = false;
       setFormError(true);
     }
 
-    if (formData.noOfUsers <= 0) {
+    if (clientData.noOfUsers <= 0) {
       noOfUsersErr.noOfUsersEmpty = "Number of users must be greater than 0";
       isValid = false;
       setFormError(true);
@@ -203,59 +189,104 @@ export const ClientDetails = () => {
   }
 
   const handleSubmit = e => {
-    e.preventDefault();
+    e.preventDefault();    
 
-    const form = e.currentTarget;
-
-    if (handleValidation()) {
+    if (handleValidation()) {      
       const userData = {
-        ClientName: formData.customerName,
-        ClientAddress1: formData.clientAddress,
-        ClientAddress2: formData.clientAddress2,
-        ClientAddress3: formData.clientAddress3,
-        PINCode: formData.pincode,
-        EncryptedCountryCode: formData.country,
-        EncryptedStateCode: formData.state,
-        ClientBillAddress1: formData.billingAddress,
-        ClientBillAddress2: formData.billingAddress2,
-        ClientBillAddress3: formData.billingAddress3,
-        BillPINCode: formData.billingPincode,
-        EncryptedBillCountryCode: formData.billingCountry,
-        EncryptedBillStateCode: formData.billingState,
-        ClientPANNO: formData.PanNo,
-        ClientGSTNO: formData.GstNo,
-        ActiveStatus: formData.status,
-        NoOfCompany: parseInt(formData.noOfCompanies),
-        NoOfUsers: parseInt(formData.noOfUsers),
+        ClientName: clientData.customerName,
+        ClientAddress1: clientData.clientAddress,
+        ClientAddress2: clientData.clientAddress2,
+        ClientAddress3: clientData.clientAddress3,
+        PINCode: clientData.pincode,
+        EncryptedCountryCode: clientData.country,
+        EncryptedStateCode: clientData.state,
+        ClientBillAddress1: clientData.billingAddress,
+        ClientBillAddress2: clientData.billingAddress2,
+        ClientBillAddress3: clientData.billingAddress3,
+        BillPINCode: clientData.billingPincode,
+        EncryptedBillCountryCode: clientData.billingCountry,
+        EncryptedBillStateCode: clientData.billingState,
+        ClientPANNO: clientData.PanNo,
+        ClientGSTNO: clientData.GstNo,
+        ActiveStatus: clientData.status,
+        NoOfCompany: parseInt(clientData.noOfCompanies),
+        NoOfUsers: parseInt(clientData.noOfUsers),
         AddUser: localStorage.getItem("LoginUserName")
       }
 
-      // setIsLoading(true);
+      setIsLoading(true);
 
-      // axios.post(process.env.REACT_APP_API_URL + '/add-client', userData)
-      //   .then(res => {
-      //     setIsLoading(false);
-      //     if (res.data.status == 200) {
-      //       toast.success(res.data.message, {
-      //         theme: 'colored'
-      //       });
-      //       $("#AddContactDetailsForm").show();
-      //       localStorage.setItem('EncryptedResponseClientCode', res.data.data.encryptedClientCode);
-      //       $("#AddClientDetailsForm :input").prop("disabled", true);
-      //     } else {
-      //       toast.error(res.data.message, {
-      //         theme: 'colored'
-      //       });
-      //     }
-      //   })
+      axios.post(process.env.REACT_APP_API_URL + '/add-client', userData)
+        .then(res => {
+          debugger
+          setIsLoading(false);
+          if (res.data.status == 200) {
+            toast.success(res.data.message, {
+              theme: 'colored'
+            });
+            $("#AddContactDetailsForm").show();
+            localStorage.setItem('EncryptedResponseClientCode', res.data.data.encryptedClientCode);
+            $("#AddClientDetailsForm :input").prop("disabled", true);
+          } else {
+            toast.error(res.data.message, {
+              theme: 'colored'
+            });
+          }
+        })
+    }
+  };
+
+  const updateClientDetails = e => {
+    e.preventDefault();    
+
+    if (handleValidation()) {      
+      const userData = {
+        EncryptedClientCode: clientData.encryptedClientCode, 
+        ClientName: clientData.customerName,
+        ClientAddress1: clientData.clientAddress,
+        ClientAddress2: clientData.clientAddress2,
+        ClientAddress3: clientData.clientAddress3,
+        PINCode: clientData.pincode,
+        EncryptedCountryCode: clientData.country,
+        EncryptedStateCode: clientData.state,
+        ClientBillAddress1: clientData.billingAddress,
+        ClientBillAddress2: clientData.billingAddress2,
+        ClientBillAddress3: clientData.billingAddress3,
+        BillPINCode: clientData.billingPincode,
+        EncryptedBillCountryCode: clientData.billingCountry,
+        EncryptedBillStateCode: clientData.billingState,
+        ClientPANNO: clientData.PanNo,
+        ClientGSTNO: clientData.GstNo,
+        ActiveStatus: clientData.status,
+        NoOfCompany: parseInt(clientData.noOfCompanies),
+        NoOfUsers: parseInt(clientData.noOfUsers),
+        AddUser: localStorage.getItem("LoginUserName")
+      }
+
+      setIsLoading(true);
+
+      axios.post(process.env.REACT_APP_API_URL + '/update-client', userData)
+        .then(res => {
+          setIsLoading(false);
+          if (res.data.status == 200) {
+            toast.success(res.data.message, {
+              theme: 'colored'
+            });
+            //localStorage.setItem('EncryptedResponseClientCode', res.data.data.encryptedClientCode);
+          } else {
+            toast.error(res.data.message, {
+              theme: 'colored'
+            });
+          }
+        })
     }
   };
 
   const handleFieldChange = e => {
-    setFormData({
-      ...formData,
+    dispatch(clientDetailsAction({
+      ...clientData,
       [e.target.name]: e.target.value
-    });
+    }));
 
     if (e.target.name == "country") {
       if (e.target.value == '')
@@ -284,34 +315,32 @@ export const ClientDetails = () => {
           animation="border"
         />
       ) : null}
-
-      {/* <TabPage handleSubmit = {formData}/> */}
       <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }} id='AddClientDetailsForm'>
         <Row>
           <Col className="me-5 ms-5">
             <Row className="mb-3">
               <Form.Label>Customer Name<span className="text-danger">*</span></Form.Label>
-              <Form.Control id="txtCustomerName" name="customerName" maxLength={50} onChange={handleFieldChange} placeholder="Customer Name" required />
+              <Form.Control id="txtCustomerName" name="customerName" maxLength={50} defaultValue={clientData.customerName} onChange={handleFieldChange} placeholder="Customer Name" required />
               {Object.keys(customerNameErr).map((key) => {
                 return <span className="error-message">{customerNameErr[key]}</span>
               })}
             </Row>
             <Row className="mb-3">
               <Form.Label>Customer Address<span className="text-danger">*</span></Form.Label>
-              <Form.Control id="txtCustomerAddress" name="clientAddress" maxLength={50} onChange={handleFieldChange} className="mb-1" placeholder="Address" required />
+              <Form.Control id="txtCustomerAddress" name="clientAddress" maxLength={50}  defaultValue={clientData.address1} onChange={handleFieldChange} className="mb-1" placeholder="Address" required />
               {Object.keys(clientAddressErr).map((key) => {
                 return <span className="error-message">{clientAddressErr[key]}</span>
               })}
-              <Form.Control id="txtCustomerAddress2" name="clientAddress2" maxLength={50} onChange={handleFieldChange} className="mb-1" placeholder="Address 2" />
-              <Form.Control id="txtCustomerAddress3" name="clientAddress3" maxLength={50} onChange={handleFieldChange} className="mb-1" placeholder="Address 3" />
+              <Form.Control id="txtCustomerAddress2" name="clientAddress2" maxLength={50} defaultValue={clientData.address2} onChange={handleFieldChange} className="mb-1" placeholder="Address 2" />
+              <Form.Control id="txtCustomerAddress3" name="clientAddress3" maxLength={50} defaultValue={clientData.address3} nChange={handleFieldChange} className="mb-1" placeholder="Address 3" />
             </Row>
             <Row className="mb-3">
               <Form.Label>Pincode</Form.Label>
-              <Form.Control id="txtPincode" name="pincode" maxLength={10} onChange={handleFieldChange} placeholder="Pincode" />
+              <Form.Control id="txtPincode" name="pincode" maxLength={10} defaultValue={clientData.pinCode} onChange={handleFieldChange} placeholder="Pincode" />
             </Row>
             <Row className="mb-3">
               <Form.Label>Country<span className="text-danger">*</span></Form.Label>
-              <Form.Select id="txtCountry" name="country" onChange={handleFieldChange} required>
+              <Form.Select id="txtCountry" name="country" defaultValue={clientData.country} onChange={handleFieldChange} required>
                 <option value=''>Select country</option>
                 {countryList.map((option, index) => (
                   <option key={index} value={option.value}>{option.key}</option>
@@ -323,7 +352,7 @@ export const ClientDetails = () => {
             </Row>
             <Row className="mb-3">
               <Form.Label>State<span className="text-danger">*</span></Form.Label>
-              <Form.Select id="txtState" name="state" onChange={handleFieldChange} required>
+              <Form.Select id="txtState" name="state" defaultValue={clientData.state} onChange={handleFieldChange} required>
                 <option value=''>Select state</option>
                 {stateList.map((option, index) => (
                   <option key={index} value={option.value}>{option.key}</option>
@@ -338,20 +367,20 @@ export const ClientDetails = () => {
           <Col className="me-5 ms-5">
             <Row className="mb-3">
               <Form.Label>Billing Address<span className="text-danger">*</span></Form.Label>
-              <Form.Control id="txtBillingAddress" name="billingAddress" maxLength={50} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address" required />
+              <Form.Control id="txtBillingAddress" name="billingAddress" maxLength={50} defaultValue={clientData.billingAddress1} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address" required />
               {Object.keys(billingAddressErr).map((key) => {
                 return <span className="error-message">{billingAddressErr[key]}</span>
               })}
-              <Form.Control id="txtBillingAddress2" name="billingAddress2" maxLength={50} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address 2" />
-              <Form.Control id="txtBillingAddress3" name="billingAddress3" maxLength={50} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address 3" />
+              <Form.Control id="txtBillingAddress2" name="billingAddress2" maxLength={50} defaultValue={clientData.billingAddress2} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address 2" />
+              <Form.Control id="txtBillingAddress3" name="billingAddress3" maxLength={50} defaultValue={clientData.billingAddress3} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address 3" />
             </Row>
             <Row className="mb-3">
               <Form.Label>Pincode</Form.Label>
-              <Form.Control id="txtBillingPincode" name="billingPincode" maxLength={10} onChange={handleFieldChange} placeholder="Pincode" />
+              <Form.Control id="txtBillingPincode" name="billingPincode" maxLength={10} defaultValue={clientData.billingPinCode} onChange={handleFieldChange} placeholder="Pincode" />
             </Row>
             <Row className="mb-3">
               <Form.Label>Country<span className="text-danger">*</span></Form.Label>
-              <Form.Select id="txtBillingCountry" name="billingCountry" onChange={handleFieldChange} required>
+              <Form.Select id="txtBillingCountry" name="billingCountry" defaultValue={clientData.billingCountry} onChange={handleFieldChange} required>
                 <option value=''>Select country</option>
                 {countryList.map((option, index) => (
                   <option key={index} value={option.value}>{option.key}</option>
@@ -363,7 +392,7 @@ export const ClientDetails = () => {
             </Row>
             <Row className="mb-3">
               <Form.Label>State<span className="text-danger">*</span></Form.Label>
-              <Form.Select id="txtBillingState" name="billingState" onChange={handleFieldChange} required>
+              <Form.Select id="txtBillingState" name="billingState" defaultValue={clientData.billingState} onChange={handleFieldChange} required>
                 <option value=''>Select state</option>
                 {billingStateList.map((option, index) => (
                   <option key={index} value={option.value}>{option.key}</option>
@@ -378,39 +407,45 @@ export const ClientDetails = () => {
           <Col className="me-5 ms-5">
             <Row className="mb-3">
               <Form.Label>PAN No.<span className="text-danger">*</span></Form.Label>
-              <Form.Control id="txtPAN" name="PanNo" maxLength={20} onChange={handleFieldChange} placeholder="PAN No." required />
+              <Form.Control id="txtPAN" name="PanNo" maxLength={20} defaultValue={clientData.panNumber} onChange={handleFieldChange} placeholder="PAN No." required />
               {Object.keys(panNoErr).map((key) => {
                 return <span className="error-message">{panNoErr[key]}</span>
               })}
             </Row>
             <Row className="mb-3">
               <Form.Label>GST No.<span className="text-danger">*</span></Form.Label>
-              <Form.Control id="txtGST" name="GstNo" maxLength={20} onChange={handleFieldChange} placeholder="GST No." required />
+              <Form.Control id="txtGST" name="GstNo" maxLength={20} defaultValue={clientData.gstNumber} onChange={handleFieldChange} placeholder="GST No." required />
               {Object.keys(gstNoErr).map((key) => {
                 return <span className="error-message">{gstNoErr[key]}</span>
               })}
             </Row>
             <Row className="mb-3">
               <Form.Label>Status</Form.Label>
-              <Form.Select id="txtStatus" name="status" onChange={handleFieldChange}>
+              <Form.Select id="txtStatus" name="status" defaultValue={clientData.status} onChange={handleFieldChange}>
                 <option value=''>Select status</option>
                 <option value="A">Active</option>
-                <option value="S">Expired</option>
+                <option value="S">Supspended</option>
               </Form.Select>
             </Row>
             <Row className="mb-3">
               <Form.Label>No. of Companies</Form.Label>
-              <Form.Control type='number' min={1} id="numNoOfCompanies" max={9999} value={formData.noOfCompanies} name="noOfCompanies" onChange={handleFieldChange} placeholder="No. of Companies" required />
+              <Form.Control type='number' min={1} id="numNoOfCompanies" max={9999} defaultValue={clientData.noOfComapnies} name="noOfCompanies" onChange={handleFieldChange} placeholder="No. of Companies" required />
               {Object.keys(noOfCompaniesErr).map((key) => {
                 return <span className="error-message">{noOfCompaniesErr[key]}</span>
               })}
             </Row>
             <Row className="mb-3">
               <Form.Label>No. of Users</Form.Label>
-              <Form.Control type='number' min={1} id="numNoOfUsers" max={9999} value={formData.noOfUsers} name="noOfUsers" onChange={handleFieldChange} placeholder="No. of Users" required />
+              <Form.Control type='number' min={1} id="numNoOfUsers" max={9999} defaultValue={clientData.noOfUsers} name="noOfUsers" onChange={handleFieldChange} placeholder="No. of Users" required />
               {Object.keys(noOfUsersErr).map((key) => {
                 return <span className="error-message">{noOfUsersErr[key]}</span>
               })}
+            </Row>
+            <Row className="mb-3">
+              <Button type='submit' id='btnAddClientDetail'>Add</Button>
+            </Row>
+            <Row className="mb-3">
+              <Button type='submit' id='btnAddClientDetail' onClick={() =>updateClientDetails()}>Update</Button>
             </Row>
           </Col>
         </Row>

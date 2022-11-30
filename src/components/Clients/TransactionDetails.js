@@ -176,7 +176,7 @@ export const TransactionDetails = () => {
                 />
             ) : null}
 
-            <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }} id='AddClientDetailsForm'>
+            <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }} id='AddClientTransactionDetailsForm'>
                 <Row>
                     <Col className="me-5 ms-5">
                         <Row className="mb-3">

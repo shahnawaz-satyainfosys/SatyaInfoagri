@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
-import { Table, Button } from 'react-bootstrap';
+import { Table} from 'react-bootstrap';
 import axios from 'axios';
 import React from 'react';
-import { toast } from 'react-toastify';
-import Moment from "moment";
 import { useDispatch } from 'react-redux';
 import { clientContactDetailsAction } from '../../../actions/index';
+import { transactionDetailsAction } from '../../../actions/index';
+import { clientDetailsAction } from '../../../actions/index';
 
 const AdvanceTable = ({
   getTableProps,
@@ -20,33 +20,13 @@ const AdvanceTable = ({
 
   const dispatch = useDispatch();
 
-  const toTabPage = (rowData) => {
+  const toTabPage = (rowData) => {    
+    dispatch(clientDetailsAction(rowData));
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
-    $('#addClient').hide();
-    $('#addContactDetail').hide();
-    $('#updateContactDetail').show();
-    localStorage.setItem('EncryptedResponseClientCode', rowData.original.encryptedClientCode);
-    $("#txtCustomerName").val(rowData.original.customerName);
-    $("#txtCustomerAddress").val(rowData.original.address1);
-    $("#txtCustomerAddress2").val(rowData.original.address2);
-    $("#txtCustomerAddress3").val(rowData.original.address3);
-    $("#txtPincode").val(rowData.original.pinCode);
-    $("#txtCountry").find(':rowData.original.country').val(rowData.original.encryptedCountryCode);
-    $("#txtState").val(rowData.original.state);
-    $("#txtBillingAddress").val(rowData.original.billingAddress1);
-    $("#txtBillingAddress2").val(rowData.original.billingAddress2);
-    $("#txtBillingAddress3").val(rowData.original.billingAddress3);
-    $("#txtBillingPincode").val(rowData.original.billingPinCode);
-    $("#txtBillingCountry").val(rowData.original.billingCountry);
-    $("#txtBillingState").val(rowData.original.billingState);
-    $("#txtPAN").val(rowData.original.panNumber);
-    $("#txtGST").val(rowData.original.gstNumber);
-    $("#txtStatus").val(rowData.original.status);
-    $("#numNoOfCompanies").val(rowData.original.noOfComapnies);
-    $("#numNoOfUsers").val(rowData.original.noOfUsers);
+    localStorage.setItem('EncryptedResponseClientCode', rowData.encryptedClientCode);
     $("#AddContactDetailsForm").hide();
-    getContactDetailsList(rowData.original.encryptedClientCode);
-    getTransactionDetailsList(rowData.original.encryptedClientCode);
+    getContactDetailsList(rowData.encryptedClientCode);
+    getTransactionDetailsList(rowData.encryptedClientCode);
   }
 
   const getContactDetailsList = async (encryptedClientCode) => {
@@ -67,14 +47,14 @@ const AdvanceTable = ({
 
           contactDetailsData = res.data.data;
           dispatch(clientContactDetailsAction(contactDetailsData));
-          
+
           if (res.data && res.data.data.length > 0) {
             $("#ClientContactDetailsTable").show();
           } else {
             $("#ClientContactDetailsTable").hide();
           }
         }
-        else{
+        else {
           $("#ClientContactDetailsTable").hide();
         }
       });
@@ -88,28 +68,24 @@ const AdvanceTable = ({
     axios
       .post(process.env.REACT_APP_API_URL + '/client-registration-authorization-list', requestParams)
       .then(res => {
-        if (res.data.status == 200) {
+
+        if ($('#TransactionDetailsTable tbody tr').length > 1) {
+          $('#TransactionDetailsTable tbody tr').remove();
+        }
+
+        let transactionDetailsData = [];
+        transactionDetailsData = res.data.data;
+        dispatch(transactionDetailsAction(transactionDetailsData));
+
+        if (res.data.status == 200) {        
           if (res.data && res.data.data.length > 0) {
-            if ($('#TransactionTableDetails tbody tr').length > 1) {
-              $('#TransactionTableDetails tbody tr').remove();
-            }
-
-            $("#TransactionDetailsTable").show();
-
-            $(function () {
-              $.each(res.data.data, function (t, transactionDetails) {
-                var tr = $('<tr>').append(
-                  $('<td>').text(transactionDetails.moduleName),
-                  $('<td>').text(Moment(transactionDetails.startDate).format("DD/MM/YYYY")),
-                  $('<td>').text(Moment(transactionDetails.endDate).format("DD/MM/YYYY")),
-                  $('<td>').text(transactionDetails.paymentType == "CQ" ? "Cheque" : transactionDetails.paymentType == "CS" ? "Cash" : "TT"),
-                  $('<td>').text(transactionDetails.amount),
-                  $('<td>').text(transactionDetails.gstPercent),
-                  $('<td>').text(transactionDetails.totalAmount)
-                ).appendTo('#TransactionTableDetails');
-              });
-            });
+            $('#TransactionDetailsTable').show();
+          } else {
+            $('#TransactionDetailsTable').hide();
           }
+        }
+        else {
+          $("#TransactionDetailsTable").hide();
         }
       });
   }
@@ -149,7 +125,7 @@ const AdvanceTable = ({
             {page.map((row, i) => {
               prepareRow(row);
               return (
-                <tr key={i} className={rowClassName} {...row.getRowProps()} onDoubleClick={() => toTabPage(row)}>
+                <tr key={i} className={rowClassName} {...row.getRowProps()} onDoubleClick={() => toTabPage(row.original)}>
                   {row.cells.map((cell, index) => {
                     return (
                       <td

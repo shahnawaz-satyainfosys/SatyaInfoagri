@@ -1,7 +1,11 @@
 import React from 'react';
 import { useEffect } from 'react';
+import {useSelector} from 'react-redux';
+import Moment from "moment";
 
 const TransactionDetailList = () => {
+  
+  const transactionDetailReducer = useSelector((state) => state.rootReducer.transactionDetailsReducer)
 
   useEffect(() => {
     const count = $('#TransactionDetailsTable tr').length;
@@ -12,7 +16,7 @@ const TransactionDetailList = () => {
 
   return (
     <>     
-      <table className='table table-striped' id='TransactionTableDetails'>
+      <table className='table table-striped'>
         <thead>
           <tr>
             <th>Module Name</th>
@@ -25,6 +29,16 @@ const TransactionDetailList = () => {
           </tr>
         </thead>
         <tbody>
+          {transactionDetailReducer && transactionDetailReducer.transactionDetails.map(data => 
+            <tr>
+              <td>{data.moduleName}</td>
+              <td>{Moment(data.startDate).format("DD/MM/YYYY")}</td>
+              <td>{Moment(data.endDate).format("DD/MM/YYYY")}</td>
+              <td>{data.paymentType == "CQ" ? "Cheque" : data.paymentType == "CS" ? "Cash" : "TT"}</td>
+              <td>{data.amount}</td>
+              <td>{data.gstPercent}%</td>
+              <td>{data.totalAmount}</td>
+            </tr>)}
         </tbody>
       </table>
     </>
