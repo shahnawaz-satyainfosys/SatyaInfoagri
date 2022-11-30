@@ -35,7 +35,6 @@ const ContactDetails = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-
     if (handleValidation()) {
       const userData = {
         EncryptedClientCode: localStorage.getItem("EncryptedResponseClientCode"),
@@ -68,6 +67,7 @@ const ContactDetails = () => {
   };
 
   const updateContactDetails = () => {
+    debugger
     const contactDetail = {
       EncryptedClientContactDetailsId: contactDetailData.encryptedClientContactDetailsId,
       ContactPersonName: contactDetailData.contactPerson,
@@ -89,6 +89,8 @@ const ContactDetails = () => {
           });
           $("#ContactDetailsTable").show();
           $("#AddContactDetailsForm").hide();
+
+          window.location.reload();
         } else {
           toast.error(res.data.message, {
             theme: 'colored'
@@ -98,6 +100,7 @@ const ContactDetails = () => {
   };
 
   const handleFieldChange = e => {
+    debugger
     dispatch(updateClientContactDetailsAction({
       ...contactDetailData,
       [e.target.name]: e.target.value
@@ -122,7 +125,7 @@ const ContactDetails = () => {
           <Col className="me-5 ms-5">
             <Row className="mb-3">
               <Form.Label className='details-form'>Contact Person<span className="text-danger">*</span></Form.Label>
-              <Form.Control id="txtContactPerson" name="contactPersonName" maxLength={50} defaultValue={contactDetailData.contactPerson} onChange={handleFieldChange} placeholder="Contact person name" required />
+              <Form.Control id="txtContactPerson" name="contactPerson" maxLength={50} defaultValue={contactDetailData.contactPerson} onChange={handleFieldChange} placeholder="Contact person name" required />
               {Object.keys(contactNameErr).map((key) => {
                 return <span className="error-message">{contactNameErr[key]}</span>
               })}

@@ -72,9 +72,8 @@ const AdvanceTable = ({
         if ($('#TransactionDetailsTable tbody tr').length > 1) {
           $('#TransactionDetailsTable tbody tr').remove();
         }
-
         let transactionDetailsData = [];
-        transactionDetailsData = res.data.data;
+        transactionDetailsData = res.data.data.length > 0 ? res.data.data : transactionDetailsData;
         dispatch(transactionDetailsAction(transactionDetailsData));
 
         if (res.data.status == 200) {        

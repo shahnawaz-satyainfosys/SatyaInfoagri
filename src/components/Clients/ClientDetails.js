@@ -330,11 +330,11 @@ export const ClientDetails = () => {
                 return <span className="error-message">{clientAddressErr[key]}</span>
               })}
               <Form.Control id="txtCustomerAddress2" name="address2" maxLength={50} defaultValue={clientData.address2} onChange={handleFieldChange} className="mb-1" placeholder="Address 2" />
-              <Form.Control id="txtCustomerAddress3" name="address3" maxLength={50} defaultValue={clientData.address3} nChange={handleFieldChange} className="mb-1" placeholder="Address 3" />
+              <Form.Control id="txtCustomerAddress3" name="address3" maxLength={50} defaultValue={clientData.address3} onChange={handleFieldChange} className="mb-1" placeholder="Address 3" />
             </Row>
             <Row className="mb-3">
               <Form.Label>Pincode</Form.Label>
-              <Form.Control id="txtPincode" name="pincode" maxLength={10} defaultValue={clientData.pinCode} onChange={handleFieldChange} placeholder="Pincode" />
+              <Form.Control id="txtPincode" name="pinCode" maxLength={10} defaultValue={clientData.pinCode} onChange={handleFieldChange} placeholder="Pincode" />
             </Row>
             <Row className="mb-3">
               <Form.Label>Country<span className="text-danger">*</span></Form.Label>
@@ -374,7 +374,7 @@ export const ClientDetails = () => {
             </Row>
             <Row className="mb-3">
               <Form.Label>Pincode</Form.Label>
-              <Form.Control id="txtBillingPincode" name="billingPincode" maxLength={10} defaultValue={clientData.billingPinCode} onChange={handleFieldChange} placeholder="Pincode" />
+              <Form.Control id="txtBillingPincode" name="billingPinCode" maxLength={10} defaultValue={clientData.billingPinCode} onChange={handleFieldChange} placeholder="Pincode" />
             </Row>
             <Row className="mb-3">
               <Form.Label>Country<span className="text-danger">*</span></Form.Label>
@@ -427,7 +427,7 @@ export const ClientDetails = () => {
             </Row>
             <Row className="mb-3">
               <Form.Label>No. of Companies</Form.Label>
-              <Form.Control type='number' min={1} id="numNoOfCompanies" max={9999} defaultValue={clientData.noOfComapnies} name="noOfCompanies" onChange={handleFieldChange} placeholder="No. of Companies" required />
+              <Form.Control type='number' min={1} id="numNoOfCompanies" max={9999} defaultValue={clientData.noOfComapnies} name="noOfComapnies" onChange={handleFieldChange} placeholder="No. of Companies" required />
               {Object.keys(noOfCompaniesErr).map((key) => {
                 return <span className="error-message">{noOfCompaniesErr[key]}</span>
               })}

@@ -120,6 +120,7 @@ export const TransactionDetails = () => {
                             theme: 'colored'
                         });
                         $("#TransactionDetailsTable").show();
+                        window.location.reload();
                     } else {
                         toast.error(res.data.message, {
                             theme: 'colored'
