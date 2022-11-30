@@ -20,7 +20,7 @@ const AdvanceTable = ({
 
   const dispatch = useDispatch();
 
-  const toTabPage = (rowData) => {    
+  const toTabPage = (rowData) => {
     dispatch(clientDetailsAction(rowData));
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
     localStorage.setItem('EncryptedResponseClientCode', rowData.encryptedClientCode);
@@ -73,7 +73,7 @@ const AdvanceTable = ({
           $('#TransactionDetailsTable tbody tr').remove();
         }
         let transactionDetailsData = [];
-        transactionDetailsData = res.data.data.length > 0 ? res.data.data : transactionDetailsData;
+        transactionDetailsData = res.data.data.length > 0 ? res.data.data : undefined;
         dispatch(transactionDetailsAction(transactionDetailsData));
 
         if (res.data.status == 200) {        

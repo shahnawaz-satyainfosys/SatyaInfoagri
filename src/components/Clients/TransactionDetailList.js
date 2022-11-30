@@ -30,7 +30,10 @@ const TransactionDetailList = () => {
           </tr>
         </thead>
         <tbody>
-          {transactionDetailReducer && transactionDetailReducer.transactionDetails.length > 0 && transactionDetailReducer.transactionDetails.map(data => 
+          {transactionDetailReducer &&
+           transactionDetailReducer.transactionDetails && 
+           transactionDetailReducer.transactionDetails.length > 0 &&
+           transactionDetailReducer.transactionDetails.map(data => 
             <tr>
               <td>{data.moduleName}</td>
               <td>{Moment(data.startDate).format("DD/MM/YYYY")}</td>

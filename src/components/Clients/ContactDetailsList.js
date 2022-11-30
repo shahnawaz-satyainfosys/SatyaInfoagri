@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -12,7 +12,8 @@ const ContactDetailsList = () => {
 
   const dispatch = useDispatch();
   const contactDetailReducer = useSelector((state) => state.rootReducer.clientContactDetailsReducer)  
-  const [modalShow, setModalShow] = useState(false);
+  const [modalShow, setModalShow] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
 
@@ -24,9 +25,10 @@ const ContactDetailsList = () => {
 
   const editContactDetails = (data) => {
     $("#AddContactDetailsForm").show();
-    $("#updateContactDetail").show();
     $("#btnAddContactDetail").hide();
+    $("#btnUpdateContactDetail").show();
     $("#btnAdd").hide();
+    $("#ContactDetailsTable").hide();
     dispatch(updateClientContactDetailsAction(data));
   }
 
@@ -34,14 +36,17 @@ const ContactDetailsList = () => {
     const data = {
       encryptedClientContactDetailsId
     }
-
+    setIsLoading(true);
     axios
       .delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data })
       .then(res => {
+        setIsLoading(false);
         if (res.data.status == 200) {
           toast.success(res.data.message, {
             theme: 'colored'
           });
+
+          window.location.reload();
         }
         else {
           toast.error(res.data.message, {
@@ -51,21 +56,33 @@ const ContactDetailsList = () => {
       })
   }
 
-  const showForm = () => {
+  const showAddContactDetailsForm = () => {
     $("#AddContactDetailsForm").show();
-    $("#AddContactForm")[0].reset();
+    //$("#AddContactForm")[0].reset();
     $("#btnAddContactDetail").show();
-    $("#updateContactDetail").hide();
+    $("#btnUpdateContactDetail").hide();
+    $("#ContactDetailsTable").hide();
     $("#btnAdd").hide();
   }
 
   return (
+    <>
+    {isLoading ? (
+        <Spinner
+          className="position-absolute start-50 loader-color"
+          animation="border"
+        />
+      ) : null}
+      
     <div>
-      <div style={{ display: "flex", justifyContent: "end" }}>
-        <Button id='btnAdd' onClick={() => showForm()}>
+      <div className='mb-3 me-5' style={{ display: "flex", justifyContent: "end" }}>
+        <Button id='btnAdd' onClick={() => showAddContactDetailsForm()}>
           Add Contact Detail
         </Button>
       </div>
+      {contactDetailReducer &&
+          contactDetailReducer.clientContactDetails && 
+           contactDetailReducer.clientContactDetails.length > 0 &&
       <table className='table table-striped' id="ClientContactDetailsTable">
         <thead>
           <tr>
@@ -78,7 +95,8 @@ const ContactDetailsList = () => {
           </tr>
         </thead>
         <tbody id='tableContactPerson'>
-          {contactDetailReducer && contactDetailReducer.clientContactDetails.map(data =>
+          
+           {contactDetailReducer.clientContactDetails.map(data =>
             <tr>
               <td>{data.contactPerson}</td>
               <td>{data.mobileNo}</td>
@@ -89,9 +107,10 @@ const ContactDetailsList = () => {
             </tr>
           )}
         </tbody>
-      </table>
+      </table>}
+    </div>
 
-      <Modal
+    <Modal
         show={modalShow}
         onHide={() => setModalShow(false)}
         size="lg"
@@ -108,11 +127,12 @@ const ContactDetailsList = () => {
           </p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={() => deleteContactDetails('')} >Confirm</Button>
+          <Button variant="primary">Confirm</Button>
           <Button onClick={() => setModalShow(false)}>Close</Button>
         </Modal.Footer>
       </Modal>
-    </div>
+
+    </>
   )
 };
 

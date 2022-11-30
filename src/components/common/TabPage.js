@@ -16,9 +16,14 @@ import AdvanceTable from 'components/common/advance-table/AdvanceTable';
 import AdvanceTableFooter from 'components/common/advance-table/AdvanceTableFooter';
 import AdvanceTableSearchBox from 'components/common/advance-table/AdvanceTableSearchBox';
 
+import { useDispatch } from 'react-redux';
+import { clientDetailsAction, clientContactDetailsAction, transactionDetailsAction } from '../../actions/index';
+
 import $ from 'jquery';
 
 const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     $('[data-rr-ui-event-key*="List"]').trigger('click');
@@ -31,9 +36,10 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
     $("#btnNew").show();
     $("#btnSave").hide();
     $("#btnCancel").hide();
-    $('#AddClientDetailsForm')[0].reset();
-    $('#ContactDetailsTable tbody tr').remove();
-    $('#TransactionDetailsTable tbody tr').remove();
+
+    dispatch(clientDetailsAction(undefined));
+    dispatch(clientContactDetailsAction(undefined));
+    dispatch(transactionDetailsAction (undefined));
   })
 
   $('[data-rr-ui-event-key*="Customer Details"]').click(function () {
