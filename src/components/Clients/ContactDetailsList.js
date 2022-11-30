@@ -13,7 +13,6 @@ const ContactDetailsList = () => {
   const dispatch = useDispatch();
   const contactDetailReducer = useSelector((state) => state.rootReducer.clientContactDetailsReducer)  
   const [modalShow, setModalShow] = useState(false);
-  const [encryptedClientContactDetailId, setEncryptedClientContactDetailId] = useState('');
 
   useEffect(() => {
 
@@ -27,6 +26,7 @@ const ContactDetailsList = () => {
     $("#AddContactDetailsForm").show();
     $("#updateContactDetail").show();
     $("#btnAddContactDetail").hide();
+    $("#btnAdd").hide();
     dispatch(updateClientContactDetailsAction(data));
   }
 
