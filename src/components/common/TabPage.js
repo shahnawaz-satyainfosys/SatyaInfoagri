@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Tabs, Tab, Form, Row, Col, Button } from 'react-bootstrap';
 
 //Datatable Modules
@@ -47,6 +47,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
     $("#btnSave").show();
     $("#btnCancel").show();
     $("#AddContactDetailsForm").hide();
+    $("#btnUpdateClientDetail").hide();
   })
 
   $('[data-rr-ui-event-key*="Transaction Details"]').click(function () {
@@ -183,7 +184,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard  id='AddTransactionDetailsForm'>
+                  <FalconComponentCard id='AddTransactionDetailsForm'>
                     <FalconComponentCard.Body language="jsx">
                       <TransactionDetails />
                     </FalconComponentCard.Body>

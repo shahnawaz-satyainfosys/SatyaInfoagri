@@ -45,8 +45,6 @@ const ContactDetailsList = () => {
           toast.success(res.data.message, {
             theme: 'colored'
           });
-
-          window.location.reload();
         }
         else {
           toast.error(res.data.message, {

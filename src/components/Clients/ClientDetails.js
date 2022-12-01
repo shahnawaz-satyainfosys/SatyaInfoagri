@@ -14,6 +14,12 @@ export const ClientDetails = () => {
   const clientDetailsReducer = useSelector((state) => state.rootReducer.clientDetailsReducer)
   const clientData = clientDetailsReducer.clientDetails;
 
+  const clientContactDetailsReducer = useSelector((state) => state.rootReducer.clientContactDetailsReducer)
+  const contactDetailData = clientContactDetailsReducer.clientContactDetails;
+
+  const transactionDetailsReducer = useSelector((state) => state.rootReducer.transactionDetailsReducer)
+  const transactionDetailsData = transactionDetailsReducer.transactionDetails;
+
   const [countryList, setCountryList] = useState([]);
   const [stateList, setStateList] = useState([]);
   const [billingStateList, setBillingStateList] = useState([]);
@@ -30,6 +36,8 @@ export const ClientDetails = () => {
   const [gstNoErr, setGstNoErr] = useState({});
   const [noOfCompaniesErr, setNoOfCompaniesErr] = useState({});
   const [noOfUsersErr, setNoOfUsersErr] = useState({});
+  const [contactDetailErr, setContactDetailErr] = useState({});
+  const [transactionDetailErr, setTransactionDetailErr] = useState({});
 
   useEffect(() => {
     getCountries();
@@ -94,6 +102,8 @@ export const ClientDetails = () => {
     const gstNoErr = {};
     const noOfCompaniesErr = {};
     const noOfUsersErr = {};
+    const contactDetailErr = {};
+    const transactionDetailErr = {};
 
     let isValid = true;
 
@@ -173,6 +183,18 @@ export const ClientDetails = () => {
       setFormError(true);
     }
 
+    if (contactDetailData.length < 1) {
+      contactDetailErr.contactEmpty = "At least one contact detail required";
+      isValid = false;
+      setFormError(true);
+    }
+
+    if (transactionDetailsData.length < 1) {
+      transactionDetailErr.transactionEmpty = "At least one transaction detail required";
+      isValid = false;
+      setFormError(true);
+    }
+
     if (!isValid) {
       setCustomerNameErr(customerNameErr);
       setClientAddressErr(clientAddressErr);
@@ -185,6 +207,8 @@ export const ClientDetails = () => {
       setGstNoErr(gstNoErr);
       setNoOfCompaniesErr(noOfCompaniesErr);
       setNoOfUsersErr(noOfUsersErr);
+      setContactDetailErr(contactDetailErr)
+      setTransactionDetailErr(transactionDetailErr);
     }
 
     return isValid;
@@ -211,12 +235,14 @@ export const ClientDetails = () => {
         ActiveStatus: clientData.status,
         NoOfCompany: parseInt(clientData.noOfComapnies),
         NoOfUsers: parseInt(clientData.noOfUsers),
-        AddUser: localStorage.getItem("LoginUserName")
+        AddUser: localStorage.getItem("LoginUserName"),
+        ClientContactDetails : [contactDetailData],
+        ClientRegistrationAuthorization : [transactionDetailsData]
       }
 
       setIsLoading(true);
 
-      axios.post(process.env.REACT_APP_API_URL + '/add-client', userData)
+      axios.post(process.env.REACT_APP_API_URL + '/add-client', {userData})
         .then(res => {
           debugger
           setIsLoading(false);
@@ -441,6 +467,9 @@ export const ClientDetails = () => {
                 {Object.keys(noOfUsersErr).map((key) => {
                   return <span className="error-message">{noOfUsersErr[key]}</span>
                 })}
+              </Row>
+              <Row className="mb-3">
+                <Button id='btnAddClientDetail' type='submit'>Add</Button>
               </Row>
               <Row className="mb-3">
                 <Button id='btnUpdateClientDetail' onClick={() => updateClientDetails()}>Update</Button>

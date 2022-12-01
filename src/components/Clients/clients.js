@@ -7,8 +7,7 @@ const tabArray = ['Customer List', 'Customer Details', 'Transaction Details'];
 
 const listColumnArray = [
   { accessor: 'sl', Header: 'S. No' },
-  { accessor: 'customerName', Header: 'Customer Name' },
-  { accessor: 'userName', Header: 'User Name' },
+  { accessor: 'customerName', Header: 'Customer Name' },  
   { accessor: 'fullAddress', Header: 'Address' },
   { accessor: 'state', Header: 'State' },
   { accessor: 'country', Header: 'Country' },

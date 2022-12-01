@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+// import { addTransactionDetailsAction } from 'actions';
+import { transactionDetailsAction } from 'actions';
 
 export const TransactionDetails = () => {
 
@@ -17,6 +20,7 @@ export const TransactionDetails = () => {
         amount: 0,
         gstPercentage: 0
     });
+    const dispatch = useDispatch();
     const [amountPayable, setAmountPayable] = useState();
     const [moduleList, setModuleList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -106,27 +110,28 @@ export const TransactionDetails = () => {
                 ChequeDate: formData.chequeDate,
                 ChequeBank: formData.chequeBank,
                 GSTPercent: parseFloat(formData.gstPercentage),
-                Amount: parseFloat(formData.amount),                
+                Amount: parseFloat(formData.amount),
                 AddUser: localStorage.getItem("LoginUserName")
             }
 
-            setIsLoading(true);
+            // setIsLoading(true);
+            dispatch(transactionDetailsAction(transactionData));          
+            $("#TransactionDetailsTable").show();  
 
-            axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionData)
-                .then(res => {
-                    setIsLoading(false);
-                    if (res.data.status == 200) {
-                        toast.success(res.data.message, {
-                            theme: 'colored'
-                        });
-                        $("#TransactionDetailsTable").show();
-                        window.location.reload();
-                    } else {
-                        toast.error(res.data.message, {
-                            theme: 'colored'
-                        });
-                    }
-                })
+            // axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionData)
+            //     .then(res => {
+            //         setIsLoading(false);
+            //         if (res.data.status == 200) {
+            //             toast.success(res.data.message, {
+            //                 theme: 'colored'
+            //             });
+            //             $("#TransactionDetailsTable").show();
+            //         } else {
+            //             toast.error(res.data.message, {
+            //                 theme: 'colored'
+            //             });
+            //         }
+            //     })
         }
     };
 

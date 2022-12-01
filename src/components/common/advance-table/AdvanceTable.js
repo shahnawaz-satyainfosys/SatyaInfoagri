@@ -25,6 +25,8 @@ const AdvanceTable = ({
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
     localStorage.setItem('EncryptedResponseClientCode', rowData.encryptedClientCode);
     $("#AddContactDetailsForm").hide();
+    $("#btnAddClientDetail").hide();
+    $("#btnUpdateClientDetail").show();
     getContactDetailsList(rowData.encryptedClientCode);
     getTransactionDetailsList(rowData.encryptedClientCode);
   }

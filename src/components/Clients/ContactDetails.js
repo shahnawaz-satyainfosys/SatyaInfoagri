@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateClientContactDetailsAction } from '../../actions/index';
+import {clientContactDetailsAction} from '../../actions/index'
 
 const ContactDetails = () => {
 
@@ -45,9 +46,10 @@ const ContactDetails = () => {
     return isValid;
   }
 
-  const handleSubmit = e => {
-    e.preventDefault();
+  const handleSubmit = ()=> {
+    //  e.preventDefault();
     if (handleValidation()) {
+      
       const userData = {
         EncryptedClientCode: localStorage.getItem("EncryptedResponseClientCode"),
         contactPerson: contactDetailData.contactPerson,
@@ -58,28 +60,35 @@ const ContactDetails = () => {
         AddUser: localStorage.getItem("LoginUserName")
       }
 
-      setIsLoading(true);
-
-      axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', userData)
-        .then(res => {
-          setIsLoading(false);
-          if (res.data.status == 200) {
-            toast.success(res.data.message, {
-              theme: 'colored'
-            });
-            $("#ContactDetailsTable").show();
-            $("#AddContactDetailsForm").hide();
-            window.location.reload();
-          } else {
-            toast.error(res.data.message, {
-              theme: 'colored'
-            });
-          }
-        })
+      // setIsLoading(true);
+      dispatch(clientContactDetailsAction(userData));
+      $("#AddContactDetailsForm").hide();
+      $("#ContactDetailsTable").show();
+      // axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', userData)
+      //   .then(res => {
+      //     setIsLoading(false);
+      //     if (res.data.status == 200) {
+      //       toast.success(res.data.message, {
+      //         theme: 'colored'
+      //       });
+      //       $("#ContactDetailsTable").show();
+      //       $("#AddContactDetailsForm").hide();
+      //     } else {
+      //       toast.error(res.data.message, {
+      //         theme: 'colored'
+      //       });
+      //     }
+      //   })
+    }else{
+      toast.error("Something went wrong", {
+                theme: 'colored'
+              });
     }
   };
 
   const updateContactDetails = () => {
+    
+    if (handleValidation()){
     const contactDetail = {
       EncryptedClientContactDetailsId: contactDetailData.encryptedClientContactDetailsId,
       ContactPersonName: contactDetailData.contactPerson,
@@ -102,13 +111,13 @@ const ContactDetails = () => {
           $("#ContactDetailsTable").show();
           $("#AddContactDetailsForm").hide();
 
-          window.location.reload();
         } else {
           toast.error(res.data.message, {
             theme: 'colored'
           });
         }
       })
+    }
   };
 
   const handleFieldChange = e => {
@@ -134,7 +143,7 @@ const ContactDetails = () => {
         />
       ) : null}
       {contactDetailData &&
-        <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }} id='AddContactForm'>
+        <Form noValidate validated={formHasError} className="details-form" onSubmit={() => { handleSubmit() }} id='AddContactForm'>
           <Row>
             <Col className="me-5 ms-5">
               <Row className="mb-3">
@@ -167,7 +176,7 @@ const ContactDetails = () => {
                 </Form.Select>
               </Row>
               <Row className="mb-3">
-                <Button variant="primary" id='btnAddContactDetail' type="submit">
+                <Button variant="primary" id='btnAddContactDetail' type="button" onClick={() => handleSubmit()}>
                   Add
                 </Button>
               </Row>
