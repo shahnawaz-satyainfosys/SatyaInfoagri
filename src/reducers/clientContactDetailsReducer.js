@@ -7,7 +7,7 @@ const clientContactDetailsReducer = (state = initialState, action) => {
     case 'CLIENTCONTACTDETAILSLIST':
       return{
         ...state,
-        clientContactDetails : action.payload
+        clientContactDetails : [...state.clientContactDetails, action.payload]
       }
     default:
       return state;

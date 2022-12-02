@@ -21,7 +21,7 @@ import { clientDetailsAction, clientContactDetailsAction, transactionDetailsActi
 
 import $ from 'jquery';
 
-const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
+const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) => {
 
   const dispatch = useDispatch();
 
@@ -58,6 +58,10 @@ const TabPage = ({ listData, listColumnArray, tabArray, module }) => {
 
   $('#btnNew').click(function () {
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
+  })
+
+  $('#btnSave').click(function () {   
+    saveDetails();
   })
 
   $('#btnCancel').click(function () {

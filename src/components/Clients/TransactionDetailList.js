@@ -17,7 +17,7 @@ const TransactionDetailList = () => {
 
   return (
     <>     
-      <table className='table table-striped'>
+       <table className='table table-striped'>
         <thead>
           <tr>
             <th>Module Name</th>
@@ -34,15 +34,16 @@ const TransactionDetailList = () => {
            transactionDetailReducer.transactionDetails && 
            transactionDetailReducer.transactionDetails.length > 0 &&
            transactionDetailReducer.transactionDetails.map(data => 
+            (data &&
             <tr>
               <td>{data.moduleName}</td>
               <td>{Moment(data.startDate).format("DD/MM/YYYY")}</td>
               <td>{Moment(data.endDate).format("DD/MM/YYYY")}</td>
-              <td>{data.paymentType == "CQ" ? "Cheque" : data.paymentType == "CS" ? "Cash" : "TT"}</td>
+              <td>{data.paymentMode === "CQ" ? "Cheque" : data.paymentType == "CS" ? "Cash" : "TT"}</td>
               <td>{data.amount}</td>
               <td>{data.gstPercent}%</td>
               <td>{data.totalAmount}</td>
-            </tr>)}
+            </tr>))}
         </tbody>
       </table>
     </>

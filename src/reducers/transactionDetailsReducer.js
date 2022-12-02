@@ -7,7 +7,7 @@ const transactionDetailsReducer = (state = initialState, action) => {
     case 'TRANSACTIONLIST':
       return{
         ...state,
-        transactionDetails : action.payload
+        transactionDetails : [...state.transactionDetails, action.payload]
       }
     default:
       return state;

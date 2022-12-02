@@ -103,20 +103,21 @@ export const TransactionDetails = () => {
             const transactionData = {
                 EncryptedClientCode: localStorage.getItem("EncryptedResponseClientCode"),
                 EncryptedModuleCode: formData.moduleName,
-                Startdate: formData.startDate,
-                EndDate: formData.endDate,
-                PaymentMode: formData.paymentMode,
-                ChequeNo: formData.chequeNo,
-                ChequeDate: formData.chequeDate,
-                ChequeBank: formData.chequeBank,
-                GSTPercent: parseFloat(formData.gstPercentage),
-                Amount: parseFloat(formData.amount),
-                AddUser: localStorage.getItem("LoginUserName")
+                startdate: formData.startDate,
+                endDate: formData.endDate,
+                paymentMode: formData.paymentMode,
+                chequeNo: formData.chequeNo,
+                chequeDate: formData.chequeDate,
+                chequeBank: formData.chequeBank,
+                gstPercent: parseFloat(formData.gstPercentage),
+                amount: parseFloat(formData.amount),
+                addUser: localStorage.getItem("LoginUserName"),
+                totalAmount: formData.totalAmount
             }
+             
+            dispatch(transactionDetailsAction(transactionData));
 
-            // setIsLoading(true);
-            dispatch(transactionDetailsAction(transactionData));          
-            $("#TransactionDetailsTable").show();  
+            $("#TransactionDetailsTable").show();
 
             // axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionData)
             //     .then(res => {
@@ -187,7 +188,7 @@ export const TransactionDetails = () => {
                     <Col className="me-5 ms-5">
                         <Row className="mb-3">
                             <Form.Label>Module Name<span className="text-danger">*</span></Form.Label>
-                            <Form.Select id="txtCountry" name="moduleName" onChange={handleFieldChange} required>
+                            <Form.Select name="moduleName" onChange={handleFieldChange} required>
                                 <option value=''>Select Module</option>
                                 {moduleList.map((option, index) => (
                                     <option key={index} value={option.value}>{option.key}</option>
@@ -251,7 +252,7 @@ export const TransactionDetails = () => {
                         </Row>
                         <Row className="mb-3">
                             <Form.Label>Total Amount Payable</Form.Label>
-                            <Form.Control type='number' id="numAmountPayable" name="amountPayable" value={amountPayable} onChange={handleFieldChange} placeholder="Total amount" />
+                            <Form.Control type='number' id="numAmountPayable" name="totalAmount" value={amountPayable} onChange={handleFieldChange} placeholder="Total amount" />
                         </Row>
                         <Row className="mb-3">
                             <Button variant="primary" type="submit">

@@ -5,7 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateClientContactDetailsAction } from '../../actions/index';
-import {clientContactDetailsAction} from '../../actions/index'
+import { clientContactDetailsAction } from '../../actions/index'
 
 const ContactDetails = () => {
 
@@ -14,9 +14,8 @@ const ContactDetails = () => {
   const updateClientContactDetailReducer = useSelector((state) => state.rootReducer.updateClientContactDetailReducer)
   var contactDetailData = updateClientContactDetailReducer.updateClientContactDetails;
 
-  if(!updateClientContactDetailReducer.updateClientContactDetails ||
-     updateClientContactDetailReducer.updateClientContactDetails.length <= 0)
-  {
+  if (!updateClientContactDetailReducer.updateClientContactDetails ||
+       updateClientContactDetailReducer.updateClientContactDetails.length <= 0) {
     contactDetailData = {
       contactPerson: '',
       mobileNo: '',
@@ -46,10 +45,9 @@ const ContactDetails = () => {
     return isValid;
   }
 
-  const handleSubmit = ()=> {
-    //  e.preventDefault();
+  const handleSubmit = () => {
     if (handleValidation()) {
-      
+
       const userData = {
         EncryptedClientCode: localStorage.getItem("EncryptedResponseClientCode"),
         contactPerson: contactDetailData.contactPerson,
@@ -59,12 +57,34 @@ const ContactDetails = () => {
         sendMail: contactDetailData.sendMail,
         AddUser: localStorage.getItem("LoginUserName")
       }
-
+      // var contactDetailArray = [];
+      // contactDetailArray.push(userData);
       // setIsLoading(true);
       dispatch(clientContactDetailsAction(userData));
       $("#AddContactDetailsForm").hide();
       $("#ContactDetailsTable").show();
-      // axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', userData)
+      $("#btnAdd").show();
+    } 
+  };
+
+  const updateContactDetails = () => {
+
+    if (handleValidation()) {
+      const contactDetail = {
+        EncryptedClientContactDetailsId: contactDetailData.encryptedClientContactDetailsId,
+        ContactPersonName: contactDetailData.contactPerson,
+        MobileNo: contactDetailData.mobileNo,
+        EmailId: contactDetailData.emailId,
+        Designation: contactDetailData.designation,
+        SendMail: contactDetailData.sendMail == "Y" ? "Y" : "N",
+        ModifyUser: localStorage.getItem("LoginUserName")
+      }
+
+      //To-do: Update this specific record in Reducer and not directly in DB
+
+      // setIsLoading(true);
+
+      // axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetail)
       //   .then(res => {
       //     setIsLoading(false);
       //     if (res.data.status == 200) {
@@ -73,50 +93,13 @@ const ContactDetails = () => {
       //       });
       //       $("#ContactDetailsTable").show();
       //       $("#AddContactDetailsForm").hide();
+
       //     } else {
       //       toast.error(res.data.message, {
       //         theme: 'colored'
       //       });
       //     }
       //   })
-    }else{
-      toast.error("Something went wrong", {
-                theme: 'colored'
-              });
-    }
-  };
-
-  const updateContactDetails = () => {
-    
-    if (handleValidation()){
-    const contactDetail = {
-      EncryptedClientContactDetailsId: contactDetailData.encryptedClientContactDetailsId,
-      ContactPersonName: contactDetailData.contactPerson,
-      MobileNo: contactDetailData.mobileNo,
-      EmailId: contactDetailData.emailId,
-      Designation: contactDetailData.designation,
-      SendMail: contactDetailData.sendMail == "Y" ? "Y" : "N",
-      ModifyUser: localStorage.getItem("LoginUserName")
-    }
-
-    setIsLoading(true);
-
-    axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetail)
-      .then(res => {
-        setIsLoading(false);
-        if (res.data.status == 200) {
-          toast.success(res.data.message, {
-            theme: 'colored'
-          });
-          $("#ContactDetailsTable").show();
-          $("#AddContactDetailsForm").hide();
-
-        } else {
-          toast.error(res.data.message, {
-            theme: 'colored'
-          });
-        }
-      })
     }
   };
 

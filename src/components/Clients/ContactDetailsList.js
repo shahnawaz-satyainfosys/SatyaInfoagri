@@ -11,7 +11,8 @@ import { updateClientContactDetailsAction } from '../../actions/index';
 const ContactDetailsList = () => {
 
   const dispatch = useDispatch();
-  const contactDetailReducer = useSelector((state) => state.rootReducer.clientContactDetailsReducer)  
+  
+  const contactDetailReducer = useSelector((state) => state.rootReducer.clientContactDetailsReducer)
   const [modalShow, setModalShow] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -55,60 +56,68 @@ const ContactDetailsList = () => {
   }
 
   const showAddContactDetailsForm = () => {
-    $("#AddContactDetailsForm").show();
-    //$("#AddContactForm")[0].reset();
+    $("#AddContactDetailsForm").show();    
     $("#btnAddContactDetail").show();
     $("#btnUpdateContactDetail").hide();
     $("#ContactDetailsTable").hide();
+    if ($('#ContactDetailsTable tr').length > 1) {
+      $("#ContactDetailsTable").show();
+    } else {
+      $("#ContactDetailsTable").hide();
+    }
     $("#btnAdd").hide();
   }
 
   return (
     <>
-    {isLoading ? (
+      {isLoading ? (
         <Spinner
           className="position-absolute start-50 loader-color"
           animation="border"
         />
       ) : null}
-      
-    <div>
-      <div className='mb-3 me-5' style={{ display: "flex", justifyContent: "end" }}>
-        <Button id='btnAdd' onClick={() => showAddContactDetailsForm()}>
-          Add Contact Detail
-        </Button>
-      </div>
-      {contactDetailReducer &&
-          contactDetailReducer.clientContactDetails && 
-           contactDetailReducer.clientContactDetails.length > 0 &&
-      <table className='table table-striped' id="ClientContactDetailsTable">
-        <thead>
-          <tr>
-            <th>Contact Person</th>
-            <th>Mobile No</th>
-            <th>Email Id</th>
-            <th>Designation</th>
-            <th>Send Mail</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id='tableContactPerson'>
-          
-           {contactDetailReducer.clientContactDetails.map(data =>
-            <tr>
-              <td>{data.contactPerson}</td>
-              <td>{data.mobileNo}</td>
-              <td>{data.emailId}</td>
-              <td>{data.designation}</td>
-              <td>{data.sendMail == 'Y' ? "Yes" : "No"}</td>
-              <td><i className="fa fa-pencil me-2" onClick={() => { editContactDetails(data) }} /> <i className="fa fa-trash" onClick={() => { deleteContactDetails(data.encryptedClientContactDetailsId) }} /></td>
-            </tr>
-          )}
-        </tbody>
-      </table>}
-    </div>
 
-    <Modal
+      <div>
+        <div className='mb-3 me-5' style={{ display: "flex", justifyContent: "end" }}>
+          <Button id='btnAdd' onClick={() => showAddContactDetailsForm()}>
+            Add Contact Detail
+          </Button>
+        </div>
+        {contactDetailReducer &&
+          contactDetailReducer.clientContactDetails &&
+          contactDetailReducer.clientContactDetails.length > 0 && (
+          <table className='table table-striped' id="ClientContactDetailsTable">
+            <thead>
+              <tr>
+                <th>Contact Person</th>
+                <th>Mobile No</th>
+                <th>Email Id</th>
+                <th>Designation</th>
+                <th>Send Mail</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id='tableContactPerson'>
+
+              { contactDetailReducer.clientContactDetails.length > 0 ?
+               
+                contactDetailReducer.clientContactDetails.map(data =>
+                  (data && 
+                  <tr>
+                    <td>{data.contactPerson}</td>
+                    <td>{data.mobileNo}</td>
+                    <td>{data.emailId}</td>
+                    <td>{data.designation}</td>
+                    <td>{data.sendMail == 'Y' ? "Yes" : "No"}</td>
+                    <td><i className="fa fa-pencil me-2" onClick={() => { editContactDetails(data) }} /> <i className="fa fa-trash" onClick={() => { deleteContactDetails(data.encryptedClientContactDetailsId) }} /></td>
+                  </tr>)
+              )
+              : null }
+            </tbody>
+          </table>)}
+      </div>
+
+      <Modal
         show={modalShow}
         onHide={() => setModalShow(false)}
         size="lg"

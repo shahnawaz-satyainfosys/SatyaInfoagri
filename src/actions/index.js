@@ -39,3 +39,10 @@ export const clientDetailsAction = (payload) => {
     payload
   };
 };
+
+export const clientDetailsErrorAction = (payload) => {
+  return {
+    type: 'CLIENTDETAILSERROR',
+    payload
+  };
+};
