@@ -11,11 +11,7 @@ const ContactDetails = () => {
 
   const dispatch = useDispatch();
 
-  const updateClientContactDetailReducer = useSelector((state) => state.rootReducer.updateClientContactDetailReducer)
-  var contactDetailData = updateClientContactDetailReducer.updateClientContactDetails;
-
-  if (!updateClientContactDetailReducer.updateClientContactDetails ||
-       updateClientContactDetailReducer.updateClientContactDetails.length <= 0) {
+  const resetContactDetailData = () => {
     contactDetailData = {
       contactPerson: '',
       mobileNo: '',
@@ -25,11 +21,22 @@ const ContactDetails = () => {
     }
   }
 
+  const contactDetailListReducer = useSelector((state) => state.rootReducer.clientContactDetailsReducer)
+  const contactDetailList = contactDetailListReducer.clientContactDetails;
+
+  const updateClientContactDetailReducer = useSelector((state) => state.rootReducer.updateClientContactDetailReducer)
+  var contactDetailData = updateClientContactDetailReducer.updateClientContactDetails;
+
+  if (!updateClientContactDetailReducer.updateClientContactDetails ||
+       updateClientContactDetailReducer.updateClientContactDetails.length <= 0) {
+        resetContactDetailData();
+  }
+
   const [formHasError, setFormError] = useState(false);
   const [contactNameErr, setContactNameErr] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleValidation = () => {
+  const validateContactDetailForm = () => {
     const contactNameErr = {};
 
     let isValid = true;
@@ -45,42 +52,52 @@ const ContactDetails = () => {
     return isValid;
   }
 
-  const handleSubmit = () => {
-    if (handleValidation()) {
+  const addContactDetailInList = () => {
+    if (validateContactDetailForm()) {
 
       const userData = {
-        EncryptedClientCode: localStorage.getItem("EncryptedResponseClientCode"),
+        encryptedClientContactDetailsId: "",
+        encryptedClientCode: localStorage.getItem("EncryptedResponseClientCode"),
         contactPerson: contactDetailData.contactPerson,
         mobileNo: contactDetailData.mobileNo,
         emailId: contactDetailData.emailId,
         designation: contactDetailData.designation,
         sendMail: contactDetailData.sendMail,
-        AddUser: localStorage.getItem("LoginUserName")
+        addUser: localStorage.getItem("LoginUserName")
       }
-      // var contactDetailArray = [];
-      // contactDetailArray.push(userData);
-      // setIsLoading(true);
+
       dispatch(clientContactDetailsAction(userData));
-      $("#AddContactDetailsForm").hide();
-      $("#ContactDetailsTable").show();
-      $("#btnAdd").show();
+      hideForm();
     } 
   };
 
   const updateContactDetails = () => {
 
-    if (handleValidation()) {
+    if (validateContactDetailForm()) {
+      
+      var contactPersonMobileNoToUpdate = localStorage.getItem("contactPersonMobileNoToUpdate");
+
       const contactDetail = {
-        EncryptedClientContactDetailsId: contactDetailData.encryptedClientContactDetailsId,
-        ContactPersonName: contactDetailData.contactPerson,
-        MobileNo: contactDetailData.mobileNo,
-        EmailId: contactDetailData.emailId,
-        Designation: contactDetailData.designation,
-        SendMail: contactDetailData.sendMail == "Y" ? "Y" : "N",
-        ModifyUser: localStorage.getItem("LoginUserName")
+        encryptedClientContactDetailsId: contactDetailData.encryptedClientContactDetailsId,
+        encryptedClientCode: contactDetailData.encryptedClientCode,
+        contactPerson: contactDetailData.contactPerson,
+        mobileNo: contactDetailData.mobileNo,
+        emailId: contactDetailData.emailId,
+        designation: contactDetailData.designation,
+        sendMail: contactDetailData.sendMail == "Y" ? "Y" : "N",
+        addUser: contactDetailData.addUser,
+        modifyUser: localStorage.getItem("LoginUserName")
       }
 
-      //To-do: Update this specific record in Reducer and not directly in DB
+      var objectIndex = contactDetailList.findIndex(x => x.mobileNo == contactPersonMobileNoToUpdate);
+      contactDetailList[objectIndex] = contactDetail;
+
+      dispatch(clientContactDetailsAction(contactDetailList));
+
+      $("#ContactDetailsTable").show();
+      $("#AddContactDetailsForm").hide();
+
+      localStorage.getItem("contactPersonMobileNoToUpdate", "");
 
       // setIsLoading(true);
 
@@ -115,6 +132,7 @@ const ContactDetails = () => {
     $("#ContactDetailsTable").show();
     $("#btnAdd").show();
     dispatch(updateClientContactDetailsAction(undefined));
+    resetContactDetailData();
   }
 
   return (
@@ -126,40 +144,40 @@ const ContactDetails = () => {
         />
       ) : null}
       {contactDetailData &&
-        <Form noValidate validated={formHasError} className="details-form" onSubmit={() => { handleSubmit() }} id='AddContactForm'>
+        <Form noValidate validated={formHasError} className="details-form" id='AddContactForm'>
           <Row>
             <Col className="me-5 ms-5">
               <Row className="mb-3">
                 <Form.Label className='details-form'>Contact Person<span className="text-danger">*</span></Form.Label>
-                <Form.Control id="txtContactPerson" name="contactPerson" maxLength={50} defaultValue={contactDetailData.contactPerson} onChange={handleFieldChange} placeholder="Contact person name" required />
+                <Form.Control id="txtContactPerson" name="contactPerson" maxLength={50} value={contactDetailData.contactPerson} onChange={handleFieldChange} placeholder="Contact person name" required />
                 {Object.keys(contactNameErr).map((key) => {
                   return <span className="error-message">{contactNameErr[key]}</span>
                 })}
               </Row>
               <Row className="mb-3">
                 <Form.Label>Mobile No</Form.Label>
-                <Form.Control id="txtMobileno" name="mobileNo" maxLength={10} defaultValue={contactDetailData.mobileNo} onChange={handleFieldChange} placeholder="Mobile No" />
+                <Form.Control id="txtMobileno" name="mobileNo" maxLength={10} value={contactDetailData.mobileNo} onChange={handleFieldChange} placeholder="Mobile No" />
               </Row>
               <Row className="mb-3">
                 <Form.Label>Email Id</Form.Label>
-                <Form.Control id="txtEmailId" name="emailId" maxLength={50} defaultValue={contactDetailData.emailId} onChange={handleFieldChange} placeholder="Email Id" />
+                <Form.Control id="txtEmailId" name="emailId" maxLength={50} value={contactDetailData.emailId} onChange={handleFieldChange} placeholder="Email Id" />
               </Row>
             </Col>
             <Col>
               <Row className="mb-3">
                 <Form.Label>Designation</Form.Label>
-                <Form.Control id="txtDesignation" name="designation" maxLength={50} defaultValue={contactDetailData.designation} onChange={handleFieldChange} placeholder="Designation" />
+                <Form.Control id="txtDesignation" name="designation" maxLength={50} value={contactDetailData.designation} onChange={handleFieldChange} placeholder="Designation" />
               </Row>
               <Row className="mb-3">
                 <Form.Label>Send Mail</Form.Label>
-                <Form.Select id="txtSendMail" name="sendMail" defaultValue={contactDetailData.sendMail} onChange={handleFieldChange}>
+                <Form.Select id="txtSendMail" name="sendMail" value={contactDetailData.sendMail} onChange={handleFieldChange}>
                   <option value=''>Select</option>
                   <option value="Y">Yes</option>
                   <option value="N">No</option>
                 </Form.Select>
               </Row>
               <Row className="mb-3">
-                <Button variant="primary" id='btnAddContactDetail' type="button" onClick={() => handleSubmit()}>
+                <Button variant="primary" id='btnAddContactDetail' type="button" onClick={() => addContactDetailInList()}>
                   Add
                 </Button>
               </Row>

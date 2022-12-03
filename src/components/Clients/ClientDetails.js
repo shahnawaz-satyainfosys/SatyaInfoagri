@@ -13,12 +13,6 @@ export const ClientDetails = () => {
   const clientDetailsReducer = useSelector((state) => state.rootReducer.clientDetailsReducer)
   const clientData = clientDetailsReducer.clientDetails;
 
-  const clientContactDetailsReducer = useSelector((state) => state.rootReducer.clientContactDetailsReducer)
-  const contactDetailData = clientContactDetailsReducer.clientContactDetails;
-
-  const transactionDetailsReducer = useSelector((state) => state.rootReducer.transactionDetailsReducer)
-  const transactionDetailsData = transactionDetailsReducer.transactionDetails;
-
   const clientDetailsErrorReducer = useSelector((state) => state.rootReducer.clientDetailsErrorReducer)
   const clientError = clientDetailsErrorReducer.clientDetailsError;
 

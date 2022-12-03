@@ -11,7 +11,6 @@ import { updateClientContactDetailsAction } from '../../actions/index';
 const ContactDetailsList = () => {
 
   const dispatch = useDispatch();
-  
   const contactDetailReducer = useSelector((state) => state.rootReducer.clientContactDetailsReducer)
   const [modalShow, setModalShow] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -24,12 +23,13 @@ const ContactDetailsList = () => {
     }
   }, []);
 
-  const editContactDetails = (data) => {
+  const editContactDetails = (data, mobileNoToUpdate) => {
     $("#AddContactDetailsForm").show();
     $("#btnAddContactDetail").hide();
     $("#btnUpdateContactDetail").show();
     $("#btnAdd").hide();
     $("#ContactDetailsTable").hide();
+    localStorage.setItem("contactPersonMobileNoToUpdate", mobileNoToUpdate);
     dispatch(updateClientContactDetailsAction(data));
   }
 
@@ -101,7 +101,7 @@ const ContactDetailsList = () => {
 
               { contactDetailReducer.clientContactDetails.length > 0 ?
                
-                contactDetailReducer.clientContactDetails.map(data =>
+                contactDetailReducer.clientContactDetails.map((data, index) =>
                   (data && 
                   <tr>
                     <td>{data.contactPerson}</td>
@@ -109,7 +109,7 @@ const ContactDetailsList = () => {
                     <td>{data.emailId}</td>
                     <td>{data.designation}</td>
                     <td>{data.sendMail == 'Y' ? "Yes" : "No"}</td>
-                    <td><i className="fa fa-pencil me-2" onClick={() => { editContactDetails(data) }} /> <i className="fa fa-trash" onClick={() => { deleteContactDetails(data.encryptedClientContactDetailsId) }} /></td>
+                    <td><i className="fa fa-pencil me-2" onClick={() => { editContactDetails(data, data.mobileNo) }} /> <i className="fa fa-trash" onClick={() => { deleteContactDetails(data.encryptedClientContactDetailsId) }} /></td>
                   </tr>)
               )
               : null }

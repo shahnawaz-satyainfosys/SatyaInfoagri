@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import TabPage from 'components/common/TabPage';
 import axios from 'axios';
-import ClientDetails from '../Clients/ClientDetails';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { clientDetailsErrorAction } from 'actions';
@@ -20,8 +19,6 @@ const listColumnArray = [
 ];
 
 export const Client = () => {
-
-  localStorage.setItem('EncryptedResponseClientCode', '');
 
   const [listData, setListData] = useState([]);
   const [perPage, setPerPage] = useState(15);
@@ -242,7 +239,6 @@ export const Client = () => {
         listColumnArray={listColumnArray}
         tabArray={tabArray}
         module="Client"
-        detailsForm={ClientDetails}
         saveDetails={addClientDetails}
       />
     </>

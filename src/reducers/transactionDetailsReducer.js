@@ -5,9 +5,18 @@ const initialState = {
 const transactionDetailsReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'TRANSACTIONLIST':
-      return{
-        ...state,
-        transactionDetails : [...state.transactionDetails, action.payload]
+      if(Array.isArray(action.payload))
+      {
+        return{
+          ...state,
+          transactionDetails : action.payload
+        }
+      }
+      else{
+        return{
+          ...state,
+          transactionDetails : [...state.transactionDetails, action.payload]
+        }
       }
     default:
       return state;

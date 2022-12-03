@@ -159,7 +159,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
                   />
                 </FalconComponentCard>
               )}
-              {index == 1 && ClientDetails && (
+              {index == 1 && module == "Client" && ClientDetails && (
                 <>
                   <FalconComponentCard>
                     <FalconComponentCard.Body language="jsx">
@@ -180,7 +180,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
                   </FalconComponentCard>
                 </>
               )}
-              {index == 2 && TransactionDetails && (
+              {index == 2 && module == "Client" && TransactionDetails && (
                 <>
                   <FalconComponentCard style={{ display: 'none' }} id='TransactionDetailsTable'>
                     <FalconComponentCard.Body language="jsx">
