@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import Modal from 'react-modal';
 import { useDispatch } from 'react-redux';
 import { updateClientContactDetailsAction } from '../../actions/index';
+import { clientContactDetailsAction } from '../../actions/index';
 
 const ContactDetailsList = () => {
 
@@ -33,26 +34,32 @@ const ContactDetailsList = () => {
     dispatch(updateClientContactDetailsAction(data));
   }
 
-  const deleteContactDetails = (encryptedClientContactDetailsId) => {
-    const data = {
-      encryptedClientContactDetailsId
-    }
-    setIsLoading(true);
-    axios
-      .delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data })
-      .then(res => {
-        setIsLoading(false);
-        if (res.data.status == 200) {
-          toast.success(res.data.message, {
-            theme: 'colored'
-          });
-        }
-        else {
-          toast.error(res.data.message, {
-            theme: 'colored'
-          });
-        }
-      })
+  const deleteContactDetails = (encryptedClientContactDetailsId, contactMobileNoToDelete) => {
+
+    var objectIndex = contactDetailReducer.clientContactDetails.findIndex(x => x.mobileNo == contactMobileNoToDelete);
+    contactDetailReducer.clientContactDetails.splice(objectIndex, 1)
+
+    dispatch(clientContactDetailsAction(contactDetailReducer.clientContactDetails));
+
+    // const data = {
+    //   encryptedClientContactDetailsId
+    // }
+    // setIsLoading(true);
+    // axios
+    //   .delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data })
+    //   .then(res => {
+    //     setIsLoading(false);
+    //     if (res.data.status == 200) {
+    //       toast.success(res.data.message, {
+    //         theme: 'colored'
+    //       });
+    //     }
+    //     else {
+    //       toast.error(res.data.message, {
+    //         theme: 'colored'
+    //       });
+    //     }
+    //   })
   }
 
   const showAddContactDetailsForm = () => {
@@ -109,7 +116,8 @@ const ContactDetailsList = () => {
                     <td>{data.emailId}</td>
                     <td>{data.designation}</td>
                     <td>{data.sendMail == 'Y' ? "Yes" : "No"}</td>
-                    <td><i className="fa fa-pencil me-2" onClick={() => { editContactDetails(data, data.mobileNo) }} /> <i className="fa fa-trash" onClick={() => { deleteContactDetails(data.encryptedClientContactDetailsId) }} /></td>
+                    <td><i className="fa fa-pencil me-2" onClick={() => { editContactDetails(data, data.mobileNo) }} />
+                    <i className="fa fa-trash" onClick={() => { deleteContactDetails(data.encryptedClientContactDetailsId, data.mobileNo) }} /></td>
                   </tr>)
               )
               : null }

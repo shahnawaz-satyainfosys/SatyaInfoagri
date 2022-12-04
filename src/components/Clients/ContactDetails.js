@@ -97,7 +97,7 @@ const ContactDetails = () => {
       $("#ContactDetailsTable").show();
       $("#AddContactDetailsForm").hide();
 
-      localStorage.getItem("contactPersonMobileNoToUpdate", "");
+      localStorage.setItem("contactPersonMobileNoToUpdate", "");
 
       // setIsLoading(true);
 
