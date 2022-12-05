@@ -41,6 +41,8 @@ const ContactDetailsList = () => {
     var objectIndex = contactDetailReducer.clientContactDetails.findIndex(x => x.mobileNo == contactMobileNoToDelete);
     contactDetailReducer.clientContactDetails.splice(objectIndex, 1)
 
+    localStorage.setItem("DeleteContactDetailsId", JSON.stringify(encryptedClientContactDetailsId))
+
     dispatch(clientContactDetailsAction(contactDetailReducer.clientContactDetails));
 
     // const data = {

@@ -192,7 +192,7 @@ export const Client = () => {
   }
 
   const addClientDetails = () => {
-    
+
     if (clientValidation()) {
       const userData = {
         ClientName: clientData.customerName,
@@ -217,7 +217,7 @@ export const Client = () => {
         ClientContactDetails: contactDetailData,
         ClientRegistrationAuthorization: transactionDetailData
       }
-      
+
       setIsLoading(true);
       axios.post(process.env.REACT_APP_API_URL + '/add-client', userData)
         .then(res => {
@@ -237,6 +237,73 @@ export const Client = () => {
     }
   }
 
+  const updateClientDetails = () => {
+
+    if (clientValidation()) {
+      const updatedUserData = {
+        EncryptedClientCode: clientData.encryptedClientCode,
+        ClientName: clientData.customerName,
+        ClientAddress1: clientData.address1,
+        ClientAddress2: clientData.address2,
+        ClientAddress3: clientData.address3,
+        PINCode: clientData.pinCode,
+        EncryptedCountryCode: clientData.encryptedCountryCode,
+        EncryptedStateCode: clientData.encryptedStateCode,
+        ClientBillAddress1: clientData.billingAddress1,
+        ClientBillAddress2: clientData.billingAddress2,
+        ClientBillAddress3: clientData.billingAddress3,
+        BillPINCode: clientData.billingPinCode,
+        EncryptedBillCountryCode: clientData.encryptedBillCountryCode,
+        EncryptedBillStateCode: clientData.encryptedBillStateCode,
+        ClientPANNO: clientData.panNumber,
+        ClientGSTNO: clientData.gstNumber,
+        ActiveStatus: clientData.status == "Active" ? "A" : "S",
+        NoOfCompany: parseInt(clientData.noOfComapnies),
+        NoOfUsers: parseInt(clientData.noOfUsers),
+        ModifyUser: localStorage.getItem("LoginUserName")
+      }
+
+      setIsLoading(true);
+
+      axios.post(process.env.REACT_APP_API_URL + '/update-client', updatedUserData, {
+        headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+      })
+        .then(res => {
+          setIsLoading(false);
+          if (res.data.status == 200) {
+            contactDetailData.forEach(async contactDetails => {
+
+              if (!contactDetails.encryptedClientContactDetailsId) {
+                const addContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', contactDetails);
+                //To-do: Validate 200
+              }
+
+              if (contactDetails.encryptedClientContactDetailsId) {
+                const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
+                //To-do: Validate 200
+              }
+            });
+
+            transactionDetailData.forEach(async transactionDetail => {       
+              if(transactionDetail.encryptedClientCode && transactionDetail.encryptedModuleCode){
+                const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail);
+                //To-do: Validate 200
+              }                              
+            })
+
+            toast.success(res.data.message, {
+              theme: 'colored'
+            });
+          }
+          else {
+            toast.error(res.data.message, {
+              theme: 'colored'
+            });
+          }
+        })
+    }
+  };
+
   return (
     <>
       {isLoading ? (
@@ -250,10 +317,10 @@ export const Client = () => {
         listColumnArray={listColumnArray}
         tabArray={tabArray}
         module="Client"
-        saveDetails={addClientDetails}
+        saveDetails={ !clientData.encryptedClientCode ? addClientDetails : updateClientDetails}
       />
     </>
-  );
+  )
 };
 
 export default Client;

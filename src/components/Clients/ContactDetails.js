@@ -105,25 +105,6 @@ const ContactDetails = () => {
       hideForm();
 
       localStorage.setItem("contactPersonMobileNoToUpdate", "");
-
-      // setIsLoading(true);
-
-      // axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetail)
-      //   .then(res => {
-      //     setIsLoading(false);
-      //     if (res.data.status == 200) {
-      //       toast.success(res.data.message, {
-      //         theme: 'colored'
-      //       });
-      //       $("#ContactDetailsTable").show();
-      //       $("#AddContactDetailsForm").hide();
-
-      //     } else {
-      //       toast.error(res.data.message, {
-      //         theme: 'colored'
-      //       });
-      //     }
-      //   })
     }
   };
 
