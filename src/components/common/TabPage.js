@@ -27,19 +27,24 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
 
   useEffect(() => {
     $('[data-rr-ui-event-key*="List"]').trigger('click');
+    $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
     $("#btnNew").show();
     $("#btnSave").hide();
     $("#btnCancel").hide();
   }, []);
+
+  const clearClientReducers = () => {
+    dispatch(clientDetailsAction([]));
+    dispatch(clientContactDetailsAction([]));
+    dispatch(transactionDetailsAction ([]));
+  }
 
   $('[data-rr-ui-event-key*="List"]').click(function () {
     $("#btnNew").show();
     $("#btnSave").hide();
     $("#btnCancel").hide();
 
-    dispatch(clientDetailsAction(undefined));
-    dispatch(clientContactDetailsAction(undefined));
-    dispatch(transactionDetailsAction (undefined));
+    clearClientReducers();
   })
 
   $('[data-rr-ui-event-key*="Customer Details"]').click(function () {
@@ -57,7 +62,11 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
   })
 
   $('#btnNew').click(function () {
+    $('[data-rr-ui-event-key*="Details"]').attr('disabled', false);
+    $('[data-rr-ui-event-key*="List"]').attr('disabled', true);
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
+
+    clearClientReducers();
   })
 
   $('#btnSave').click(function () {   
@@ -65,7 +74,13 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
   })
 
   $('#btnCancel').click(function () {
+    $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
+    $('[data-rr-ui-event-key*="List"]').attr('disabled', false);
     $('[data-rr-ui-event-key*="List"]').trigger('click');
+  })
+
+  $('#btnExit').click(function () {
+    window.location.href = '/dashboard';
   })
 
   const data = `const columns = ${JSON.stringify(listColumnArray)};
@@ -123,7 +138,8 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
             <div style={{ display: "flex", justifyContent: "end" }}>
               <Button className='btn btn-primary me-2' id='btnNew'>New</Button>
               <Button className='btn btn-success me-2' id='btnSave'>Save</Button>
-              <Button className='btn btn-danger mr-4' id='btnCancel'>Cancel</Button>
+              <Button className='btn btn-danger me-2' id='btnCancel'>Cancel</Button>
+              <Button className='btn btn-info mr-4' id='btnExit'>Exit</Button>
             </div>
           </Col>
         </Row>
@@ -182,7 +198,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
               )}
               {index == 2 && module == "Client" && TransactionDetails && (
                 <>
-                  <FalconComponentCard style={{ display: 'none' }} id='TransactionDetailsTable'>
+                  <FalconComponentCard id='TransactionDetailsListCard'>
                     <FalconComponentCard.Body language="jsx">
                       <TransactionDetailList />
                     </FalconComponentCard.Body>

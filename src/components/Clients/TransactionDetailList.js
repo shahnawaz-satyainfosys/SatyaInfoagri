@@ -4,7 +4,10 @@ import {useSelector} from 'react-redux';
 import Moment from "moment";
 
 const TransactionDetailList = () => {
+  
   const transactionDetailReducer = useSelector((state) => state.rootReducer.transactionDetailsReducer)
+  const clientDetailsErrorReducer = useSelector((state) => state.rootReducer.clientDetailsErrorReducer)
+  const clientError = clientDetailsErrorReducer.clientDetailsError;
 
   useEffect(() => {
     const count = $('#TransactionDetailsTable tr').length;
@@ -13,11 +16,28 @@ const TransactionDetailList = () => {
     }else{
       $("#TransactionDetailsTable").hide();
     }
+
+    if(clientError.transactionDetailErr.Count > 0)
+    {
+      $("#TransactionDetailsListCard").show();
+    }
+    else{
+      $("#TransactionDetailsListCard").hide();
+    }
   }, []);
 
   return (
-    <>     
-       <table className='table table-striped'>
+    <>
+      { 
+          clientError.transactionDetailErr && 
+          (
+            <div className='mb-3'>
+              <span className="error-message">{clientError.transactionDetailErr.transactionEmpty}</span>
+            </div>
+          )
+        }     
+
+       <table className='table table-striped' id="TransactionDetailsTable">
         <thead>
           <tr>
             <th>Module Name</th>
@@ -33,8 +53,7 @@ const TransactionDetailList = () => {
           {transactionDetailReducer &&
            transactionDetailReducer.transactionDetails && 
            transactionDetailReducer.transactionDetails.length > 0 &&
-           transactionDetailReducer.transactionDetails.map(data => 
-            (data &&
+           transactionDetailReducer.transactionDetails.map(data =>
             <tr>
               <td>{data.moduleName}</td>
               <td>{Moment(data.startDate).format("DD/MM/YYYY")}</td>
@@ -43,7 +62,7 @@ const TransactionDetailList = () => {
               <td>{data.amount}</td>
               <td>{data.gstPercent}%</td>
               <td>{data.totalAmount}</td>
-            </tr>))}
+            </tr>)}
         </tbody>
       </table>
     </>

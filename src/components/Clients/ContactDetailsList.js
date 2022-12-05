@@ -13,6 +13,8 @@ const ContactDetailsList = () => {
 
   const dispatch = useDispatch();
   const contactDetailReducer = useSelector((state) => state.rootReducer.clientContactDetailsReducer)
+  const clientDetailsErrorReducer = useSelector((state) => state.rootReducer.clientDetailsErrorReducer)
+  const clientError = clientDetailsErrorReducer.clientDetailsError;
   const [modalShow, setModalShow] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -90,6 +92,14 @@ const ContactDetailsList = () => {
             Add Contact Detail
           </Button>
         </div>
+        { 
+          clientError.contactDetailErr && 
+          (
+            <div className='mb-3'>
+              <span className="error-message">{clientError.contactDetailErr.contactEmpty}</span>
+            </div>
+          )
+        }
         {contactDetailReducer &&
           contactDetailReducer.clientContactDetails &&
           contactDetailReducer.clientContactDetails.length > 0 && (

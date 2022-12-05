@@ -9,12 +9,12 @@ import 'helpers/initFA';
 store.subscribe(() => console.log(store.getState()));
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
       <Main>
         <App />
       </Main>
-    </Provider>
-  </React.StrictMode>,
+    </Provider>,
+  // </React.StrictMode>,
   document.getElementById('main')
 );

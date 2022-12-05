@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { clientDetailsErrorAction } from 'actions';
+import { Spinner } from 'react-bootstrap';
 
 const tabArray = ['Customer List', 'Customer Details', 'Transaction Details'];
 
@@ -22,6 +23,7 @@ export const Client = () => {
 
   const [listData, setListData] = useState([]);
   const [perPage, setPerPage] = useState(15);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchUsers = async (page, size = perPage) => {
     let token = localStorage.getItem('Token');
@@ -56,7 +58,7 @@ export const Client = () => {
   const contactDetailData = clientContactDetailsReducer.clientContactDetails;
 
   const transactionDetailsReducer = useSelector((state) => state.rootReducer.transactionDetailsReducer)
-  const transactionDetailsData = transactionDetailsReducer.transactionDetails;
+  const transactionDetailData = transactionDetailsReducer.transactionDetails;
 
   const [formHasError, setFormError] = useState(false);
 
@@ -90,13 +92,13 @@ export const Client = () => {
       setFormError(true);
     }
 
-    if (!clientData.country) {
+    if (!clientData.encryptedCountryCode) {
       countryErr.empty = "Select country";
       isValid = false;
       setFormError(true);
     }
 
-    if (!clientData.state) {
+    if (!clientData.encryptedStateCode) {
       stateErr.empty = "Select state";
       isValid = false;
       setFormError(true);
@@ -155,12 +157,13 @@ export const Client = () => {
     }
 
     if (contactDetailData.length < 1) {
-      contactDetailErr.contactEmpty = alert("At least one contact detail required");
+      contactDetailErr.contactEmpty = "At least one contact detail required";
       isValid = false;
       setFormError(true);
+      $("#TransactionDetailsListCard").show();
     }
 
-    if (transactionDetailsData.length < 1) {
+    if (transactionDetailData.length < 1) {
       transactionDetailErr.transactionEmpty = "At least one transaction detail required";
       isValid = false;
       setFormError(true);
@@ -207,14 +210,14 @@ export const Client = () => {
         EncryptedBillStateCode: clientData.encryptedBillStateCode,
         ClientPANNO: clientData.panNumber,
         ClientGSTNO: clientData.gstNumber,
-        ActiveStatus: clientData.status,
+        ActiveStatus: clientData.status == "Active" ? "A" : "S",
         NoOfCompany: parseInt(clientData.noOfComapnies),
         NoOfUsers: parseInt(clientData.noOfUsers),
         AddUser: localStorage.getItem("LoginUserName"),
         ClientContactDetails: contactDetailData,
-        ClientRegistrationAuthorization: transactionDetailsData
+        ClientRegistrationAuthorization: transactionDetailData
       }
-
+      
       setIsLoading(true);
       axios.post(process.env.REACT_APP_API_URL + '/add-client', userData)
         .then(res => {
@@ -223,6 +226,8 @@ export const Client = () => {
             toast.success(res.data.message, {
               theme: 'colored'
             });
+
+            $('[data-rr-ui-event-key*="List"]').click();
           } else {
             toast.error(res.data.message, {
               theme: 'colored'
@@ -234,6 +239,12 @@ export const Client = () => {
 
   return (
     <>
+      {isLoading ? (
+        <Spinner
+          className="position-absolute start-50 loader-color"
+          animation="border"
+        />
+      ) : null}
       <TabPage
         listData={listData}
         listColumnArray={listColumnArray}

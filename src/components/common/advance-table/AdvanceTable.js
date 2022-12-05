@@ -22,6 +22,8 @@ const AdvanceTable = ({
 
   const toTabPage = (rowData) => {
     dispatch(clientDetailsAction(rowData));
+    $('[data-rr-ui-event-key*="Details"]').attr('disabled', false);
+    $('[data-rr-ui-event-key*="List"]').attr('disabled', true);
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
     localStorage.setItem('EncryptedResponseClientCode', rowData.encryptedClientCode);
     $("#AddContactDetailsForm").hide();
@@ -75,14 +77,16 @@ const AdvanceTable = ({
           $('#TransactionDetailsTable tbody tr').remove();
         }
         let transactionDetailsData = [];
-        transactionDetailsData = res.data.data.length > 0 ? res.data.data : undefined;
+        transactionDetailsData = res.data.data.length > 0 ? res.data.data : [];
         dispatch(transactionDetailsAction(transactionDetailsData));
 
         if (res.data.status == 200) {        
           if (res.data && res.data.data.length > 0) {
-            $('#TransactionDetailsTable').show();
+            $("#TransactionDetailsTable").show();
+            $("#TransactionDetailsListCard").show();
           } else {
-            $('#TransactionDetailsTable').hide();
+            $("#TransactionDetailsTable").hide();
+            $("#TransactionDetailsListCard").hide();
           }
         }
         else {
@@ -133,7 +137,11 @@ const AdvanceTable = ({
                         key={index}
                         {...cell.getCellProps(cell.column.cellProps)}
                       >
-                        {cell.render('Cell')}
+                        {
+                          index == 0 ?  
+                          i + 1 :
+                          cell.render('Cell')
+                        }
                       </td>
                     );
                   })}

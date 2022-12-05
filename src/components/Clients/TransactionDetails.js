@@ -9,7 +9,7 @@ import { transactionDetailsAction } from 'actions';
 
 export const TransactionDetails = () => {
 
-    const [formData, setFormData] = useState({
+    var initialState = {
         moduleName: '',
         startDate: '',
         endDate: '',
@@ -19,7 +19,9 @@ export const TransactionDetails = () => {
         chequeBank: '',
         amount: 0,
         gstPercentage: 0
-    });
+    }
+
+    const [formData, setFormData] = useState(initialState);
     const dispatch = useDispatch();
     const [amountPayable, setAmountPayable] = useState();
     const [moduleList, setModuleList] = useState([]);
@@ -52,7 +54,7 @@ export const TransactionDetails = () => {
             });
     }
 
-    const handleValidation = () => {
+    const validateTransactionDetails = () => {
         const moduleNameErr = {};
         const startDateErr = {};
         const endDateErr = {};
@@ -94,15 +96,16 @@ export const TransactionDetails = () => {
         return isValid;
     }
 
-    const handleSubmit = e => {
+    const submitTransactionDetails = e => {
         e.preventDefault();
 
         const form = e.currentTarget;
 
-        if (handleValidation()) {
+        if (validateTransactionDetails()) {
             const transactionData = {
-                EncryptedClientCode: localStorage.getItem("EncryptedResponseClientCode"),
-                EncryptedModuleCode: formData.moduleName,
+                encryptedClientCode: localStorage.getItem("EncryptedResponseClientCode"),
+                encryptedModuleCode: formData.moduleName,
+                moduleName: $("#selModuleName").find("option:selected").text(),
                 startdate: formData.startDate,
                 endDate: formData.endDate,
                 paymentMode: formData.paymentMode,
@@ -112,12 +115,17 @@ export const TransactionDetails = () => {
                 gstPercent: parseFloat(formData.gstPercentage),
                 amount: parseFloat(formData.amount),
                 addUser: localStorage.getItem("LoginUserName"),
-                totalAmount: formData.totalAmount
+                totalAmount: amountPayable
             }
              
             dispatch(transactionDetailsAction(transactionData));
 
             $("#TransactionDetailsTable").show();
+            $("#TransactionDetailsListCard").show();
+
+            setAmountPayable('');
+            setFormData(initialState);
+            $(form)[0].reset();
 
             // axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionData)
             //     .then(res => {
@@ -126,7 +134,7 @@ export const TransactionDetails = () => {
             //             toast.success(res.data.message, {
             //                 theme: 'colored'
             //             });
-            //             $("#TransactionDetailsTable").show();
+            //             $("#TransactionDetailsListCard").show();
             //         } else {
             //             toast.error(res.data.message, {
             //                 theme: 'colored'
@@ -141,6 +149,28 @@ export const TransactionDetails = () => {
             ...formData,
             [e.target.name]: e.target.value
         });
+
+        if (e.target.name == "paymentMode") {
+            if (e.target.value != '')
+            {
+                if(e.target.value == "TT")
+                {
+                    $('#lblPaymentModeNo').text('TT No.');
+                    $('#lblPaymentModeDate').text('TT Date');
+                    $('#lblPaymentModeBankName').text('TT Bank');
+                    $('.payment-mode-details').show();
+                }
+                else if(e.target.value == "CQ"){
+                    $('#lblPaymentModeNo').text('Cheque No.');
+                    $('#lblPaymentModeDate').text('Cheque Date');
+                    $('#lblPaymentModeBankName').text('Cheque Bank');
+                    $('.payment-mode-details').show();
+                }
+                else{
+                    $('.payment-mode-details').hide();
+                }
+            }
+          }
     };
 
     const handleAmountChange = e => {
@@ -183,12 +213,12 @@ export const TransactionDetails = () => {
                 />
             ) : null}
 
-            <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }} id='AddClientTransactionDetailsForm'>
+            <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { submitTransactionDetails(e) }} id='AddClientTransactionDetailsForm'>
                 <Row>
                     <Col className="me-5 ms-5">
                         <Row className="mb-3">
                             <Form.Label>Module Name<span className="text-danger">*</span></Form.Label>
-                            <Form.Select name="moduleName" onChange={handleFieldChange} required>
+                            <Form.Select name="moduleName" id="selModuleName" onChange={handleFieldChange} required>
                                 <option value=''>Select Module</option>
                                 {moduleList.map((option, index) => (
                                     <option key={index} value={option.value}>{option.key}</option>
@@ -224,23 +254,23 @@ export const TransactionDetails = () => {
                                 <option value="TT">TT</option>
                             </Form.Select>
                         </Row>
-                        <Row className="mb-3">
-                            <Form.Label>Cheque No.</Form.Label>
-                            <Form.Control id="txtChequeNo" name="chequeNo" onChange={handleFieldChange} placeholder="Enter cheque number" />
+                        <Row className="mb-3 payment-mode-details">
+                            <Form.Label id="lblPaymentModeNo">Cheque No.</Form.Label>
+                            <Form.Control id="txtChequeNo" name="chequeNo" onChange={handleFieldChange} placeholder="Enter number" />
                         </Row>
-                        <Row className="mb-3">
-                            <Form.Label>Cheque Date</Form.Label>
-                            <Form.Control type='date' id="txtPassword" name="chequeDate" onChange={handleFieldChange} placeholder="Select cheque date" />
+                        <Row className="mb-3 payment-mode-details">
+                            <Form.Label id="lblPaymentModeDate">Cheque Date</Form.Label>
+                            <Form.Control type='date' id="txtPassword" name="chequeDate" onChange={handleFieldChange} placeholder="Select date" />
                         </Row>
-                        <Row className="mb-3">
-                            <Form.Label>Cheque Bank</Form.Label>
-                            <Form.Control id="txtChequeBank" name="chequeBank" onChange={handleFieldChange} placeholder="Enter cheque bank name" />
+                        <Row className="mb-3 payment-mode-details">
+                            <Form.Label id="lblPaymentModeBankName">Cheque Bank</Form.Label>
+                            <Form.Control id="txtChequeBank" name="chequeBank" onChange={handleFieldChange} placeholder="Enter bank name" />
                         </Row>
                     </Col>
 
                     <Col className="me-5 ms-5">
                         <Row className="mb-3">
-                            <Form.Label>Amount</Form.Label>
+                            <Form.Label>Amount<span className="text-danger">*</span></Form.Label>
                             <Form.Control type='number' id="txtAmount" name="amount" min={0} onChange={handleAmountChange} placeholder="Enter amount" required />
                             {Object.keys(amountErr).map((key) => {
                                 return <span className="error-message">{amountErr[key]}</span>

@@ -34,10 +34,12 @@ const ContactDetails = () => {
 
   const [formHasError, setFormError] = useState(false);
   const [contactNameErr, setContactNameErr] = useState({});
+  const [contactMobileNoErr, setContactMobileNoErr] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   const validateContactDetailForm = () => {
     const contactNameErr = {};
+    const contactMobileNoErr = {};
 
     let isValid = true;
 
@@ -46,8 +48,14 @@ const ContactDetails = () => {
       isValid = false;
       setFormError(true);
     }
+    if (!contactDetailData.mobileNo) {
+      contactMobileNoErr.mobileNoEmpty = "Enter contact mobile number";
+      isValid = false;
+      setFormError(true);
+    }
     if (!isValid) {
       setContactNameErr(contactNameErr);
+      setContactMobileNoErr(contactMobileNoErr);
     }
     return isValid;
   }
@@ -94,8 +102,7 @@ const ContactDetails = () => {
 
       dispatch(clientContactDetailsAction(contactDetailList));
 
-      $("#ContactDetailsTable").show();
-      $("#AddContactDetailsForm").hide();
+      hideForm();
 
       localStorage.setItem("contactPersonMobileNoToUpdate", "");
 
@@ -156,7 +163,10 @@ const ContactDetails = () => {
               </Row>
               <Row className="mb-3">
                 <Form.Label>Mobile No</Form.Label>
-                <Form.Control id="txtMobileno" name="mobileNo" maxLength={10} value={contactDetailData.mobileNo} onChange={handleFieldChange} placeholder="Mobile No" />
+                <Form.Control id="txtMobileno" name="mobileNo" maxLength={10} value={contactDetailData.mobileNo} onChange={handleFieldChange} placeholder="Mobile No" required />
+                {Object.keys(contactMobileNoErr).map((key) => {
+                  return <span className="error-message">{contactMobileNoErr[key]}</span>
+                })}
               </Row>
               <Row className="mb-3">
                 <Form.Label>Email Id</Form.Label>
