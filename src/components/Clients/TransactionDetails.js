@@ -2,9 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
-// import { addTransactionDetailsAction } from 'actions';
 import { transactionDetailsAction } from 'actions';
 
 export const TransactionDetails = () => {
@@ -111,7 +109,7 @@ export const TransactionDetails = () => {
                 endDate: formData.endDate,
                 paymentMode: formData.paymentMode,
                 chequeNo: formData.chequeNo,
-                chequeDate: formData.chequeDate,
+                chequeDate: formData.chequeDate ? formData.chequeDate : new Date(),
                 chequeBank: formData.chequeBank,
                 gstPercent: parseFloat(formData.gstPercentage),
                 amount: parseFloat(formData.amount),
@@ -127,21 +125,6 @@ export const TransactionDetails = () => {
             setAmountPayable('');
             setFormData(initialState);
             $(form)[0].reset();
-
-            // axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionData)
-            //     .then(res => {
-            //         setIsLoading(false);
-            //         if (res.data.status == 200) {
-            //             toast.success(res.data.message, {
-            //                 theme: 'colored'
-            //             });
-            //             $("#TransactionDetailsListCard").show();
-            //         } else {
-            //             toast.error(res.data.message, {
-            //                 theme: 'colored'
-            //             });
-            //         }
-            //     })
         }
     };
 
