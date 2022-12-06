@@ -103,6 +103,7 @@ export const TransactionDetails = () => {
 
         if (validateTransactionDetails()) {
             const transactionData = {
+                encryptedClientRegisterationAuthorizationId: "",
                 encryptedClientCode: localStorage.getItem("EncryptedResponseClientCode"),
                 encryptedModuleCode: formData.moduleName,
                 moduleName: $("#selModuleName").find("option:selected").text(),
@@ -260,7 +261,7 @@ export const TransactionDetails = () => {
                         </Row>
                         <Row className="mb-3 payment-mode-details">
                             <Form.Label id="lblPaymentModeDate">Cheque Date</Form.Label>
-                            <Form.Control type='date' id="txtPassword" name="chequeDate" onChange={handleFieldChange} placeholder="Select date" />
+                            <Form.Control type='date' id="txtChequeDate" name="chequeDate" onChange={handleFieldChange} placeholder="Select date" />
                         </Row>
                         <Row className="mb-3 payment-mode-details">
                             <Form.Label id="lblPaymentModeBankName">Cheque Bank</Form.Label>

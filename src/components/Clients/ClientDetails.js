@@ -12,7 +12,6 @@ export const ClientDetails = () => {
 
   const clientDetailsReducer = useSelector((state) => state.rootReducer.clientDetailsReducer)
   const clientData = clientDetailsReducer.clientDetails;
-
   const clientDetailsErrorReducer = useSelector((state) => state.rootReducer.clientDetailsErrorReducer)
   const clientError = clientDetailsErrorReducer.clientDetailsError;
 
@@ -20,7 +19,6 @@ export const ClientDetails = () => {
   const [stateList, setStateList] = useState([]);
   const [billingStateList, setBillingStateList] = useState([]);
 
-  const [isLoading, setIsLoading] = useState(false);
   const [formHasError, setFormError] = useState(false);
 
   useEffect(() => {
@@ -40,7 +38,7 @@ export const ClientDetails = () => {
                 value: country.encryptedCountryCode
               });
             });
-          setCountryList(countryData);
+            setCountryList(countryData);
         }
       });
   }
@@ -73,6 +71,29 @@ export const ClientDetails = () => {
           setStateList(stateData);
       });
   }
+
+  const setSelectCountryStates = () => {
+    if(clientData.country && clientData.billingCountry)
+    {
+      $('#txtCountry option:contains(' + clientData.country + ')').prop('selected', true)
+      getStates(clientData.encryptedCountryCode);
+      $('#txtState option:contains(' + clientData.state + ')').prop('selected', true)
+      
+  
+      $('#txtBillingCountry option:contains(' + clientData.billingCountry + ')').prop('selected', true)
+      getStates(clientData.encryptedBillCountryCode, true);
+      $('#txtBillingState option:contains(' + clientData.billingState + ')').prop('selected', true) 
+    }
+  }
+
+  if(clientData.country && 
+    clientData.billingCountry &&
+    (!$('#txtCountry').val() || !$('#txtBillingCountry').val() ||
+     !$('#txtState').val() || !$('#txtBillingState').val()))
+  {
+    setSelectCountryStates();
+  }
+
   const handleFieldChange = e => {
     dispatch(clientDetailsAction({
       ...clientData,
@@ -96,13 +117,6 @@ export const ClientDetails = () => {
 
   return (
     <>
-      {isLoading ? (
-        <Spinner
-          className="position-absolute start-50 loader-color"
-          animation="border"
-        />
-      ) : null}
-
         {clientData && 
 
       <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }} id='AddClientDetailsForm'>
@@ -130,7 +144,7 @@ export const ClientDetails = () => {
             </Row>
             <Row className="mb-3">
               <Form.Label>Country<span className="text-danger">*</span></Form.Label>
-              <Form.Select id="txtCountry" name="encryptedCountryCode" defaultValue={clientData.encryptedCountryCode} onChange={handleFieldChange} required>
+              <Form.Select id="txtCountry" name="encryptedCountryCode" defaultValue={clientData.countryCode} onChange={handleFieldChange} required>
                 <option value=''>Select country</option>
                 {countryList.map((option, index) => (
                   <option key={index} value={option.value}>{option.key}</option>
@@ -142,7 +156,7 @@ export const ClientDetails = () => {
             </Row>
             <Row className="mb-3">
               <Form.Label>State<span className="text-danger">*</span></Form.Label>
-              <Form.Select id="txtState" name="encryptedStateCode" defaultValue={clientData.encryptedStateCode} onChange={handleFieldChange} required>
+              <Form.Select id="txtState" name="encryptedStateCode" defaultValue={clientData.stateCode} onChange={handleFieldChange} required>
                 <option value=''>Select state</option>
                 {stateList.map((option, index) => (
                   <option key={index} value={option.value}>{option.key}</option>
@@ -170,7 +184,7 @@ export const ClientDetails = () => {
             </Row>
             <Row className="mb-3">
               <Form.Label>Country<span className="text-danger">*</span></Form.Label>
-              <Form.Select id="txtBillingCountry" name="encryptedBillCountryCode" defaultValue={clientData.encryptedBillCountryCode} onChange={handleFieldChange} required>
+              <Form.Select id="txtBillingCountry" name="encryptedBillCountryCode" defaultValue={clientData.billCountryCode} onChange={handleFieldChange} required>
                 <option value=''>Select country</option>
                 {countryList.map((option, index) => (
                   <option key={index} value={option.value}>{option.key}</option>
@@ -182,7 +196,7 @@ export const ClientDetails = () => {
             </Row>
             <Row className="mb-3">
               <Form.Label>State<span className="text-danger">*</span></Form.Label>
-              <Form.Select id="txtBillingState" name="encryptedBillStateCode" defaultValue={clientData.encryptedBillStateCode} onChange={handleFieldChange} required>
+              <Form.Select id="txtBillingState" name="encryptedBillStateCode" defaultValue={clientData.billStateCode} onChange={handleFieldChange} required>
                 <option value=''>Select state</option>
                 {billingStateList.map((option, index) => (
                   <option key={index} value={option.value}>{option.key}</option>
@@ -230,9 +244,6 @@ export const ClientDetails = () => {
               {Object.keys(clientError.noOfUsersErr).map((key) => {
                 return <span className="error-message">{clientError.noOfUsersErr[key]}</span>
               })}
-            </Row>
-            <Row className="mb-3">
-              <Button id='btnUpdateClientDetail' onClick={() => updateClientDetails()}>Update</Button>
             </Row>
           </Col>
         </Row>

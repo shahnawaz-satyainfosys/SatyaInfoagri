@@ -271,6 +271,9 @@ export const Client = () => {
         .then(res => {
           setIsLoading(false);
           if (res.data.status == 200) {
+            toast.success(res.data.message, {
+              theme: 'colored'
+            });
             contactDetailData.forEach(async contactDetails => {
 
               if (!contactDetails.encryptedClientContactDetailsId) {
@@ -283,17 +286,13 @@ export const Client = () => {
                 //To-do: Validate 200
               }
             });
-
-            transactionDetailData.forEach(async transactionDetail => {       
-              if(transactionDetail.encryptedClientCode && transactionDetail.encryptedModuleCode){
+            transactionDetailData.filter(x => !x.encryptedClientRegisterationAuthorizationId).forEach(async transactionDetail => {       
+              if(transactionDetail.encryptedClientRegisterationAuthorizationId == ''){
+                delete transactionDetail.encryptedClientRegisterationAuthorizationId;
                 const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail);
                 //To-do: Validate 200
               }                              
             })
-
-            toast.success(res.data.message, {
-              theme: 'colored'
-            });
           }
           else {
             toast.error(res.data.message, {

@@ -74,9 +74,10 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
   })
 
   $('#btnCancel').click(function () {
-    $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
-    $('[data-rr-ui-event-key*="List"]').attr('disabled', false);
-    $('[data-rr-ui-event-key*="List"]').trigger('click');
+    window.location.reload();
+    // $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
+    // $('[data-rr-ui-event-key*="List"]').attr('disabled', false);
+    // $('[data-rr-ui-event-key*="List"]').trigger('click');
   })
 
   $('#btnExit').click(function () {
