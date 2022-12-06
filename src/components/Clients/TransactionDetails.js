@@ -4,6 +4,7 @@ import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { transactionDetailsAction } from 'actions';
+import { toast } from 'react-toastify';
 
 export const TransactionDetails = () => {
 
@@ -29,6 +30,10 @@ export const TransactionDetails = () => {
     const [startDateErr, setStartDateErr] = useState({});
     const [endDateErr, setEndDateErr] = useState({});
     const [amountErr, setAmountErr] = useState({});
+    const [paymentModeErr, setPaymentModeErr] = useState({});
+    const [chequeNoErr, setChequeNoErr] = useState({});
+    const [chequeDateErr, setChequeDateErr] = useState({});
+    const [chequeBankErr, setChequeBankErr] = useState({});
 
     useEffect(() => {
         getModule();
@@ -57,6 +62,10 @@ export const TransactionDetails = () => {
         const startDateErr = {};
         const endDateErr = {};
         const amountErr = {};
+        const paymentModeErr = {};
+        const chequeNoErr = {};
+        const chequeDateErr = {};
+        const chequeBankErr = {};
 
         let isValid = true;
 
@@ -84,11 +93,61 @@ export const TransactionDetails = () => {
             setFormError(true);
         }
 
+        if (!formData.paymentMode) {
+            paymentModeErr.paymentModeEmpty = "Select payment mode";
+            isValid = false;
+            setFormError(true);
+        }
+
+        if (formData.paymentMode === "CQ") {
+            if (!formData.chequeNo) {
+                chequeNoErr.chequeNoEmpty = "Enter cheque no";
+                isValid = false;
+                setFormError(true);
+            }
+
+            if (!formData.chequeDate) {
+                chequeDateErr.chequeDateEmpty = "Select cheque date";
+                isValid = false;
+                setFormError(true);
+            }
+
+            if (!formData.chequeBank) {
+                chequeBankErr.chequeBankEmpty = "Enter cheque bank name";
+                isValid = false;
+                setFormError(true);
+            }
+        }
+
+        if (formData.paymentMode === "TT") {
+            if (!formData.chequeNo) {
+                chequeNoErr.TTNoEmpty = "Enter TT no";
+                isValid = false;
+                setFormError(true);
+            }
+
+            if (!formData.chequeDate) {
+                chequeDateErr.TTDateEmpty = "Select TT date";
+                isValid = false;
+                setFormError(true);
+            }
+
+            if (!formData.chequeBank) {
+                chequeBankErr.TTBankEmpty = "Enter TT bank name";
+                isValid = false;
+                setFormError(true);
+            }
+        }
+
         if (!isValid) {
             setModuleNameErr(moduleNameErr);
             setStartDateErr(startDateErr);
             setEndDateErr(endDateErr);
             setAmountErr(amountErr);
+            setPaymentModeErr(paymentModeErr);
+            setChequeNoErr(chequeNoErr);
+            setChequeDateErr(chequeDateErr);
+            setChequeBankErr(chequeBankErr);
         }
 
         return isValid;
@@ -116,8 +175,12 @@ export const TransactionDetails = () => {
                 addUser: localStorage.getItem("LoginUserName"),
                 totalAmount: amountPayable
             }
-             
+
             dispatch(transactionDetailsAction(transactionData));
+
+            toast.success("Transaction Added Successfully", {
+                theme: 'colored'
+            });
 
             $("#TransactionDetailsTable").show();
             $("#TransactionDetailsListCard").show();
@@ -135,26 +198,50 @@ export const TransactionDetails = () => {
         });
 
         if (e.target.name == "paymentMode") {
-            if (e.target.value != '')
-            {
-                if(e.target.value == "TT")
-                {
-                    $('#lblPaymentModeNo').text('TT No.');
+            if (e.target.value != '') {
+                if (e.target.value == "TT") {
+                    $('#lblPaymentModeNo').text('TT No.').show();
+                    $('#txtChequeNo').show();
                     $('#lblPaymentModeDate').text('TT Date');
-                    $('#lblPaymentModeBankName').text('TT Bank');
+                    $('#lblPaymentModeBankName').text('TT Bank').show();
+                    $('#txtChequeBank').show();
                     $('.payment-mode-details').show();
                 }
-                else if(e.target.value == "CQ"){
-                    $('#lblPaymentModeNo').text('Cheque No.');
+                else if (e.target.value == "CQ") {
+                    $('#lblPaymentModeNo').text('Cheque No.').show();
+                    $('#txtChequeNo').show();
                     $('#lblPaymentModeDate').text('Cheque Date');
-                    $('#lblPaymentModeBankName').text('Cheque Bank');
+                    $('#lblPaymentModeBankName').text('Cheque Bank').show();
+                    $('#txtChequeBank').show();
                     $('.payment-mode-details').show();
                 }
-                else{
+                else if (e.target.value == "GP") {
+                    $('#lblPaymentModeNo').text('GPay Transaction No.');
+                    $('#lblPaymentModeDate').text('GPay Date');
+                    $('#lblPaymentModeBankName').hide();
+                    $('#txtChequeBank').hide();
+                    $('.payment-mode-details').show();
+                }
+                else if (e.target.value == "NB") {
+                    $('#lblPaymentModeNo').text('NB Transaction No.');
+                    $('#lblPaymentModeDate').text('NB Date');
+                    $('#lblPaymentModeBankName').hide();
+                    $('#txtChequeBank').hide();
+                    $('.payment-mode-details').show();
+                }
+                else if (e.target.value == "CS") {
+                    $('#lblPaymentModeNo').hide();
+                    $('#txtChequeNo').hide();
+                    $('#lblPaymentModeDate').text('Date');
+                    $('#lblPaymentModeBankName').hide();
+                    $('#txtChequeBank').hide();
+                    $('.payment-mode-details').show();
+                }
+                else {
                     $('.payment-mode-details').hide();
                 }
             }
-          }
+        }
     };
 
     const handleAmountChange = e => {
@@ -231,24 +318,38 @@ export const TransactionDetails = () => {
                     <Col className="me-5 ms-5">
                         <Row className="mb-3">
                             <Form.Label>Payment Mode</Form.Label>
-                            <Form.Select id="txtPaymentMode" name="paymentMode" onChange={handleFieldChange}>
+                            <Form.Select id="txtPaymentMode" name="paymentMode" onChange={handleFieldChange} required>
                                 <option value=''>Select payment mode</option>
                                 <option value="CQ">Cheque</option>
                                 <option value="CS">Cash</option>
                                 <option value="TT">TT</option>
+                                <option value="GP">GPay</option>
+                                <option value="NB">NetBanking</option>
                             </Form.Select>
+                            {Object.keys(paymentModeErr).map((key) => {
+                                return <span className="error-message">{paymentModeErr[key]}</span>
+                            })}
                         </Row>
                         <Row className="mb-3 payment-mode-details">
                             <Form.Label id="lblPaymentModeNo">Cheque No.</Form.Label>
                             <Form.Control id="txtChequeNo" name="chequeNo" onChange={handleFieldChange} placeholder="Enter number" />
+                            {Object.keys(chequeNoErr).map((key) => {
+                                return <span className="error-message">{chequeNoErr[key]}</span>
+                            })}
                         </Row>
                         <Row className="mb-3 payment-mode-details">
                             <Form.Label id="lblPaymentModeDate">Cheque Date</Form.Label>
                             <Form.Control type='date' id="txtChequeDate" name="chequeDate" onChange={handleFieldChange} placeholder="Select date" />
+                            {Object.keys(chequeDateErr).map((key) => {
+                                return <span className="error-message">{chequeDateErr[key]}</span>
+                            })}
                         </Row>
                         <Row className="mb-3 payment-mode-details">
                             <Form.Label id="lblPaymentModeBankName">Cheque Bank</Form.Label>
                             <Form.Control id="txtChequeBank" name="chequeBank" onChange={handleFieldChange} placeholder="Enter bank name" />
+                            {Object.keys(chequeBankErr).map((key) => {
+                                return <span className="error-message">{chequeBankErr[key]}</span>
+                            })}
                         </Row>
                     </Col>
 

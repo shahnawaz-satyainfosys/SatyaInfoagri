@@ -58,7 +58,10 @@ const TransactionDetailList = () => {
               <td>{data.moduleName}</td>
               <td>{Moment(data.startDate).format("DD/MM/YYYY")}</td>
               <td>{Moment(data.endDate).format("DD/MM/YYYY")}</td>
-              <td>{data.paymentMode === "CQ" ? "Cheque" : data.paymentMode == "CS" ? "Cash" : "TT"}</td>
+              <td>{data.paymentMode == "CQ" ? "Cheque" :
+                   data.paymentMode == "CS" ? "Cash" :
+                   data.paymentMode == "TT" ? "TT" :
+                   data.paymentMode == "GP" ? "GPay" : "NB"}</td>
               <td>{data.amount}</td>
               <td>{data.gstPercent}%</td>
               <td>{data.totalAmount}</td>

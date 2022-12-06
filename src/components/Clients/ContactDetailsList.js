@@ -1,9 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import Modal from 'react-modal';
 import { useDispatch } from 'react-redux';
 import { updateClientContactDetailsAction } from '../../actions/index';
@@ -41,7 +39,7 @@ const ContactDetailsList = () => {
     var objectIndex = contactDetailReducer.clientContactDetails.findIndex(x => x.mobileNo == contactMobileNoToDelete);
     contactDetailReducer.clientContactDetails.splice(objectIndex, 1)
 
-    localStorage.setItem("DeleteContactDetailsId", JSON.stringify(encryptedClientContactDetailsId))
+    localStorage.setItem("DeleteContactDetailsId", encryptedClientContactDetailsId)
 
     dispatch(clientContactDetailsAction(contactDetailReducer.clientContactDetails));
 

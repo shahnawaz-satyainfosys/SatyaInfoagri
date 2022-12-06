@@ -279,19 +279,46 @@ export const Client = () => {
               if (!contactDetails.encryptedClientContactDetailsId) {
                 const addContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', contactDetails);
                 //To-do: Validate 200
+                if (addContactDetailResponse.data.status != 200) {
+                  toast.error(addContactDetailResponse.data.message, {
+                    theme: 'colored'
+                  });
+                }
               }
 
               if (contactDetails.encryptedClientContactDetailsId) {
                 const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
                 //To-do: Validate 200
+                if (updateContactDetailResponse.data.status != 200) {
+                  toast.error(updateContactDetailResponse.data.message, {
+                    theme: 'colored'
+                  });
+                }
               }
             });
-            transactionDetailData.filter(x => !x.encryptedClientRegisterationAuthorizationId).forEach(async transactionDetail => {       
-              if(transactionDetail.encryptedClientRegisterationAuthorizationId == ''){
+
+            const data = { encryptedClientContactDetailsId: localStorage.getItem("DeleteContactDetailsId") }
+            const deleteContactDetailResponse = axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data })
+            localStorage.removeItem("DeleteContactDetailsId");
+            // if (deleteContactDetailResponse.data.status == 200) {
+
+            // } else {
+            //   toast.error(deleteContactDetailResponse.data.message, {
+            //     theme: 'colored'
+            //   });
+            // }
+            
+            transactionDetailData.filter(x => !x.encryptedClientRegisterationAuthorizationId).forEach(async transactionDetail => {
+              if (transactionDetail.encryptedClientRegisterationAuthorizationId == '') {
                 delete transactionDetail.encryptedClientRegisterationAuthorizationId;
                 const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail);
                 //To-do: Validate 200
-              }                              
+                if (transactionDetailResponse.data.status != 200) { 
+                  toast.error(transactionDetailResponse.data.message, {
+                    theme: 'colored'
+                  });
+                }
+              }
             })
           }
           else {
@@ -316,7 +343,7 @@ export const Client = () => {
         listColumnArray={listColumnArray}
         tabArray={tabArray}
         module="Client"
-        saveDetails={ !clientData.encryptedClientCode ? addClientDetails : updateClientDetails}
+        saveDetails={!clientData.encryptedClientCode ? addClientDetails : updateClientDetails}
       />
     </>
   )

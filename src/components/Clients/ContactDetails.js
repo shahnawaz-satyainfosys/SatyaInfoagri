@@ -28,8 +28,8 @@ const ContactDetails = () => {
   var contactDetailData = updateClientContactDetailReducer.updateClientContactDetails;
 
   if (!updateClientContactDetailReducer.updateClientContactDetails ||
-       updateClientContactDetailReducer.updateClientContactDetails.length <= 0) {
-        resetContactDetailData();
+    updateClientContactDetailReducer.updateClientContactDetails.length <= 0) {
+    resetContactDetailData();
   }
 
   const [formHasError, setFormError] = useState(false);
@@ -75,14 +75,18 @@ const ContactDetails = () => {
       }
 
       dispatch(clientContactDetailsAction(userData));
+
+      toast.success("Contact Added Successfully", {
+        theme: 'colored'
+      });
       hideForm();
-    } 
+    }
   };
 
   const updateContactDetails = () => {
 
     if (validateContactDetailForm()) {
-      
+
       var contactPersonMobileNoToUpdate = localStorage.getItem("contactPersonMobileNoToUpdate");
 
       const contactDetail = {
@@ -101,6 +105,10 @@ const ContactDetails = () => {
       contactDetailList[objectIndex] = contactDetail;
 
       dispatch(clientContactDetailsAction(contactDetailList));
+
+      toast.success("Contact Updated Successfully", {
+        theme: 'colored'
+      });
 
       hideForm();
 
