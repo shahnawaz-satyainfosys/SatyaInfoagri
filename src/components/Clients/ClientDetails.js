@@ -73,8 +73,6 @@ export const ClientDetails = () => {
   }
 
   const setSelectCountryStates = () => {
-    if(clientData.country && clientData.billingCountry)
-    {
       $('#txtCountry option:contains(' + clientData.country + ')').prop('selected', true)
       getStates(clientData.encryptedCountryCode);
       $('#txtState option:contains(' + clientData.state + ')').prop('selected', true)
@@ -83,7 +81,6 @@ export const ClientDetails = () => {
       $('#txtBillingCountry option:contains(' + clientData.billingCountry + ')').prop('selected', true)
       getStates(clientData.encryptedBillCountryCode, true);
       $('#txtBillingState option:contains(' + clientData.billingState + ')').prop('selected', true) 
-    }
   }
 
   if(clientData.country && 
@@ -92,6 +89,11 @@ export const ClientDetails = () => {
      !$('#txtState').val() || !$('#txtBillingState').val()))
   {
     setSelectCountryStates();
+  }
+
+  if(clientData.status && !$('#txtStatus').val())
+  {
+    $('#txtStatus option:contains(' + clientData.status + ')').prop('selected', true);
   }
 
   const handleFieldChange = e => {
@@ -226,9 +228,8 @@ export const ClientDetails = () => {
             <Row className="mb-3">
               <Form.Label>Status</Form.Label>
               <Form.Select id="txtStatus" name="status" defaultValue={clientData.status} onChange={handleFieldChange}>
-                <option value=''>Select status</option>
                 <option value="Active">Active</option>
-                <option value="Suspended">Supspended</option>
+                <option value="Suspended">Suspended</option>
               </Form.Select>
             </Row>
             <Row className="mb-3">

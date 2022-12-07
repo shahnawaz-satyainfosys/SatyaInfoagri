@@ -101,7 +101,7 @@ export const TransactionDetails = () => {
 
         if (formData.paymentMode === "CQ") {
             if (!formData.chequeNo) {
-                chequeNoErr.chequeNoEmpty = "Enter cheque no";
+                chequeNoErr.chequeNoEmpty = "Enter cheque no.";
                 isValid = false;
                 setFormError(true);
             }
@@ -138,6 +138,43 @@ export const TransactionDetails = () => {
                 setFormError(true);
             }
         }
+
+        if (formData.paymentMode === "GP") {
+            if (!formData.chequeNo) {
+                chequeNoErr.gPayNoEmpty = "Enter GPay transaction no.";
+                isValid = false;
+                setFormError(true);
+            }
+
+            if (!formData.chequeDate) {
+                chequeDateErr.gPayDateEmpty = "Select GPay date";
+                isValid = false;
+                setFormError(true);
+            }
+        }
+
+        if (formData.paymentMode === "NB") {
+            if (!formData.chequeNo) {
+                chequeNoErr.nBNoEmpty = "Enter NetBanking transaction no.";
+                isValid = false;
+                setFormError(true);
+            }
+
+            if (!formData.chequeDate) {
+                chequeDateErr.nBDateEmpty = "Select NetBanking date";
+                isValid = false;
+                setFormError(true);
+            }
+        }
+
+        if (formData.paymentMode === "CS") {
+            if (!formData.chequeDate) {
+                chequeDateErr.cashDateEmpty = "Select date";
+                isValid = false;
+                setFormError(true);
+            }
+        }
+
 
         if (!isValid) {
             setModuleNameErr(moduleNameErr);
