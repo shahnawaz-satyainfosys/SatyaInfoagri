@@ -67,13 +67,6 @@ const ContactDetailsList = () => {
 
   return (
     <>
-      {isLoading ? (
-        <Spinner
-          className="position-absolute start-50 loader-color"
-          animation="border"
-        />
-      ) : null}
-
       {modalShow && paramsData &&
         <Modal
           show={modalShow}

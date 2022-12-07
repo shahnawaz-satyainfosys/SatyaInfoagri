@@ -5,7 +5,11 @@ const initialState = {
 const clientContactDetailsReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'CLIENTCONTACTDETAILSLIST':
-      if(Array.isArray(action.payload))
+      if(!action.payload)
+      {
+        return initialState
+      }
+      else if(Array.isArray(action.payload))
       {
         return{
           ...state,

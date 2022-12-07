@@ -49,7 +49,6 @@ export const Client = () => {
     fetchUsers(1);
   }, []);
 
-
   const dispatch = useDispatch();
 
   const clientDetailsReducer = useSelector((state) => state.rootReducer.clientDetailsReducer)
@@ -427,7 +426,7 @@ export const Client = () => {
         listColumnArray={listColumnArray}
         tabArray={tabArray}
         module="Client"
-        saveDetails={!clientData.encryptedClientCode ? addClientDetails : updateClientDetails}
+        saveDetails={!clientData && !clientData.encryptedClientCode ? addClientDetails : updateClientDetails}
       />
     </>
   )

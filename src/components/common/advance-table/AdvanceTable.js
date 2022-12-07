@@ -23,7 +23,6 @@ const AdvanceTable = ({
   const toTabPage = (rowData) => {
     dispatch(clientDetailsAction(rowData));
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', false);
-    $('[data-rr-ui-event-key*="List"]').attr('disabled', true);
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
     localStorage.setItem('EncryptedResponseClientCode', rowData.encryptedClientCode);
     $("#AddContactDetailsForm").hide();

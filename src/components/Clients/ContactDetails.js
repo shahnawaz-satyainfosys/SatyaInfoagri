@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
 import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateClientContactDetailsAction } from '../../actions/index';

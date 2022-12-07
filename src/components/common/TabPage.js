@@ -48,16 +48,17 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
   }, []);
 
   const clearClientReducers = () => {
-    dispatch(clientDetailsAction([]));
-    dispatch(clientContactDetailsAction([]));
-    dispatch(transactionDetailsAction([]));
+    dispatch(clientDetailsAction(undefined));
+    dispatch(clientContactDetailsAction(undefined));
+    dispatch(transactionDetailsAction(undefined));
   }
 
   $('[data-rr-ui-event-key*="List"]').click(function () {
     $("#btnNew").show();
     $("#btnSave").hide();
     $("#btnCancel").hide();
-
+    $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
+    $('[data-rr-ui-event-key*="List"]').attr('disabled', false);
     clearClientReducers();
   })
 
@@ -77,7 +78,6 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
 
   $('#btnNew').click(function () {
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', false);
-    $('[data-rr-ui-event-key*="List"]').attr('disabled', true);
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
 
     clearClientReducers();
@@ -91,13 +91,8 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     if ($("#AddClientDetailsForm").isChanged()) {
       setModalShow(true);
     } else {
-      window.location.reload();
+      $('[data-rr-ui-event-key*="List"]').trigger('click');
     }
-
-    // window.location.reload();
-    // $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
-    // $('[data-rr-ui-event-key*="List"]').attr('disabled', false);
-    // $('[data-rr-ui-event-key*="List"]').trigger('click');
   })
 
   $('#btnExit').click(function () {
