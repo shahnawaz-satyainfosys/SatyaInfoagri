@@ -82,7 +82,6 @@ export const Client = () => {
   // });
 
   const clientValidation = () => {
-
     const customerNameErr = {};
     const clientAddressErr = {};
     const countryErr = {};
@@ -229,7 +228,7 @@ export const Client = () => {
         EncryptedBillStateCode: clientData.encryptedBillStateCode,
         ClientPANNO: clientData.panNumber,
         ClientGSTNO: clientData.gstNumber,
-        ActiveStatus: clientData.status == "Active" ? "A" : "S",
+        ActiveStatus: clientData.status == null || clientData.status == "Active" ? "A" : "S",
         NoOfCompany: parseInt(clientData.noOfComapnies),
         NoOfUsers: parseInt(clientData.noOfUsers),
         AddUser: localStorage.getItem("LoginUserName"),
@@ -255,8 +254,8 @@ export const Client = () => {
         })
     }
   }
-  const updateClientDetails = () => {
 
+  const updateClientDetails = () => {
     if (clientValidation()) {
       const updatedUserData = {
         EncryptedClientCode: clientData.encryptedClientCode,
@@ -275,16 +274,16 @@ export const Client = () => {
         EncryptedBillStateCode: clientData.encryptedBillStateCode,
         ClientPANNO: clientData.panNumber,
         ClientGSTNO: clientData.gstNumber,
-        ActiveStatus: clientData.status == "Active" ? "A" : "S",
+        ActiveStatus: !clientData.status || clientData.status == "Active" ? "A" : "S",
         NoOfCompany: parseInt(clientData.noOfComapnies),
         NoOfUsers: parseInt(clientData.noOfUsers),
         ModifyUser: localStorage.getItem("LoginUserName")
       }
 
-      setIsLoading(true);
 
       if ($("#AddClientDetailsForm").isChanged()) {
-        
+        setIsLoading(true);
+
         axios.post(process.env.REACT_APP_API_URL + '/update-client', updatedUserData, {
           headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
         })
@@ -303,6 +302,7 @@ export const Client = () => {
                     toast.error(addContactDetailResponse.data.message, {
                       theme: 'colored'
                     });
+                    return false;
                   }
                 }
 
@@ -426,7 +426,7 @@ export const Client = () => {
         listColumnArray={listColumnArray}
         tabArray={tabArray}
         module="Client"
-        saveDetails={!clientData && !clientData.encryptedClientCode ? addClientDetails : updateClientDetails}
+        saveDetails={!clientData.encryptedClientCode ? addClientDetails : updateClientDetails}
       />
     </>
   )

@@ -38,6 +38,7 @@ const ContactDetailsList = () => {
     setModalShow(true);
     setParamsData({encryptedClientContactDetailsId, contactMobileNoToDelete});
   }
+
   const deleteContactDetails = () => {
 
     if(!paramsData)
@@ -47,6 +48,10 @@ const ContactDetailsList = () => {
     contactDetailReducer.clientContactDetails.splice(objectIndex, 1)
 
     localStorage.setItem("DeleteContactDetailsId", paramsData.encryptedClientContactDetailsId)
+
+    toast.success("Contact deleted successfully", {
+      theme: 'colored'
+    });
 
     dispatch(clientContactDetailsAction(contactDetailReducer.clientContactDetails));
     setModalShow(false);
