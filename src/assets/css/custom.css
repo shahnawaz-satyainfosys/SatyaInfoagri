@@ -24,6 +24,11 @@
     font-size: 15px;
 }
 
-.table-striped tr:hover{
+.row-selected, .table-striped tr:hover{
     cursor: pointer;
+    background-color: #5e6e8221;
+}
+
+.table-striped>tbody>tr:nth-of-type(2n)>* {
+    background-color: var(--falcon-table-bg) !important;
 }
