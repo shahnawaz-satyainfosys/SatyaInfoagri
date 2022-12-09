@@ -1,10 +1,10 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { Button, Modal, Table } from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux';
 import { updateClientContactDetailsAction } from '../../actions/index';
 import { clientContactDetailsAction } from '../../actions/index';
+import { toast } from 'react-toastify';
 
 const ContactDetailsList = () => {
 
@@ -111,7 +111,7 @@ const ContactDetailsList = () => {
         {contactDetailReducer &&
           contactDetailReducer.clientContactDetails &&
           contactDetailReducer.clientContactDetails.length > 0 && (
-            <table className='table table-striped' id="ClientContactDetailsTable">
+            <Table striped responsive id="ClientContactDetailsTable">
               <thead>
                 <tr>
                   <th>Contact Person</th>
@@ -140,7 +140,7 @@ const ContactDetailsList = () => {
                   )
                   : null}
               </tbody>
-            </table>)}
+            </Table>)}
       </div>
     </>
   )

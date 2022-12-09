@@ -188,7 +188,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
       <Form>
         <Row>
           <Col>
-            <div style={{ display: "flex", justifyContent: "end" }}>
+            <div style={{ display: "flex", justifyContent: "left" }}>
               <Button className='btn btn-primary me-2' id='btnNew'>New</Button>
               <Button className='btn btn-success me-2' id='btnSave'>Save</Button>
               <Button className='btn btn-danger me-2' id='btnCancel' >Cancel</Button>

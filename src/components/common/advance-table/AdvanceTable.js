@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { clientContactDetailsAction } from '../../../actions/index';
 import { transactionDetailsAction } from '../../../actions/index';
 import { clientDetailsAction } from '../../../actions/index';
+import $ from 'jquery'
 
 const AdvanceTable = ({
   getTableProps,
@@ -97,7 +98,7 @@ const AdvanceTable = ({
   return (
     <>
       <SimpleBarReact>
-        <Table {...getTableProps(tableProps)}>
+        <Table id="advanceTable" {...getTableProps(tableProps)}>
           <thead className={headerClassName}>
             <tr>
               {headers.map((column, index) => (
@@ -153,6 +154,17 @@ const AdvanceTable = ({
     </>
   );
 };
+
+setTimeout(() => {
+  $("#advanceTable tbody tr").click(function() {
+    if ($(this).hasClass("row-selected")) {
+      return;
+    }
+    $("#advanceTable tr.row-selected").removeClass("row-selected");
+    $(this).addClass("row-selected");
+  });
+}, 2000);
+
 AdvanceTable.propTypes = {
   getTableProps: PropTypes.func,
   headers: PropTypes.array,

@@ -176,6 +176,11 @@ export const Client = () => {
 
     if (contactDetailData.length < 1) {
       contactDetailErr.contactEmpty = "At least one contact detail required";
+      setTimeout(() => {
+        toast.error(contactDetailErr.contactEmpty, {
+          theme: 'colored'
+        });
+      }, 1000);
       isValid = false;
       setFormError(true);
       $("#TransactionDetailsListCard").show();
@@ -183,6 +188,11 @@ export const Client = () => {
 
     if (transactionDetailData.length < 1) {
       transactionDetailErr.transactionEmpty = "At least one transaction detail required";
+      setTimeout(() => {
+        toast.error(transactionDetailErr.transactionEmpty, {
+          theme: 'colored'
+        });
+      }, 1000);
       isValid = false;
       setFormError(true);
     }
@@ -293,6 +303,7 @@ export const Client = () => {
               toast.success(res.data.message, {
                 theme: 'colored'
               });
+
               contactDetailData.forEach(async contactDetails => {
 
                 if (!contactDetails.encryptedClientContactDetailsId) {
@@ -302,11 +313,9 @@ export const Client = () => {
                     toast.error(addContactDetailResponse.data.message, {
                       theme: 'colored'
                     });
-                    return false;
                   }
                 }
-
-                if (contactDetails.encryptedClientContactDetailsId) {
+                else if (contactDetails.encryptedClientContactDetailsId) {
                   const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
                   //To-do: Break loop if response is not 200
                   if (updateContactDetailResponse.data.status != 200) {
