@@ -86,10 +86,6 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     clearClientReducers();
   })
 
-  $('#btnSave').click(function () {
-    saveDetails();
-  })
-
   $('#btnCancel').click(function () {
     $('#btnExit').attr('isExit', false);
     if ($("#AddClientDetailsForm").isChanged()) {
@@ -168,7 +164,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
         <Modal
           show={modalShow}
           onHide={() => setModalShow(false)}
-          size="lg"
+          size="md"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           backdrop="static"
@@ -177,7 +173,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
             <Modal.Title id="contained-modal-title-vcenter">Confirmation</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <h4>Save changes?</h4>
+            <h4>Do you want to save changes?</h4>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="success" onClick={() => save() }>Save</Button>
@@ -189,10 +185,18 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
         <Row>
           <Col>
             <div style={{ display: "flex", justifyContent: "left" }}>
-              <Button className='btn btn-primary me-2' id='btnNew'>New</Button>
-              <Button className='btn btn-success me-2' id='btnSave'>Save</Button>
-              <Button className='btn btn-danger me-2' id='btnCancel' >Cancel</Button>
-              <Button className='btn btn-info mr-4' id='btnExit'>Exit</Button>
+              <Button className='btn btn-primary me-2' id='btnNew'>
+                <span class="fas fa-plus me-1" data-fa-transform="shrink-3"></span>New
+              </Button>
+              <Button className='btn btn-success me-2' id='btnSave' onClick={saveDetails}>
+                <span class="fas fa-save me-1" data-fa-transform="shrink-3"></span>Save
+              </Button>
+              <Button className='btn btn-danger me-2' id='btnCancel' >
+                <span class="fas fa-times me-1" data-fa-transform="shrink-3"></span>Cancel
+              </Button>
+              <Button className='btn btn-info mr-4' id='btnExit'>
+                <span class="fas fa-sign-out-alt me-1" data-fa-transform="shrink-3"></span>Exit
+              </Button>
             </div>
           </Col>
         </Row>

@@ -173,7 +173,6 @@ export const Client = () => {
       isValid = false;
       setFormError(true);
     }
-
     if (contactDetailData.length < 1) {
       contactDetailErr.contactEmpty = "At least one contact detail required";
       setTimeout(() => {
@@ -303,52 +302,6 @@ export const Client = () => {
               toast.success(res.data.message, {
                 theme: 'colored'
               });
-
-              contactDetailData.forEach(async contactDetails => {
-
-                if (!contactDetails.encryptedClientContactDetailsId) {
-                  const addContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', contactDetails);
-                  //To-do: Break loop if response is not 200
-                  if (addContactDetailResponse.data.status != 200) {
-                    toast.error(addContactDetailResponse.data.message, {
-                      theme: 'colored'
-                    });
-                  }
-                }
-                else if (contactDetails.encryptedClientContactDetailsId) {
-                  const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
-                  //To-do: Break loop if response is not 200
-                  if (updateContactDetailResponse.data.status != 200) {
-                    toast.error(updateContactDetailResponse.data.message, {
-                      theme: 'colored'
-                    });
-                  }
-                }
-              });
-
-              const data = { encryptedClientContactDetailsId: localStorage.getItem("DeleteContactDetailsId") }
-              const deleteContactDetailResponse = axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data })
-              localStorage.removeItem("DeleteContactDetailsId");
-              // if (deleteContactDetailResponse.data.status == 200) {
-
-              // } else {
-              //   toast.error(deleteContactDetailResponse.data.message, {
-              //     theme: 'colored'
-              //   });
-              // }
-
-              transactionDetailData.filter(x => !x.encryptedClientRegisterationAuthorizationId).forEach(async transactionDetail => {
-                if (transactionDetail.encryptedClientRegisterationAuthorizationId == '') {
-                  delete transactionDetail.encryptedClientRegisterationAuthorizationId;
-                  const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail);
-                  //To-do: Break loop if response is not 200
-                  if (transactionDetailResponse.data.status != 200) {
-                    toast.error(transactionDetailResponse.data.message, {
-                      theme: 'colored'
-                    });
-                  }
-                }
-              })
             }
             else {
               toast.error(res.data.message, {
@@ -357,6 +310,60 @@ export const Client = () => {
             }
           })
       }
+
+      contactDetailData.forEach(async contactDetails => {
+
+        if (!contactDetails.encryptedClientContactDetailsId) {
+          const addContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', contactDetails);
+          //To-do: Break loop if response is not 200
+          if (addContactDetailResponse.data.status != 200) {
+            toast.error(addContactDetailResponse.data.message, {
+              theme: 'colored'
+            });
+          }
+        }
+        else if (contactDetails.encryptedClientContactDetailsId) {
+          const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
+          //To-do: Break loop if response is not 200
+          if (updateContactDetailResponse.data.status != 200) {
+            toast.error(updateContactDetailResponse.data.message, {
+              theme: 'colored'
+            });
+          }
+        }
+      });
+
+      toast.success("Contact details updated successfully!", {
+        theme: 'colored'
+      });
+
+      const data = { encryptedClientContactDetailsId: localStorage.getItem("DeleteContactDetailsId") }
+      const deleteContactDetailResponse = axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data })
+      localStorage.removeItem("DeleteContactDetailsId");
+      // if (deleteContactDetailResponse.data.status == 200) {
+
+      // } else {
+      //   toast.error(deleteContactDetailResponse.data.message, {
+      //     theme: 'colored'
+      //   });
+      // }
+
+      transactionDetailData.filter(x => !x.encryptedClientRegisterationAuthorizationId).forEach(async transactionDetail => {
+        if (transactionDetail.encryptedClientRegisterationAuthorizationId == '') {
+          delete transactionDetail.encryptedClientRegisterationAuthorizationId;
+          const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail);
+          //To-do: Break loop if response is not 200
+          if (transactionDetailResponse.data.status != 200) {
+            toast.error(transactionDetailResponse.data.message, {
+              theme: 'colored'
+            });
+          }
+        }
+      })
+
+      toast.success("Transaction details added successfully!", {
+        theme: 'colored'
+      });
       // axios.post(process.env.REACT_APP_API_URL + '/update-client', updatedUserData, {
       //   headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
       // })

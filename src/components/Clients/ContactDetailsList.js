@@ -76,7 +76,7 @@ const ContactDetailsList = () => {
         <Modal
           show={modalShow}
           onHide={() => setModalShow(false)}
-          size="lg"
+          size="md"
           aria-labelledby="contained-modal-title-vcenter"
           centered
           backdrop="static"
