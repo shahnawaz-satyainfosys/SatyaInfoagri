@@ -30,6 +30,36 @@ const NavbarVertical = () => {
     if (menuTreeItemCount <= 1) {
       getMenuTree();
     }
+
+    setTimeout(function (){
+      
+      var pageUrl = window.location.href.split("/").length > 2 ? "/" + window.location.href.split("/")[3] : "";
+
+      $('li a.nav-link').each(function(i, obj) {
+        var menuLink =  $(this).attr('href');
+
+        if(pageUrl == menuLink)
+        {
+          var parentContainerId = $(this).attr('data-parent-container-id');
+
+          if($('#' + parentContainerId).hasClass('dropdown-indicator') &&
+             $('#' + parentContainerId).hasClass('collapsed')) 
+          {
+            var childMenuContainerId = $('#' + parentContainerId).attr('data-children-container-id');
+            $('#' + parentContainerId).removeClass('collapsed');
+            $('#' + parentContainerId).attr('aria-expanded', 'true');
+            $('#' + childMenuContainerId).addClass('show');
+          }
+
+          if(!$(this).hasClass('dropdown-indicator'))
+          {
+            $('li a.nav-link').removeClass("active");
+            $(this).addClass("active");
+          }
+        }
+    });
+    }, 1000);
+
     if (isNavbarVerticalCollapsed) {
       HTMLClassList.add('navbar-vertical-collapsed');
     } else {
@@ -39,6 +69,31 @@ const NavbarVertical = () => {
       HTMLClassList.remove('navbar-vertical-collapsed-hover');
     };
   }, [isNavbarVerticalCollapsed, HTMLClassList]);
+
+  $('body').on('click', 'li a.nav-link', function () 
+  {
+    var childMenuContainerId = $(this).attr('data-children-container-id');
+
+    if ($(this).hasClass('dropdown-indicator') && $(this).hasClass('collapsed')) {
+      $(this).removeClass('collapsed');
+      $(this).attr('aria-expanded', 'true');
+      $('#' + childMenuContainerId).addClass('show');
+    }
+    else if($(this).hasClass('dropdown-indicator') && !$(this).hasClass('collapsed')){
+      $(this).addClass('collapsed');
+      $(this).attr('aria-expanded', 'false');
+      $('#' + childMenuContainerId).removeClass('show');
+    }
+
+    if(!$(this).hasClass('dropdown-indicator'))
+    {
+      $('.dropdown-indicator').addClass("collapsed");
+      $('.dropdown-indicator').attr('aria-expanded', 'false');
+      $('ul').removeClass("show");
+      $('li a.nav-link').removeClass("active");
+      $(this).addClass("active");
+    }
+  })
 
   //Control mouseEnter event
   let time = null;

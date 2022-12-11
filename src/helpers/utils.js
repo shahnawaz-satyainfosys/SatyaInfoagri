@@ -91,27 +91,23 @@ export const getMenuTree = () => {
 
         for (let i = 0; i < parentMenus.length; i++) {
           const name = parentMenus[i].menuItemName;
-          const childId = parentMenus[i].childId;
+          const childrenId = parentMenus[i].childId;
           const menuUrl = parentMenus[i].menuItemPageURL;
           const icon = parentMenus[i].menuItemIcon;
 
-          var childMenus = res.data.data.filter(x => x.parentId == childId);
+          var childMenus = res.data.data.filter(x => x.parentId == childrenId);
 
-          menuTreeHtml += `<a id="parent_${childId}" aria-current="page" class="nav-link ${childMenus.length > 0 ? 'dropdown-indicator collapsed\" aria-expanded="false' : ''}">
-                                <div class="d-flex align-items-center"`;
-
-          menuTreeHtml += childMenus.length > 0 ? `onClick="sidebarMenuClick('parent_${childId}', 'children_${childId}');"` : '';
-
-          menuTreeHtml += `>
-                            <span class="nav-link-icon">
-                              <span class="${icon ? icon : "fas fa-chart-pie"}"></span>
-                            </span>
-                            <span class="nav-link-text ps-1">${name}</span>
-                          </div>
-                      </a>`;
+          menuTreeHtml += `<a id="parent_${childrenId}" data-children-container-id="children_${childrenId}" aria-current="page" class="nav-link ${childMenus.length > 0 ? 'dropdown-indicator collapsed\" aria-expanded="false' : ''}">
+                                <div class="d-flex align-items-center">
+                                <span class="nav-link-icon">
+                                  <span class="${icon ? icon : "fas fa-chart-pie"}"></span>
+                                </span>
+                                <span class="nav-link-text ps-1">${name}</span>
+                              </div>
+                          </a>`;
 
           if (childMenus.length > 0) {
-            menuTreeHtml += `<ul id="children_${childId}" class="nav collapse">`;
+            menuTreeHtml += `<ul id="children_${childrenId}" class="nav collapse">`;
 
             for (let j = 0; j < childMenus.length; j++) {
               const childId = childMenus[j].childId;
@@ -119,7 +115,7 @@ export const getMenuTree = () => {
               const menuUrl = childMenus[j].menuItemPageURL;
 
               menuTreeHtml += `<li id="child_${childId}" class="nav-item">
-                                      <a class="nav-link" href="${menuUrl}" data-bs-toggle="" aria-expanded="false">
+                                      <a class="nav-link" href="${menuUrl}" data-parent-container-id="parent_${childrenId}" data-bs-toggle="" aria-expanded="false">
                                         <div class="d-flex align-items-center">
                                          <span class="nav-link-text ps-1">${name}</span>
                                         </div>

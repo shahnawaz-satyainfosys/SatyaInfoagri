@@ -25,19 +25,4 @@
   <main class="main" id="main"></main>
 </body>
 
-<script>
-  function sidebarMenuClick(parentMenuElementId, childMenuContainerId) {
-    if ($('#' + parentMenuElementId).hasClass('collapsed')) {
-      $('#' + parentMenuElementId).removeClass('collapsed');
-      $('#' + parentMenuElementId).attr('aria-expanded', 'true');
-      $('#' + childMenuContainerId).addClass('show');
-    }
-    else {
-      $('#' + parentMenuElementId).addClass('collapsed');
-      $('#' + parentMenuElementId).attr('aria-expanded', 'false');
-      $('#' + childMenuContainerId).removeClass('show');
-    }
-  }
-</script>
-
 </html>
