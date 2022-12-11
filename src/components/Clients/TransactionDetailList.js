@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import {useSelector} from 'react-redux';
 import Moment from "moment";
+import { Table } from 'react-bootstrap';
 
 const TransactionDetailList = () => {
   
@@ -37,7 +38,7 @@ const TransactionDetailList = () => {
           )
         }     
 
-       <table className='table table-striped' id="TransactionDetailsTable">
+       <Table striped responsive id="TransactionDetailsTable">
         <thead>
           <tr>
             <th>Module Name</th>
@@ -67,7 +68,7 @@ const TransactionDetailList = () => {
               <td>{data.totalAmount}</td>
             </tr>)}
         </tbody>
-      </table>
+      </Table>
     </>
   )
 };

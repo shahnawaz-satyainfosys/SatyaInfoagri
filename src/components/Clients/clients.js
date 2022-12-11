@@ -82,7 +82,6 @@ export const Client = () => {
   // });
 
   const clientValidation = () => {
-
     const customerNameErr = {};
     const clientAddressErr = {};
     const countryErr = {};
@@ -177,6 +176,11 @@ export const Client = () => {
 
     if (contactDetailData.length < 1) {
       contactDetailErr.contactEmpty = "At least one contact detail required";
+      setTimeout(() => {
+        toast.error(contactDetailErr.contactEmpty, {
+          theme: 'colored'
+        });
+      }, 1000);
       isValid = false;
       setFormError(true);
       $("#TransactionDetailsListCard").show();
@@ -184,6 +188,11 @@ export const Client = () => {
 
     if (transactionDetailData.length < 1) {
       transactionDetailErr.transactionEmpty = "At least one transaction detail required";
+      setTimeout(() => {
+        toast.error(transactionDetailErr.transactionEmpty, {
+          theme: 'colored'
+        });
+      }, 1000);
       isValid = false;
       setFormError(true);
     }
@@ -229,7 +238,7 @@ export const Client = () => {
         EncryptedBillStateCode: clientData.encryptedBillStateCode,
         ClientPANNO: clientData.panNumber,
         ClientGSTNO: clientData.gstNumber,
-        ActiveStatus: clientData.status == "Active" ? "A" : "S",
+        ActiveStatus: clientData.status == null || clientData.status == "Active" ? "A" : "S",
         NoOfCompany: parseInt(clientData.noOfComapnies),
         NoOfUsers: parseInt(clientData.noOfUsers),
         AddUser: localStorage.getItem("LoginUserName"),
@@ -255,8 +264,8 @@ export const Client = () => {
         })
     }
   }
-  const updateClientDetails = () => {
 
+  const updateClientDetails = () => {
     if (clientValidation()) {
       const updatedUserData = {
         EncryptedClientCode: clientData.encryptedClientCode,
@@ -275,16 +284,16 @@ export const Client = () => {
         EncryptedBillStateCode: clientData.encryptedBillStateCode,
         ClientPANNO: clientData.panNumber,
         ClientGSTNO: clientData.gstNumber,
-        ActiveStatus: clientData.status == "Active" ? "A" : "S",
+        ActiveStatus: !clientData.status || clientData.status == "Active" ? "A" : "S",
         NoOfCompany: parseInt(clientData.noOfComapnies),
         NoOfUsers: parseInt(clientData.noOfUsers),
         ModifyUser: localStorage.getItem("LoginUserName")
       }
 
-      setIsLoading(true);
 
       if ($("#AddClientDetailsForm").isChanged()) {
-        
+        setIsLoading(true);
+
         axios.post(process.env.REACT_APP_API_URL + '/update-client', updatedUserData, {
           headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
         })
@@ -294,6 +303,7 @@ export const Client = () => {
               toast.success(res.data.message, {
                 theme: 'colored'
               });
+
               contactDetailData.forEach(async contactDetails => {
 
                 if (!contactDetails.encryptedClientContactDetailsId) {
@@ -305,8 +315,7 @@ export const Client = () => {
                     });
                   }
                 }
-
-                if (contactDetails.encryptedClientContactDetailsId) {
+                else if (contactDetails.encryptedClientContactDetailsId) {
                   const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
                   //To-do: Break loop if response is not 200
                   if (updateContactDetailResponse.data.status != 200) {
@@ -426,7 +435,7 @@ export const Client = () => {
         listColumnArray={listColumnArray}
         tabArray={tabArray}
         module="Client"
-        saveDetails={!clientData && !clientData.encryptedClientCode ? addClientDetails : updateClientDetails}
+        saveDetails={!clientData.encryptedClientCode ? addClientDetails : updateClientDetails}
       />
     </>
   )

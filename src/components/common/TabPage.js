@@ -16,7 +16,7 @@ import AdvanceTable from 'components/common/advance-table/AdvanceTable';
 import AdvanceTableFooter from 'components/common/advance-table/AdvanceTableFooter';
 import AdvanceTableSearchBox from 'components/common/advance-table/AdvanceTableSearchBox';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { clientDetailsAction, clientContactDetailsAction, transactionDetailsAction } from '../../actions/index';
 
 import $ from 'jquery';
@@ -24,6 +24,9 @@ import $ from 'jquery';
 const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) => {
 
   const dispatch = useDispatch();
+
+  const clientDetailsErrorReducer = useSelector((state) => state.rootReducer.clientDetailsErrorReducer)
+  const clientError = clientDetailsErrorReducer.clientDetailsError;
 
   $.fn.extend({
     trackChanges: function () {
@@ -88,6 +91,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
   })
 
   $('#btnCancel').click(function () {
+    $('#btnExit').attr('isExit', false);
     if ($("#AddClientDetailsForm").isChanged()) {
       setModalShow(true);
     } else {
@@ -96,6 +100,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
   })
 
   $('#btnExit').click(function () {
+    $('#btnExit').attr('isExit', true);
     if ($("#AddClientDetailsForm").isChanged()) {
       setModalShow(true);
     } else {
@@ -153,19 +158,8 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
   const [modalShow, setModalShow] = React.useState(false);
 
   const save = () => {
-    saveDetails();
+    saveDetails($('#btnExit').attr('isExit'));
     setModalShow(false);
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
-  }
-
-  const exitSave = () => {
-    saveDetails();
-    setModalShow(false);
-    setTimeout(() => {
-      window.location.href = '/dashboard';
-    }, 2000);
   }
 
   return (
@@ -180,21 +174,21 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
           backdrop="static"
         >
           <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">Confirmation</Modal.Title>
-        </Modal.Header>
+            <Modal.Title id="contained-modal-title-vcenter">Confirmation</Modal.Title>
+          </Modal.Header>
           <Modal.Body>
             <h4>Save changes?</h4>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="success" onClick={() => { save() }}>Save</Button>
-            <Button variant="danger" onClick={() => window.location.reload()}>Discard</Button>
+            <Button variant="success" onClick={() => save() }>Save</Button>
+            <Button variant="danger" onClick={() => { ($('#btnExit').attr('isExit') === true) ? window.location.href = '/dashboard' : window.location.reload() }}>Discard</Button>
           </Modal.Footer>
         </Modal>
       }
       <Form>
         <Row>
           <Col>
-            <div style={{ display: "flex", justifyContent: "end" }}>
+            <div style={{ display: "flex", justifyContent: "left" }}>
               <Button className='btn btn-primary me-2' id='btnNew'>New</Button>
               <Button className='btn btn-success me-2' id='btnSave'>Save</Button>
               <Button className='btn btn-danger me-2' id='btnCancel' >Cancel</Button>

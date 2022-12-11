@@ -90,7 +90,7 @@ export const ClientDetails = () => {
     setSelectCountryStates();
   }
 
-  if(clientData.status && !$('#txtStatus').val())
+  if(clientData.status && $('#txtStatus').val())
   {
     $('#txtStatus option:contains(' + clientData.status + ')').prop('selected', true);
   }
