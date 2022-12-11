@@ -25,9 +25,6 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
 
   const dispatch = useDispatch();
 
-  const clientDetailsErrorReducer = useSelector((state) => state.rootReducer.clientDetailsErrorReducer)
-  const clientError = clientDetailsErrorReducer.clientDetailsError;
-
   $.fn.extend({
     trackChanges: function () {
       $(":input", this).change(function () {
@@ -214,11 +211,6 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
             <Tab eventKey={tab} title={tab} className="border p-3">
               {index == 0 && listData && (
                 <FalconComponentCard>
-                  <FalconComponentCard.Header
-                    light={false}
-                    className="border-bottom border-200"
-                    noPreview={true}
-                  />
                   <FalconComponentCard.Body
                     code={searchableTableCode}
                     scope={{

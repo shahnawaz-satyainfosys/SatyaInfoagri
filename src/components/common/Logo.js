@@ -19,7 +19,7 @@ const Logo = ({ at, width, className, ...rest }) => {
         className={classNames(
           'd-flex',
           {
-            'align-items-center py-3': at === 'navbar-vertical',
+            'align-items-center toggle-logo': at === 'navbar-vertical',
             'align-items-center': at === 'navbar-top',
             'flex-center fw-bolder fs-5 mb-4': at === 'auth'
           },

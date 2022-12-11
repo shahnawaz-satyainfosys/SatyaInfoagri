@@ -36,3 +36,27 @@
 .table-striped>tbody>tr:nth-of-type(2n)>* {
     background-color: var(--falcon-table-bg) !important;
 }
+
+.navbar{
+    padding: 0 10px 0 0 !important;
+}
+
+.navbar-top{
+    min-height: unset !important;
+}
+
+.navbar-nav {
+    --falcon-nav-link-padding-y: 0.3rem !important;
+    margin-bottom: -5px !important;
+}
+
+.toggle-logo{
+    padding-bottom: 5px;
+}
+
+@media (min-width: 1200px)
+{
+    .navbar-vertical.navbar-expand-xl+.content {
+        margin-left: 13.5rem !important;
+    }
+}
