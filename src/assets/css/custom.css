@@ -60,3 +60,9 @@
         margin-left: 13.5rem !important;
     }
 }
+
+.navbar-collapse
+{
+    max-height: 1260px;
+    overflow: scroll;
+}
