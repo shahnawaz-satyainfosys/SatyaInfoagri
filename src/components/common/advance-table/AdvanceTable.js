@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
-import { Table} from 'react-bootstrap';
+import { Badge, Table } from 'react-bootstrap';
 import axios from 'axios';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -140,8 +140,23 @@ const AdvanceTable = ({
                         {
                           index == 0 ?  
                           i + 1 :
-                          cell.render('Cell')
-                        }
+                          cell.column.id != "status" ?
+                          cell.render('Cell') :
+                          cell.row.values.status == "Active" ?
+                          <Badge
+                            pill
+                            bg="success"
+                          >
+                            {cell.render('Cell')}
+                          </Badge> :
+                          cell.row.values.status == "Suspended" ? 
+                          <Badge
+                            pill
+                            bg="secondary"
+                          >
+                            {cell.render('Cell')}
+                          </Badge> : ''
+                          }
                       </td>
                     );
                   })}
