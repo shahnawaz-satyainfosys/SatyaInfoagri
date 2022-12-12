@@ -4,6 +4,7 @@ import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { transactionDetailsAction } from 'actions';
+import { transactionDetailChangedAction } from '../../actions/index'
 import { toast } from 'react-toastify';
 
 export const TransactionDetails = () => {
@@ -214,6 +215,12 @@ export const TransactionDetails = () => {
             }
 
             dispatch(transactionDetailsAction(transactionData));
+
+            const addTransactionDetail = {
+                transactionDetailsAdded: true
+            }
+
+            dispatch(transactionDetailChangedAction(addTransactionDetail));
 
             toast.success("Transaction Added Successfully", {
                 theme: 'colored'

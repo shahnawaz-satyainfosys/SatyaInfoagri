@@ -46,3 +46,17 @@ export const clientDetailsErrorAction = (payload) => {
     payload
   };
 };
+
+export const contactDetailChangedAction = (payload) => {
+  return {
+    type: 'CONTACTDETAILCHANGED',
+    payload
+  };
+};
+
+export const transactionDetailChangedAction = (payload) => {
+  return {
+    type: 'TRANSACTIONDETAILCHANGED',
+    payload
+  };
+};

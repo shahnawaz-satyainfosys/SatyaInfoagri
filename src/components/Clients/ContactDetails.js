@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateClientContactDetailsAction } from '../../actions/index';
 import { clientContactDetailsAction } from '../../actions/index'
+import { contactDetailChangedAction } from '../../actions/index'
 
 const ContactDetails = () => {
 
@@ -60,8 +61,8 @@ const ContactDetails = () => {
   }
 
   const addContactDetailInList = () => {
+    
     if (validateContactDetailForm()) {
-
       const userData = {
         encryptedClientContactDetailsId: "",
         encryptedClientCode: localStorage.getItem("EncryptedResponseClientCode"),
@@ -70,10 +71,16 @@ const ContactDetails = () => {
         emailId: contactDetailData.emailId,
         designation: contactDetailData.designation,
         sendMail: contactDetailData.sendMail,
-        addUser: localStorage.getItem("LoginUserName")
+        addUser: localStorage.getItem("LoginUserName"),
       }
 
       dispatch(clientContactDetailsAction(userData));
+
+      const addContactDetail = {
+        contactDetailsChanged: true
+      }
+
+      dispatch(contactDetailChangedAction(addContactDetail));
 
       toast.success("Contact Added Successfully", {
         theme: 'colored'
@@ -97,13 +104,19 @@ const ContactDetails = () => {
         designation: contactDetailData.designation,
         sendMail: contactDetailData.sendMail == "Y" ? "Y" : "N",
         addUser: contactDetailData.addUser,
-        modifyUser: localStorage.getItem("LoginUserName")
+        modifyUser: localStorage.getItem("LoginUserName"),
       }
 
       var objectIndex = contactDetailList.findIndex(x => x.mobileNo == contactPersonMobileNoToUpdate);
       contactDetailList[objectIndex] = contactDetail;
 
       dispatch(clientContactDetailsAction(contactDetailList));
+
+      const updateContactDetail = {
+        contactDetailsChanged: true
+      }
+
+      dispatch(contactDetailChangedAction(updateContactDetail));
 
       toast.success("Contact Updated Successfully", {
         theme: 'colored'

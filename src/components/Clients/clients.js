@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { clientDetailsErrorAction } from 'actions';
+import { contactDetailChangedAction } from 'actions';
+import { transactionDetailChangedAction } from 'actions';
 import { Spinner } from 'react-bootstrap';
 
 const tabArray = ['Customer List', 'Customer Details', 'Transaction Details'];
@@ -60,6 +62,12 @@ export const Client = () => {
   const transactionDetailsReducer = useSelector((state) => state.rootReducer.transactionDetailsReducer)
   const transactionDetailData = transactionDetailsReducer.transactionDetails;
 
+  const contactChanged = useSelector((state) => state.rootReducer.contactDetailChangedReducer)
+  let clientContactDetailChanged = contactChanged.contactDetailChanged;
+
+  const transactionChanged = useSelector((state) => state.rootReducer.transactionDetailChangedReducer)
+  let transactionDetailChanged = transactionChanged.transactionDetailChanged;
+
   const [formHasError, setFormError] = useState(false);
 
   $.fn.extend({
@@ -75,11 +83,6 @@ export const Client = () => {
   });
 
   $("#AddClientDetailsForm").trackChanges();
-
-  // $("#ClientContactDetailsTable").on('change', 'input', function () {
-  //   var row = $(this).closest('tr');
-  //   console.log(row);
-  // });
 
   const clientValidation = () => {
     const customerNameErr = {};
@@ -219,7 +222,6 @@ export const Client = () => {
   }
 
   const addClientDetails = () => {
-
     if (clientValidation()) {
       const userData = {
         ClientName: clientData.customerName,
@@ -298,12 +300,7 @@ export const Client = () => {
         })
           .then(res => {
             setIsLoading(false);
-            if (res.data.status == 200) {
-              toast.success(res.data.message, {
-                theme: 'colored'
-              });
-            }
-            else {
+            if (res.data.status != 200) {
               toast.error(res.data.message, {
                 theme: 'colored'
               });
@@ -311,121 +308,76 @@ export const Client = () => {
           })
       }
 
-      contactDetailData.forEach(async contactDetails => {
+      if (clientContactDetailChanged.contactDetailsChanged) {
+        contactDetailData.forEach(async contactDetails => {
 
-        if (!contactDetails.encryptedClientContactDetailsId) {
-          const addContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', contactDetails);
-          //To-do: Break loop if response is not 200
-          if (addContactDetailResponse.data.status != 200) {
-            toast.error(addContactDetailResponse.data.message, {
-              theme: 'colored'
-            });
+          if (!contactDetails.encryptedClientContactDetailsId) {
+            const addContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', contactDetails);
+            //To-do: Break loop if response is not 200
+            if (addContactDetailResponse.data.status != 200) {
+              toast.error(addContactDetailResponse.data.message, {
+                theme: 'colored'
+              });
+            }
           }
-        }
-        else if (contactDetails.encryptedClientContactDetailsId) {
-          const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
-          //To-do: Break loop if response is not 200
-          if (updateContactDetailResponse.data.status != 200) {
-            toast.error(updateContactDetailResponse.data.message, {
-              theme: 'colored'
-            });
+          else if (contactDetails.encryptedClientContactDetailsId) {
+            const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
+            //To-do: Break loop if response is not 200
+            if (updateContactDetailResponse.data.status != 200) {
+              toast.error(updateContactDetailResponse.data.message, {
+                theme: 'colored'
+              });
+            }
           }
-        }
-      });
+        });
 
-      toast.success("Contact details updated successfully!", {
+        clientContactDetailChanged = {
+          contactDetailsChanged: false
+        }
+
+        dispatch(contactDetailChangedAction(clientContactDetailChanged));
+      }
+
+      var deleteContactDetailsId = localStorage.getItem("DeleteContactDetailsId")
+
+      if(deleteContactDetailsId)
+      {
+        const data = { encryptedClientContactDetailsId: deleteContactDetailsId }
+        const deleteContactDetailResponse = axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data })
+        if (deleteContactDetailResponse.data.status != 200) {
+          toast.error(deleteContactDetailResponse.data.message, {
+            theme: 'colored'
+          });
+        }
+        else{
+          localStorage.removeItem("DeleteContactDetailsId");
+        }
+      }
+
+      if (transactionDetailChanged.transactionDetailChanged) {
+        transactionDetailData.filter(x => !x.encryptedClientRegisterationAuthorizationId).forEach(async transactionDetail => {
+          if (transactionDetail.encryptedClientRegisterationAuthorizationId == '') {
+            delete transactionDetail.encryptedClientRegisterationAuthorizationId;
+            const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail);
+            if (transactionDetailResponse.data.status != 200) {
+              toast.error(transactionDetailResponse.data.message, {
+                theme: 'colored'
+              });
+            }
+          }
+        })
+
+        transactionDetailChanged = {
+          transactionDetailChanged: false
+        }
+
+        dispatch(transactionDetailChangedAction(transactionDetailChanged));
+      }
+
+      toast.success("Client details updated successfully!", {
         theme: 'colored'
       });
-
-      const data = { encryptedClientContactDetailsId: localStorage.getItem("DeleteContactDetailsId") }
-      const deleteContactDetailResponse = axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data })
-      localStorage.removeItem("DeleteContactDetailsId");
-      // if (deleteContactDetailResponse.data.status == 200) {
-
-      // } else {
-      //   toast.error(deleteContactDetailResponse.data.message, {
-      //     theme: 'colored'
-      //   });
-      // }
-
-      transactionDetailData.filter(x => !x.encryptedClientRegisterationAuthorizationId).forEach(async transactionDetail => {
-        if (transactionDetail.encryptedClientRegisterationAuthorizationId == '') {
-          delete transactionDetail.encryptedClientRegisterationAuthorizationId;
-          const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail);
-          //To-do: Break loop if response is not 200
-          if (transactionDetailResponse.data.status != 200) {
-            toast.error(transactionDetailResponse.data.message, {
-              theme: 'colored'
-            });
-          }
-        }
-      })
-
-      toast.success("Transaction details added successfully!", {
-        theme: 'colored'
-      });
-      // axios.post(process.env.REACT_APP_API_URL + '/update-client', updatedUserData, {
-      //   headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
-      // })
-      //   .then(res => {
-      //     setIsLoading(false);
-      //     if (res.data.status == 200) {
-      //       toast.success(res.data.message, {
-      //         theme: 'colored'
-      //       });
-      //       contactDetailData.forEach(async contactDetails => {
-
-      //         if (!contactDetails.encryptedClientContactDetailsId) {
-      //           const addContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', contactDetails);
-      //           //To-do: Validate 200
-      //           if (addContactDetailResponse.data.status != 200) {
-      //             toast.error(addContactDetailResponse.data.message, {
-      //               theme: 'colored'
-      //             });
-      //           }
-      //         }
-
-      //         if (contactDetails.encryptedClientContactDetailsId) {
-      //           const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
-      //           //To-do: Validate 200
-      //           if (updateContactDetailResponse.data.status != 200) {
-      //             toast.error(updateContactDetailResponse.data.message, {
-      //               theme: 'colored'
-      //             });
-      //           }
-      //         }
-      //       });
-
-      //       const data = { encryptedClientContactDetailsId: localStorage.getItem("DeleteContactDetailsId") }
-      //       const deleteContactDetailResponse = axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data })
-      //       localStorage.removeItem("DeleteContactDetailsId");
-      //       // if (deleteContactDetailResponse.data.status == 200) {
-
-      //       // } else {
-      //       //   toast.error(deleteContactDetailResponse.data.message, {
-      //       //     theme: 'colored'
-      //       //   });
-      //       // }
-
-      //       transactionDetailData.filter(x => !x.encryptedClientRegisterationAuthorizationId).forEach(async transactionDetail => {
-      //         if (transactionDetail.encryptedClientRegisterationAuthorizationId == '') {
-      //           delete transactionDetail.encryptedClientRegisterationAuthorizationId;
-      //           const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail);
-      //           //To-do: Validate 200
-      //           if (transactionDetailResponse.data.status != 200) { 
-      //             toast.error(transactionDetailResponse.data.message, {
-      //               theme: 'colored'
-      //             });
-      //           }
-      //         }
-      //       })
-      //     }
-      //     else {
-      //       toast.error(res.data.message, {
-      //         theme: 'colored'
-      //       });
-      //     }
-      //   })
+      
     }
   };
 
