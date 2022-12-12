@@ -38,6 +38,7 @@ export const TransactionDetails = () => {
 
     useEffect(() => {
         getModule();
+        $('.payment-mode-details').hide();
     }, []);
 
     const getModule = async () => {
@@ -260,14 +261,16 @@ export const TransactionDetails = () => {
                     $('.payment-mode-details').show();
                 }
                 else if (e.target.value == "GP") {
-                    $('#lblPaymentModeNo').text('GPay Transaction No.');
+                    $('#lblPaymentModeNo').text('GPay Transaction No.').show();
+                    $('#txtChequeNo').show();
                     $('#lblPaymentModeDate').text('GPay Date');
                     $('#lblPaymentModeBankName').hide();
                     $('#txtChequeBank').hide();
                     $('.payment-mode-details').show();
                 }
                 else if (e.target.value == "NB") {
-                    $('#lblPaymentModeNo').text('NB Transaction No.');
+                    $('#lblPaymentModeNo').text('NB Transaction No.').show();
+                    $('#txtChequeNo').show();
                     $('#lblPaymentModeDate').text('NB Date');
                     $('#lblPaymentModeBankName').hide();
                     $('#txtChequeBank').hide();
@@ -281,9 +284,9 @@ export const TransactionDetails = () => {
                     $('#txtChequeBank').hide();
                     $('.payment-mode-details').show();
                 }
-                else {
-                    $('.payment-mode-details').hide();
-                }
+            }
+            else {
+                $('.payment-mode-details').hide();
             }
         }
     };
