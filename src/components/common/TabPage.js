@@ -17,11 +17,18 @@ import AdvanceTableFooter from 'components/common/advance-table/AdvanceTableFoot
 import AdvanceTableSearchBox from 'components/common/advance-table/AdvanceTableSearchBox';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { clientDetailsAction, clientContactDetailsAction, transactionDetailsAction } from '../../actions/index';
+import { clientDetailsAction, clientContactDetailsAction, transactionDetailsAction, clientDetailsErrorAction } from '../../actions/index';
+
 
 import $ from 'jquery';
 
 const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) => {
+
+  const contactChanged = useSelector((state) => state.rootReducer.contactDetailChangedReducer)
+  let clientContactDetailChanged = contactChanged.contactDetailChanged;
+
+  const transactionChanged = useSelector((state) => state.rootReducer.transactionDetailChangedReducer)
+  let transactionDetailChanged = transactionChanged.transactionDetailChanged;
 
   const dispatch = useDispatch();
 
@@ -51,6 +58,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     dispatch(clientDetailsAction(undefined));
     dispatch(clientContactDetailsAction(undefined));
     dispatch(transactionDetailsAction(undefined));
+    dispatch(clientDetailsErrorAction(undefined));
   }
 
   $('[data-rr-ui-event-key*="List"]').click(function () {
@@ -83,23 +91,39 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     clearClientReducers();
   })
 
-  $('#btnCancel').click(function () {
-    $('#btnExit').attr('isExit', false);
-    if ($("#AddClientDetailsForm").isChanged()) {
+  const discardChanges = () => {
+    if($('#btnExit').attr('isExit') == 'true')
+      window.location.href = '/dashboard';
+    else
+      $('[data-rr-ui-event-key*="List"]').trigger('click');
+
+    setModalShow(false);
+  }
+
+  const cancelClick = () => {
+    $('#btnExit').attr('isExit', 'false');
+    if ($("#AddClientDetailsForm").isChanged() ||
+        clientContactDetailChanged.contactDetailsChanged ||
+        transactionDetailChanged.transactionDetailChanged
+    ) {
       setModalShow(true);
-    } else {
+    } 
+    else {
       $('[data-rr-ui-event-key*="List"]').trigger('click');
     }
-  })
+  }
 
-  $('#btnExit').click(function () {
-    $('#btnExit').attr('isExit', true);
-    if ($("#AddClientDetailsForm").isChanged()) {
+  const exitModule = () => {
+    $('#btnExit').attr('isExit', 'true');
+    if (($("#AddClientDetailsForm").isChanged()) ||
+        (clientContactDetailChanged.contactDetailsChanged) ||
+        transactionDetailChanged.transactionDetailChanged) {
       setModalShow(true);
-    } else {
+    } 
+    else {
       window.location.href = '/dashboard';
     }
-  })
+  }
 
   const data = `const columns = ${JSON.stringify(listColumnArray)};
   
@@ -151,7 +175,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
   const [modalShow, setModalShow] = React.useState(false);
 
   const save = () => {
-    saveDetails($('#btnExit').attr('isExit'));
+    $('#btnSave').trigger('click');
     setModalShow(false);
   }
 
@@ -173,8 +197,8 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
             <h4>Do you want to save changes?</h4>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="success" onClick={() => save() }>Save</Button>
-            <Button variant="danger" onClick={() => { ($('#btnExit').attr('isExit') === true) ? window.location.href = '/dashboard' : window.location.reload() }}>Discard</Button>
+            <Button variant="success" onClick={save}>Save</Button>
+            <Button variant="danger" onClick={discardChanges}>Discard</Button>
           </Modal.Footer>
         </Modal>
       }
@@ -188,10 +212,10 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
               <Button className='btn btn-success me-2' id='btnSave' onClick={saveDetails}>
                 <span class="fas fa-save me-1" data-fa-transform="shrink-3"></span>Save
               </Button>
-              <Button className='btn btn-danger me-2' id='btnCancel' >
+              <Button className='btn btn-danger me-2' id='btnCancel' onClick={cancelClick}>
                 <span class="fas fa-times me-1" data-fa-transform="shrink-3"></span>Cancel
               </Button>
-              <Button className='btn btn-info mr-4' id='btnExit'>
+              <Button className='btn btn-info mr-4' id='btnExit' onClick={exitModule}>
                 <span class="fas fa-sign-out-alt me-1" data-fa-transform="shrink-3"></span>Exit
               </Button>
             </div>

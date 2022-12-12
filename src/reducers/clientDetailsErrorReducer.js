@@ -19,9 +19,15 @@ const initialState = {
 const clientDetailsErrorReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'CLIENTDETAILSERROR':
-      return{
-        ...state,
-        clientDetailsError : action.payload        
+      if(!action.payload)
+      {
+        return initialState
+      }
+      else{
+        return{
+          ...state,
+          clientDetailsError : action.payload        
+        }
       }
     default:
       return state;

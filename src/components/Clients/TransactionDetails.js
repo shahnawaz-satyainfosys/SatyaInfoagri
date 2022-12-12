@@ -217,7 +217,7 @@ export const TransactionDetails = () => {
             dispatch(transactionDetailsAction(transactionData));
 
             const addTransactionDetail = {
-                transactionDetailsAdded: true
+                transactionDetailChanged: true
             }
 
             dispatch(transactionDetailChangedAction(addTransactionDetail));
