@@ -2,10 +2,11 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { transactionDetailsAction } from 'actions';
 import { transactionDetailChangedAction } from '../../actions/index'
 import { toast } from 'react-toastify';
+import Moment from "moment";
 
 export const TransactionDetails = () => {
 
@@ -20,6 +21,9 @@ export const TransactionDetails = () => {
         amount: 0,
         gstPercentage: 0
     }
+
+    const transactionDetailsReducer = useSelector((state) => state.rootReducer.transactionDetailsReducer)
+    const transactionDetailData = transactionDetailsReducer.transactionDetails;
 
     const [formData, setFormData] = useState(initialState);
     const dispatch = useDispatch();
@@ -216,6 +220,26 @@ export const TransactionDetails = () => {
             }
 
             dispatch(transactionDetailsAction(transactionData));
+
+            // var loopBreaked = false;
+            // transactionDetailData.forEach(transactionDetail => {
+            //     if (!loopBreaked) {
+            //         if (transactionDetail.moduleName == transactionData.moduleName) {
+            //             if ((Moment(transactionDetail.startDate).format("YYYY-MM-DD") >= formData.startDate && Moment(transactionDetail.endDate).format("YYYY-MM-DD") <= formData.startDate) ||
+            //                  (Moment(transactionDetail.startDate).format("YYYY-MM-DD") >= formData.endDate && Moment(transactionDetail.endDate).format("YYYY-MM-DD") <= formData.endDate) ||
+            //                  (formData.startDate >= Moment(transactionDetail.startDate).format("YYYY-MM-DD") && formData.endDate <= Moment(transactionDetail.startDate).format("YYYY-MM-DD")) ||
+            //                  (formData.startDate >= Moment(transactionDetail.endDate).format("YYYY-MM-DD") && formData.endDate <= Moment(transactionDetail.endDate).format("YYYY-MM-DD"))) {
+            //                 toast.error(`For this date range ${transactionData.moduleName} already exists, please select other date range`, {
+            //                     theme: 'colored'
+            //                 });
+
+            //                 loopBreaked = true;
+            //             }
+            //         } else {
+            //             dispatch(transactionDetailsAction(transactionData));
+            //         }
+            //     }
+            // })
 
             const addTransactionDetail = {
                 transactionDetailChanged: true

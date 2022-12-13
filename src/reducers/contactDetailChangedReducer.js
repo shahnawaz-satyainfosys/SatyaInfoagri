@@ -5,9 +5,15 @@ const initialState = {
 const contactDetailChangedReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'CONTACTDETAILCHANGED':
-      return{
-        ...state,
-        contactDetailChanged : action.payload
+      if(!action.payload)
+      {
+        return initialState
+      }
+      else{
+        return{
+          ...state,
+          contactDetailChanged : action.payload
+        }
       }
     default:
       return state;

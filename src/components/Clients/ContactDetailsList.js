@@ -4,6 +4,7 @@ import { Button, Modal, Table } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateClientContactDetailsAction } from '../../actions/index';
 import { clientContactDetailsAction } from '../../actions/index';
+import { contactDetailChangedAction } from '../../actions/index'
 import { toast } from 'react-toastify';
 
 const ContactDetailsList = () => {
@@ -55,6 +56,12 @@ const ContactDetailsList = () => {
 
     dispatch(clientContactDetailsAction(contactDetailReducer.clientContactDetails));
     setModalShow(false);
+
+    const contactDetailDeleted = {
+      contactDetailsChanged: true
+    }
+
+    dispatch(contactDetailChangedAction(contactDetailDeleted));
   }
 
   const showAddContactDetailsForm = () => {

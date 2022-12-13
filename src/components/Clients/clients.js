@@ -291,10 +291,8 @@ export const Client = () => {
         ModifyUser: localStorage.getItem("LoginUserName")
       }
 
-
       if ($("#AddClientDetailsForm").isChanged()) {
         setIsLoading(true);
-
         axios.post(process.env.REACT_APP_API_URL + '/update-client', updatedUserData, {
           headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
         })
@@ -306,6 +304,7 @@ export const Client = () => {
               });
             }
           })
+        $('#AddClientDetailsForm').get(0).reset();
       }
 
       if (clientContactDetailChanged.contactDetailsChanged) {
@@ -331,6 +330,23 @@ export const Client = () => {
           }
         });
 
+        var deleteContactDetailsId = localStorage.getItem("DeleteContactDetailsId")
+        if (deleteContactDetailsId && clientContactDetailChanged.contactDetailsChanged) {
+          const data = { encryptedClientContactDetailsId: deleteContactDetailsId }
+          axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data })
+            .then(res => {
+              setIsLoading(false);
+              if (res.data.status != 200) {
+                toast.error(res.data.message, {
+                  theme: 'colored'
+                });
+              }
+              else {
+                localStorage.removeItem("DeleteContactDetailsId");
+              }
+            })
+        }
+
         clientContactDetailChanged = {
           contactDetailsChanged: false
         }
@@ -338,21 +354,6 @@ export const Client = () => {
         dispatch(contactDetailChangedAction(clientContactDetailChanged));
       }
 
-      var deleteContactDetailsId = localStorage.getItem("DeleteContactDetailsId")
-
-      if(deleteContactDetailsId)
-      {
-        const data = { encryptedClientContactDetailsId: deleteContactDetailsId }
-        const deleteContactDetailResponse = axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data })
-        if (deleteContactDetailResponse.data.status != 200) {
-          toast.error(deleteContactDetailResponse.data.message, {
-            theme: 'colored'
-          });
-        }
-        else{
-          localStorage.removeItem("DeleteContactDetailsId");
-        }
-      }
 
       if (transactionDetailChanged.transactionDetailChanged) {
         transactionDetailData.filter(x => !x.encryptedClientRegisterationAuthorizationId).forEach(async transactionDetail => {
@@ -377,7 +378,6 @@ export const Client = () => {
       toast.success("Client details updated successfully!", {
         theme: 'colored'
       });
-      
     }
   };
 
@@ -394,6 +394,7 @@ export const Client = () => {
         listColumnArray={listColumnArray}
         tabArray={tabArray}
         module="Client"
+        refreshList={fetchUsers}
         saveDetails={!clientData.encryptedClientCode ? addClientDetails : updateClientDetails}
       />
     </>

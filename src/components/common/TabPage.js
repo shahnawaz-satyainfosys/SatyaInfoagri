@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Tabs, Tab, Form, Row, Col, Button, Modal } from 'react-bootstrap';
+import { Tabs, Tab, Form, Row, Col, Button, Modal, Alert } from 'react-bootstrap';
 
 //Datatable Modules
 import FalconComponentCard from 'components/common/FalconComponentCard';
@@ -22,13 +22,16 @@ import { clientDetailsAction, clientContactDetailsAction, transactionDetailsActi
 
 import $ from 'jquery';
 
-const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) => {
+const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, refreshList }) => {
 
   const contactChanged = useSelector((state) => state.rootReducer.contactDetailChangedReducer)
   let clientContactDetailChanged = contactChanged.contactDetailChanged;
 
   const transactionChanged = useSelector((state) => state.rootReducer.transactionDetailChangedReducer)
   let transactionDetailChanged = transactionChanged.transactionDetailChanged;
+
+  const clientDetailsErrorReducer = useSelector((state) => state.rootReducer.clientDetailsErrorReducer)
+  const clientError = clientDetailsErrorReducer.clientDetailsError;
 
   const dispatch = useDispatch();
 
@@ -54,11 +57,19 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     $("#btnCancel").hide();
   }, []);
 
+  if (Object.keys(clientError.contactDetailErr).length != 0) {
+    $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
+  }
+  if (Object.keys(clientError.transactionDetailErr).length != 0 && Object.keys(clientError.contactDetailErr).length === 0) {
+    $('[data-rr-ui-event-key*="Transaction Details"]').trigger('click');
+  }
+
   const clearClientReducers = () => {
     dispatch(clientDetailsAction(undefined));
     dispatch(clientContactDetailsAction(undefined));
     dispatch(transactionDetailsAction(undefined));
     dispatch(clientDetailsErrorAction(undefined));
+    //To-do: Clear contact, form, transaction changed reducers
   }
 
   $('[data-rr-ui-event-key*="List"]').click(function () {
@@ -67,6 +78,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     $("#btnCancel").hide();
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
     $('[data-rr-ui-event-key*="List"]').attr('disabled', false);
+    refreshList(1);
     clearClientReducers();
   })
 
@@ -92,7 +104,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
   })
 
   const discardChanges = () => {
-    if($('#btnExit').attr('isExit') == 'true')
+    if ($('#btnExit').attr('isExit') == 'true')
       window.location.href = '/dashboard';
     else
       $('[data-rr-ui-event-key*="List"]').trigger('click');
@@ -103,11 +115,11 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
   const cancelClick = () => {
     $('#btnExit').attr('isExit', 'false');
     if ($("#AddClientDetailsForm").isChanged() ||
-        clientContactDetailChanged.contactDetailsChanged ||
-        transactionDetailChanged.transactionDetailChanged
+      clientContactDetailChanged.contactDetailsChanged ||
+      transactionDetailChanged.transactionDetailChanged
     ) {
       setModalShow(true);
-    } 
+    }
     else {
       $('[data-rr-ui-event-key*="List"]').trigger('click');
     }
@@ -116,10 +128,10 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
   const exitModule = () => {
     $('#btnExit').attr('isExit', 'true');
     if (($("#AddClientDetailsForm").isChanged()) ||
-        (clientContactDetailChanged.contactDetailsChanged) ||
-        transactionDetailChanged.transactionDetailChanged) {
+      (clientContactDetailChanged.contactDetailsChanged) ||
+      transactionDetailChanged.transactionDetailChanged) {
       setModalShow(true);
-    } 
+    }
     else {
       window.location.href = '/dashboard';
     }

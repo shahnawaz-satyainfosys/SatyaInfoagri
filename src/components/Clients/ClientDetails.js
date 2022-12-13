@@ -10,7 +10,8 @@ export const ClientDetails = () => {
   const dispatch = useDispatch();
 
   const clientDetailsReducer = useSelector((state) => state.rootReducer.clientDetailsReducer)
-  const clientData = clientDetailsReducer.clientDetails;
+  var clientData = clientDetailsReducer.clientDetails;
+
   const clientDetailsErrorReducer = useSelector((state) => state.rootReducer.clientDetailsErrorReducer)
   const clientError = clientDetailsErrorReducer.clientDetailsError;
 
@@ -37,7 +38,7 @@ export const ClientDetails = () => {
                 value: country.encryptedCountryCode
               });
             });
-            setCountryList(countryData);
+          setCountryList(countryData);
         }
       });
   }
@@ -72,26 +73,23 @@ export const ClientDetails = () => {
   }
 
   const setSelectCountryStates = () => {
-      $('#txtCountry option:contains(' + clientData.country + ')').prop('selected', true)
-      getStates(clientData.encryptedCountryCode);
-      $('#txtState option:contains(' + clientData.state + ')').prop('selected', true)
-      
-  
-      $('#txtBillingCountry option:contains(' + clientData.billingCountry + ')').prop('selected', true)
-      getStates(clientData.encryptedBillCountryCode, true);
-      $('#txtBillingState option:contains(' + clientData.billingState + ')').prop('selected', true) 
+    $('#txtCountry option:contains(' + clientData.country + ')').prop('selected', true)
+    getStates(clientData.encryptedCountryCode);
+    $('#txtState option:contains(' + clientData.state + ')').prop('selected', true)
+
+    $('#txtBillingCountry option:contains(' + clientData.billingCountry + ')').prop('selected', true)
+    getStates(clientData.encryptedBillCountryCode, true);
+    $('#txtBillingState option:contains(' + clientData.billingState + ')').prop('selected', true)
   }
 
-  if(clientData.country && 
+  if (clientData.country &&
     clientData.billingCountry &&
     (!$('#txtCountry').val() || !$('#txtBillingCountry').val() ||
-     !$('#txtState').val() || !$('#txtBillingState').val()))
-  {
+      !$('#txtState').val() || !$('#txtBillingState').val())) {
     setSelectCountryStates();
   }
 
-  if(clientData.status && $('#txtStatus').val())
-  {
+  if (clientData.status && $('#txtStatus').val()) {
     $('#txtStatus option:contains(' + clientData.status + ')').prop('selected', true);
   }
 
@@ -118,136 +116,136 @@ export const ClientDetails = () => {
 
   return (
     <>
-        {clientData && 
+      {clientData &&
 
-      <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }} id='AddClientDetailsForm'>
-        <Row>
-          <Col className="me-5 ms-5">
-            <Row className="mb-3">
-              <Form.Label>Customer Name<span className="text-danger">*</span></Form.Label>
-              <Form.Control id="txtCustomerName" name="customerName" maxLength={50} defaultValue={clientData.customerName} onChange={handleFieldChange} placeholder="Customer Name" required />
-              {Object.keys(clientError.customerNameErr).map((key) => {
-                return <span className="error-message">{clientError.customerNameErr[key]}</span>
-              })}
-            </Row>
-            <Row className="mb-3">
-              <Form.Label>Customer Address<span className="text-danger">*</span></Form.Label>
-              <Form.Control id="txtCustomerAddress" name="address1" maxLength={50} defaultValue={clientData.address1} onChange={handleFieldChange} className="mb-1" placeholder="Address" required />
-              {Object.keys(clientError.clientAddressErr).map((key) => {
-                return <span className="error-message">{clientError.clientAddressErr[key]}</span>
-              })}
-              <Form.Control id="txtCustomerAddress2" name="address2" maxLength={50} defaultValue={clientData.address2} onChange={handleFieldChange} className="mb-1" placeholder="Address 2" />
-              <Form.Control id="txtCustomerAddress3" name="address3" maxLength={50} defaultValue={clientData.address3} onChange={handleFieldChange} className="mb-1" placeholder="Address 3" />
-            </Row>
-            <Row className="mb-3">
-              <Form.Label>Pincode</Form.Label>
-              <Form.Control id="txtPincode" name="pinCode" maxLength={10} defaultValue={clientData.pinCode} onChange={handleFieldChange} placeholder="Pincode" />
-            </Row>
-            <Row className="mb-3">
-              <Form.Label>Country<span className="text-danger">*</span></Form.Label>
-              <Form.Select id="txtCountry" name="encryptedCountryCode" defaultValue={clientData.countryCode} onChange={handleFieldChange} required>
-                <option value=''>Select country</option>
-                {countryList.map((option, index) => (
-                  <option key={index} value={option.value}>{option.key}</option>
-                ))}
-              </Form.Select>
-              {Object.keys(clientError.countryErr).map((key) => {
-                return <span className="error-message">{clientError.countryErr[key]}</span>
-              })}
-            </Row>
-            <Row className="mb-3">
-              <Form.Label>State<span className="text-danger">*</span></Form.Label>
-              <Form.Select id="txtState" name="encryptedStateCode" defaultValue={clientData.stateCode} onChange={handleFieldChange} required>
-                <option value=''>Select state</option>
-                {stateList.map((option, index) => (
-                  <option key={index} value={option.value}>{option.key}</option>
-                ))}
-              </Form.Select>
-              {Object.keys(clientError.stateErr).map((key) => {
-                return <span className="error-message">{clientError.stateErr[key]}</span>
-              })}
-            </Row>
-          </Col>
+        <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }} id='AddClientDetailsForm'>
+          <Row>
+            <Col className="me-5 ms-5">
+              <Row className="mb-3">
+                <Form.Label>Customer Name<span className="text-danger">*</span></Form.Label>
+                <Form.Control id="txtCustomerName" name="customerName" maxLength={50} defaultValue={clientData.customerName} onChange={handleFieldChange} placeholder="Customer Name" required />
+                {Object.keys(clientError.customerNameErr).map((key) => {
+                  return <span className="error-message">{clientError.customerNameErr[key]}</span>
+                })}
+              </Row>
+              <Row className="mb-3">
+                <Form.Label>Customer Address<span className="text-danger">*</span></Form.Label>
+                <Form.Control id="txtCustomerAddress" name="address1" maxLength={50} defaultValue={clientData.address1} onChange={handleFieldChange} className="mb-1" placeholder="Address" required />
+                {Object.keys(clientError.clientAddressErr).map((key) => {
+                  return <span className="error-message">{clientError.clientAddressErr[key]}</span>
+                })}
+                <Form.Control id="txtCustomerAddress2" name="address2" maxLength={50} defaultValue={clientData.address2} onChange={handleFieldChange} className="mb-1" placeholder="Address 2" />
+                <Form.Control id="txtCustomerAddress3" name="address3" maxLength={50} defaultValue={clientData.address3} onChange={handleFieldChange} className="mb-1" placeholder="Address 3" />
+              </Row>
+              <Row className="mb-3">
+                <Form.Label>Pincode</Form.Label>
+                <Form.Control id="txtPincode" name="pinCode" maxLength={10} defaultValue={clientData.pinCode} onChange={handleFieldChange} placeholder="Pincode" />
+              </Row>
+              <Row className="mb-3">
+                <Form.Label>Country<span className="text-danger">*</span></Form.Label>
+                <Form.Select id="txtCountry" name="encryptedCountryCode" defaultValue={clientData.countryCode} onChange={handleFieldChange} required>
+                  <option value=''>Select country</option>
+                  {countryList.map((option, index) => (
+                    <option key={index} value={option.value}>{option.key}</option>
+                  ))}
+                </Form.Select>
+                {Object.keys(clientError.countryErr).map((key) => {
+                  return <span className="error-message">{clientError.countryErr[key]}</span>
+                })}
+              </Row>
+              <Row className="mb-3">
+                <Form.Label>State<span className="text-danger">*</span></Form.Label>
+                <Form.Select id="txtState" name="encryptedStateCode" defaultValue={clientData.stateCode} onChange={handleFieldChange} required>
+                  <option value=''>Select state</option>
+                  {stateList.map((option, index) => (
+                    <option key={index} value={option.value}>{option.key}</option>
+                  ))}
+                </Form.Select>
+                {Object.keys(clientError.stateErr).map((key) => {
+                  return <span className="error-message">{clientError.stateErr[key]}</span>
+                })}
+              </Row>
+            </Col>
 
-          <Col className="me-5 ms-5">
-            <Row className="mb-3">
-              <Form.Label>Billing Address<span className="text-danger">*</span></Form.Label>
-              <Form.Control id="txtBillingAddress" name="billingAddress1" maxLength={50} defaultValue={clientData.billingAddress1} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address" required />
-              {Object.keys(clientError.billingAddressErr).map((key) => {
-                return <span className="error-message">{clientError.billingAddressErr[key]}</span>
-              })}
-              <Form.Control id="txtBillingAddress2" name="billingAddress2" maxLength={50} defaultValue={clientData.billingAddress2} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address 2" />
-              <Form.Control id="txtBillingAddress3" name="billingAddress3" maxLength={50} defaultValue={clientData.billingAddress3} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address 3" />
-            </Row>
-            <Row className="mb-3">
-              <Form.Label>Pincode</Form.Label>
-              <Form.Control id="txtBillingPincode" name="billingPinCode" maxLength={10} defaultValue={clientData.billingPinCode} onChange={handleFieldChange} placeholder="Pincode" />
-            </Row>
-            <Row className="mb-3">
-              <Form.Label>Country<span className="text-danger">*</span></Form.Label>
-              <Form.Select id="txtBillingCountry" name="encryptedBillCountryCode" defaultValue={clientData.billCountryCode} onChange={handleFieldChange} required>
-                <option value=''>Select country</option>
-                {countryList.map((option, index) => (
-                  <option key={index} value={option.value}>{option.key}</option>
-                ))}
-              </Form.Select>
-              {Object.keys(clientError.billingCountryErr).map((key) => {
-                return <span className="error-message">{clientError.billingCountryErr[key]}</span>
-              })}
-            </Row>
-            <Row className="mb-3">
-              <Form.Label>State<span className="text-danger">*</span></Form.Label>
-              <Form.Select id="txtBillingState" name="encryptedBillStateCode" defaultValue={clientData.billStateCode} onChange={handleFieldChange} required>
-                <option value=''>Select state</option>
-                {billingStateList.map((option, index) => (
-                  <option key={index} value={option.value}>{option.key}</option>
-                ))}
-              </Form.Select>
-              {Object.keys(clientError.billingStateErr).map((key) => {
-                return <span className="error-message">{clientError.billingStateErr[key]}</span>
-              })}
-            </Row>
-          </Col>
+            <Col className="me-5 ms-5">
+              <Row className="mb-3">
+                <Form.Label>Billing Address<span className="text-danger">*</span></Form.Label>
+                <Form.Control id="txtBillingAddress" name="billingAddress1" maxLength={50} defaultValue={clientData.billingAddress1} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address" required />
+                {Object.keys(clientError.billingAddressErr).map((key) => {
+                  return <span className="error-message">{clientError.billingAddressErr[key]}</span>
+                })}
+                <Form.Control id="txtBillingAddress2" name="billingAddress2" maxLength={50} defaultValue={clientData.billingAddress2} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address 2" />
+                <Form.Control id="txtBillingAddress3" name="billingAddress3" maxLength={50} defaultValue={clientData.billingAddress3} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address 3" />
+              </Row>
+              <Row className="mb-3">
+                <Form.Label>Pincode</Form.Label>
+                <Form.Control id="txtBillingPincode" name="billingPinCode" maxLength={10} defaultValue={clientData.billingPinCode} onChange={handleFieldChange} placeholder="Pincode" />
+              </Row>
+              <Row className="mb-3">
+                <Form.Label>Country<span className="text-danger">*</span></Form.Label>
+                <Form.Select id="txtBillingCountry" name="encryptedBillCountryCode" defaultValue={clientData.billCountryCode} onChange={handleFieldChange} required>
+                  <option value=''>Select country</option>
+                  {countryList.map((option, index) => (
+                    <option key={index} value={option.value}>{option.key}</option>
+                  ))}
+                </Form.Select>
+                {Object.keys(clientError.billingCountryErr).map((key) => {
+                  return <span className="error-message">{clientError.billingCountryErr[key]}</span>
+                })}
+              </Row>
+              <Row className="mb-3">
+                <Form.Label>State<span className="text-danger">*</span></Form.Label>
+                <Form.Select id="txtBillingState" name="encryptedBillStateCode" defaultValue={clientData.billStateCode} onChange={handleFieldChange} required>
+                  <option value=''>Select state</option>
+                  {billingStateList.map((option, index) => (
+                    <option key={index} value={option.value}>{option.key}</option>
+                  ))}
+                </Form.Select>
+                {Object.keys(clientError.billingStateErr).map((key) => {
+                  return <span className="error-message">{clientError.billingStateErr[key]}</span>
+                })}
+              </Row>
+            </Col>
 
-          <Col className="me-5 ms-5">
-            <Row className="mb-3">
-              <Form.Label>PAN No.<span className="text-danger">*</span></Form.Label>
-              <Form.Control id="txtPAN" name="panNumber" maxLength={20} defaultValue={clientData.panNumber} onChange={handleFieldChange} placeholder="PAN No." required />
-              {Object.keys(clientError.panNoErr).map((key) => {
-                return <span className="error-message">{clientError.panNoErr[key]}</span>
-              })}
-            </Row>
-            <Row className="mb-3">
-              <Form.Label>GST No.<span className="text-danger">*</span></Form.Label>
-              <Form.Control id="txtGST" name="gstNumber" maxLength={20} defaultValue={clientData.gstNumber} onChange={handleFieldChange} placeholder="GST No." required />
-              {Object.keys(clientError.gstNoErr).map((key) => {
-                return <span className="error-message">{clientError.gstNoErr[key]}</span>
-              })}
-            </Row>
-            <Row className="mb-3">
-              <Form.Label>Status</Form.Label>
-              <Form.Select id="txtStatus" name="status" defaultValue={clientData.status} onChange={handleFieldChange}>
-                <option value="Active">Active</option>
-                <option value="Suspended">Suspended</option>
-              </Form.Select>
-            </Row>
-            <Row className="mb-3">
-              <Form.Label>No. of Companies</Form.Label>
-              <Form.Control type='number' min={1} id="numNoOfCompanies" max={9999} defaultValue={clientData.noOfComapnies} name="noOfComapnies" onChange={handleFieldChange} placeholder="No. of Companies" required />
-              {Object.keys(clientError.noOfCompaniesErr).map((key) => {
-                return <span className="error-message">{clientError.noOfCompaniesErr[key]}</span>
-              })}
-            </Row>
-            <Row className="mb-3">
-              <Form.Label>No. of Users</Form.Label>
-              <Form.Control type='number' min={1} id="numNoOfUsers" max={9999} defaultValue={clientData.noOfUsers} name="noOfUsers" onChange={handleFieldChange} placeholder="No. of Users" required />
-              {Object.keys(clientError.noOfUsersErr).map((key) => {
-                return <span className="error-message">{clientError.noOfUsersErr[key]}</span>
-              })}
-            </Row>
-          </Col>
-        </Row>
-      </Form>
+            <Col className="me-5 ms-5">
+              <Row className="mb-3">
+                <Form.Label>PAN No.<span className="text-danger">*</span></Form.Label>
+                <Form.Control id="txtPAN" name="panNumber" maxLength={20} defaultValue={clientData.panNumber} onChange={handleFieldChange} placeholder="PAN No." required />
+                {Object.keys(clientError.panNoErr).map((key) => {
+                  return <span className="error-message">{clientError.panNoErr[key]}</span>
+                })}
+              </Row>
+              <Row className="mb-3">
+                <Form.Label>GST No.<span className="text-danger">*</span></Form.Label>
+                <Form.Control id="txtGST" name="gstNumber" maxLength={20} defaultValue={clientData.gstNumber} onChange={handleFieldChange} placeholder="GST No." required />
+                {Object.keys(clientError.gstNoErr).map((key) => {
+                  return <span className="error-message">{clientError.gstNoErr[key]}</span>
+                })}
+              </Row>
+              <Row className="mb-3">
+                <Form.Label>Status</Form.Label>
+                <Form.Select id="txtStatus" name="status" defaultValue={clientData.status} onChange={handleFieldChange}>
+                  <option value="Active">Active</option>
+                  <option value="Suspended">Suspended</option>
+                </Form.Select>
+              </Row>
+              <Row className="mb-3">
+                <Form.Label>No. of Companies</Form.Label>
+                <Form.Control type='number' min={1} id="numNoOfCompanies" max={9999} defaultValue={clientData.noOfComapnies} name="noOfComapnies" onChange={handleFieldChange} placeholder="No. of Companies" required />
+                {Object.keys(clientError.noOfCompaniesErr).map((key) => {
+                  return <span className="error-message">{clientError.noOfCompaniesErr[key]}</span>
+                })}
+              </Row>
+              <Row className="mb-3">
+                <Form.Label>No. of Users</Form.Label>
+                <Form.Control type='number' min={1} id="numNoOfUsers" max={9999} defaultValue={clientData.noOfUsers} name="noOfUsers" onChange={handleFieldChange} placeholder="No. of Users" required />
+                {Object.keys(clientError.noOfUsersErr).map((key) => {
+                  return <span className="error-message">{clientError.noOfUsersErr[key]}</span>
+                })}
+              </Row>
+            </Col>
+          </Row>
+        </Form>
       }
     </>
   )
