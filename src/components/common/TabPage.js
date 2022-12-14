@@ -22,7 +22,7 @@ import { clientDetailsAction, clientContactDetailsAction, transactionDetailsActi
 
 import $ from 'jquery';
 
-const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, refreshList }) => {
+const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) => {
 
   const contactChanged = useSelector((state) => state.rootReducer.contactDetailChangedReducer)
   let clientContactDetailChanged = contactChanged.contactDetailChanged;
@@ -49,8 +49,6 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, ref
     }
   });
 
-  $("#AddClientDetailsForm").trackChanges();
-
   useEffect(() => {
     $('[data-rr-ui-event-key*="List"]').trigger('click');
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
@@ -67,6 +65,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, ref
     dispatch(clientDetailsErrorAction(undefined));
     dispatch(contactDetailChangedAction(undefined));
     dispatch(transactionDetailChangedAction(undefined));
+    $("#AddClientDetailsForm").data("changed", false);
   }
 
   $('[data-rr-ui-event-key*="List"]').click(function () {
@@ -96,7 +95,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, ref
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', false);
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
     $('#btnSave').attr('disabled', false);
-
+    $("#AddClientDetailsForm").trackChanges();
     clearClientReducers();
   })
 

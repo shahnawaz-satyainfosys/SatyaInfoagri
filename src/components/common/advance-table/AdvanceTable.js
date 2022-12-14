@@ -27,6 +27,7 @@ const AdvanceTable = ({
     dispatch(clientDetailsAction(rowData));
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', false);
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
+    $("#AddClientDetailsForm").trackChanges();
     $('#btnSave').attr('disabled', true);
     localStorage.setItem('EncryptedResponseClientCode', rowData.encryptedClientCode);
     $("#AddContactDetailsForm").hide();
