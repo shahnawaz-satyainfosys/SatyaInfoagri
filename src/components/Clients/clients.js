@@ -262,8 +262,9 @@ export const Client = () => {
             toast.success(res.data.message, {
               theme: 'colored'
             });
-            $("#AddClientDetailsForm").data("changed", false);
-            // $('[data-rr-ui-event-key*="List"]').click();
+            updateCallback();
+            // To-do: Do not redirect to List, instead change Save button click function to updateClient after successfully add
+            $('[data-rr-ui-event-key*="List"]').click();
           } else {
             toast.error(res.data.message, {
               theme: 'colored'
@@ -325,7 +326,7 @@ export const Client = () => {
         ModifyUser: localStorage.getItem("LoginUserName")
       }
 
-      var updateRequired = $("#AddClientDetailsForm").isChanged() ||        clientContactDetailChanged.contactDetailsChanged || transactionDetailChanged.transactionDetailChanged;
+      var updateRequired = $("#AddClientDetailsForm").isChanged() || clientContactDetailChanged.contactDetailsChanged || transactionDetailChanged.transactionDetailChanged;
 
       if (!updateRequired) {
         toast.warning("Nothing to change!", {
@@ -334,7 +335,7 @@ export const Client = () => {
 
         return;
       }
-debugger
+
       if ($("#AddClientDetailsForm").isChanged()) {
         setIsLoading(true);
         axios.post(process.env.REACT_APP_API_URL + '/update-client', updatedUserData, {

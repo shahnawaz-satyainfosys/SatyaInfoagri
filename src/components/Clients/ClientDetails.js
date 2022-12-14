@@ -40,7 +40,7 @@ export const ClientDetails = () => {
       "pinCode":"",
       "state":"",
       "stateCode":"",
-      "status":""
+      "status":"Active"
    }
   }
 

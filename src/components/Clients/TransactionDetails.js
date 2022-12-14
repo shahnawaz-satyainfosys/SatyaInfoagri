@@ -410,7 +410,7 @@ export const TransactionDetails = () => {
                         </Row>
                         <Row className="mb-3 payment-mode-details">
                             <Form.Label id="lblPaymentModeNo">Cheque No.</Form.Label>
-                            <Form.Control id="txtChequeNo" name="chequeNo" onChange={handleFieldChange} placeholder="Enter number" />
+                            <Form.Control id="txtChequeNo" name="chequeNo" maxLength={15} onChange={handleFieldChange} placeholder="Enter number" />
                             {Object.keys(chequeNoErr).map((key) => {
                                 return <span className="error-message">{chequeNoErr[key]}</span>
                             })}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { Button, Col, Form, Row, Spinner } from 'react-bootstrap';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateClientContactDetailsAction } from '../../actions/index';
@@ -35,7 +35,6 @@ const ContactDetails = () => {
   const [formHasError, setFormError] = useState(false);
   const [contactNameErr, setContactNameErr] = useState({});
   const [contactMobileNoErr, setContactMobileNoErr] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
 
   const validateContactDetailForm = () => {
     const contactNameErr = {};
@@ -151,12 +150,6 @@ const ContactDetails = () => {
 
   return (
     <>
-      {isLoading ? (
-        <Spinner
-          className="position-absolute start-50 loader-color"
-          animation="border"
-        />
-      ) : null}
       {contactDetailData &&
         <Form noValidate validated={formHasError} className="details-form" id='AddContactForm'>
           <Row>
@@ -169,8 +162,8 @@ const ContactDetails = () => {
                 })}
               </Row>
               <Row className="mb-3">
-                <Form.Label>Mobile No</Form.Label>
-                <Form.Control id="txtMobileno" name="mobileNo" maxLength={10} value={contactDetailData.mobileNo} onChange={handleFieldChange} placeholder="Mobile No" required />
+                <Form.Label>Mobile No<span className="text-danger">*</span></Form.Label>
+                <Form.Control type='number' id="txtMobileno" name="mobileNo" maxLength={10} value={contactDetailData.mobileNo} onChange={handleFieldChange} placeholder="Mobile No" required />
                 {Object.keys(contactMobileNoErr).map((key) => {
                   return <span className="error-message">{contactMobileNoErr[key]}</span>
                 })}
