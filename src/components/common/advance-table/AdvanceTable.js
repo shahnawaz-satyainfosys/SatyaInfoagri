@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
 import { Badge, Table } from 'react-bootstrap';
 import axios from 'axios';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { clientContactDetailsAction } from '../../../actions/index';
 import { transactionDetailsAction } from '../../../actions/index';
@@ -19,12 +19,15 @@ const AdvanceTable = ({
   tableProps
 }) => {
 
+  var [srNo, setSrNo] = useState(0);
+
   const dispatch = useDispatch();
 
   const toTabPage = (rowData) => {
     dispatch(clientDetailsAction(rowData));
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', false);
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
+    $('#btnSave').attr('disabled', true);
     localStorage.setItem('EncryptedResponseClientCode', rowData.encryptedClientCode);
     $("#AddContactDetailsForm").hide();
     $("#btnAddClientDetail").hide();
@@ -80,7 +83,7 @@ const AdvanceTable = ({
         transactionDetailsData = res.data.data.length > 0 ? res.data.data : [];
         dispatch(transactionDetailsAction(transactionDetailsData));
 
-        if (res.data.status == 200) {        
+        if (res.data.status == 200) {
           if (res.data && res.data.data.length > 0) {
             $("#TransactionDetailsTable").show();
             $("#TransactionDetailsListCard").show();
@@ -132,31 +135,34 @@ const AdvanceTable = ({
               return (
                 <tr key={i} className={rowClassName} {...row.getRowProps()} onDoubleClick={() => toTabPage(row.original)}>
                   {row.cells.map((cell, index) => {
+
+                    //setSrNo(1);
+
                     return (
                       <td
                         key={index}
                         {...cell.getCellProps(cell.column.cellProps)}
                       >
                         {
-                          index == 0 ?  
-                          i + 1 :
-                          cell.column.id != "status" ?
-                          cell.render('Cell') :
-                          cell.row.values.status == "Active" ?
-                          <Badge
-                            pill
-                            bg="success"
-                          >
-                            {cell.render('Cell')}
-                          </Badge> :
-                          cell.row.values.status == "Suspended" ? 
-                          <Badge
-                            pill
-                            bg="secondary"
-                          >
-                            {cell.render('Cell')}
-                          </Badge> : ''
-                          }
+                          index == 0 ?
+                            srNo++ :
+                            cell.column.id != "status" ?
+                              cell.render('Cell') :
+                              cell.row.values.status == "Active" ?
+                                <Badge
+                                  pill
+                                  bg="success"
+                                >
+                                  {cell.render('Cell')}
+                                </Badge> :
+                                cell.row.values.status == "Suspended" ?
+                                  <Badge
+                                    pill
+                                    bg="secondary"
+                                  >
+                                    {cell.render('Cell')}
+                                  </Badge> : ''
+                        }
                       </td>
                     );
                   })}
@@ -171,7 +177,7 @@ const AdvanceTable = ({
 };
 
 setTimeout(() => {
-  $("#advanceTable tbody tr").click(function() {
+  $("#advanceTable tbody tr").click(function () {
     if ($(this).hasClass("row-selected")) {
       return;
     }

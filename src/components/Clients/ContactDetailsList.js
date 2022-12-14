@@ -55,6 +55,10 @@ const ContactDetailsList = () => {
     });
 
     dispatch(clientContactDetailsAction(contactDetailReducer.clientContactDetails));
+
+    if($("#btnSave").attr('disabled'))
+          $("#btnSave").attr('disabled', false);
+          
     setModalShow(false);
 
     const contactDetailDeleted = {

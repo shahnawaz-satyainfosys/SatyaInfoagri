@@ -82,6 +82,9 @@ const ContactDetails = () => {
 
       dispatch(contactDetailChangedAction(addContactDetail));
 
+      if($("#btnSave").attr('disabled'))
+          $("#btnSave").attr('disabled', false);
+
       toast.success("Contact Added Successfully", {
         theme: 'colored'
       });
@@ -117,6 +120,9 @@ const ContactDetails = () => {
       }
 
       dispatch(contactDetailChangedAction(updateContactDetail));
+
+      if($("#btnSave").attr('disabled'))
+          $("#btnSave").attr('disabled', false);
 
       toast.success("Contact Updated Successfully", {
         theme: 'colored'

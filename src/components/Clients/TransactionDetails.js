@@ -29,7 +29,6 @@ export const TransactionDetails = () => {
     const dispatch = useDispatch();
     const [amountPayable, setAmountPayable] = useState();
     const [moduleList, setModuleList] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
     const [formHasError, setFormError] = useState(false);
     const [moduleNameErr, setModuleNameErr] = useState({});
     const [startDateErr, setStartDateErr] = useState({});
@@ -196,6 +195,18 @@ export const TransactionDetails = () => {
         return isValid;
     }
 
+    const clearStates = () => {
+        setFormError(false);
+        setModuleNameErr({});
+        setStartDateErr({});
+        setEndDateErr({});
+        setAmountErr({});
+        setPaymentModeErr({});
+        setChequeNoErr({});
+        setChequeDateErr({});
+        setChequeBankErr({});
+    }
+
     const submitTransactionDetails = e => {
         e.preventDefault();
 
@@ -207,7 +218,7 @@ export const TransactionDetails = () => {
                 encryptedClientCode: localStorage.getItem("EncryptedResponseClientCode"),
                 encryptedModuleCode: formData.moduleName,
                 moduleName: $("#selModuleName").find("option:selected").text(),
-                startdate: formData.startDate,
+                startDate: formData.startDate,
                 endDate: formData.endDate,
                 paymentMode: formData.paymentMode,
                 chequeNo: formData.chequeNo,
@@ -219,44 +230,47 @@ export const TransactionDetails = () => {
                 totalAmount: amountPayable
             }
 
-            dispatch(transactionDetailsAction(transactionData));
+            var loopBreaked = false;
+            transactionDetailData.forEach(transactionDetail => {
+                if (!loopBreaked) {
+                    if (transactionDetail.moduleName == transactionData.moduleName) {
+                        debugger
+                        if ((Moment(transactionDetail.startDate).format("YYYY-MM-DD") <= formData.startDate && Moment(transactionDetail.endDate).format("YYYY-MM-DD") >= formData.startDate) ||
+                            (Moment(transactionDetail.startDate).format("YYYY-MM-DD") <= formData.endDate && Moment(transactionDetail.endDate).format("YYYY-MM-DD") >= formData.endDate)) {
+                            toast.error(`For this date range ${transactionData.moduleName} already exists, please select other date range`, {
+                                theme: 'colored'
+                            });
 
-            // var loopBreaked = false;
-            // transactionDetailData.forEach(transactionDetail => {
-            //     if (!loopBreaked) {
-            //         if (transactionDetail.moduleName == transactionData.moduleName) {
-            //             if ((Moment(transactionDetail.startDate).format("YYYY-MM-DD") >= formData.startDate && Moment(transactionDetail.endDate).format("YYYY-MM-DD") <= formData.startDate) ||
-            //                  (Moment(transactionDetail.startDate).format("YYYY-MM-DD") >= formData.endDate && Moment(transactionDetail.endDate).format("YYYY-MM-DD") <= formData.endDate) ||
-            //                  (formData.startDate >= Moment(transactionDetail.startDate).format("YYYY-MM-DD") && formData.endDate <= Moment(transactionDetail.startDate).format("YYYY-MM-DD")) ||
-            //                  (formData.startDate >= Moment(transactionDetail.endDate).format("YYYY-MM-DD") && formData.endDate <= Moment(transactionDetail.endDate).format("YYYY-MM-DD"))) {
-            //                 toast.error(`For this date range ${transactionData.moduleName} already exists, please select other date range`, {
-            //                     theme: 'colored'
-            //                 });
+                            loopBreaked = true;
+                        }
+                    }
+                }
+            })
 
-            //                 loopBreaked = true;
-            //             }
-            //         } else {
-            //             dispatch(transactionDetailsAction(transactionData));
-            //         }
-            //     }
-            // })
+            if (!loopBreaked) {
+                dispatch(transactionDetailsAction(transactionData));
 
-            const addTransactionDetail = {
-                transactionDetailChanged: true
+                const addTransactionDetail = {
+                    transactionDetailChanged: true
+                }
+
+                dispatch(transactionDetailChangedAction(addTransactionDetail));
+
+                if ($("#btnSave").attr('disabled'))
+                    $("#btnSave").attr('disabled', false);
+
+                toast.success("Transaction Added Successfully", {
+                    theme: 'colored'
+                });
+
+                $("#TransactionDetailsTable").show();
+                $("#TransactionDetailsListCard").show();
+
+                setAmountPayable('');
+                $(form)[0].reset();
+                setFormData(initialState);
+                clearStates();
             }
-
-            dispatch(transactionDetailChangedAction(addTransactionDetail));
-
-            toast.success("Transaction Added Successfully", {
-                theme: 'colored'
-            });
-
-            $("#TransactionDetailsTable").show();
-            $("#TransactionDetailsListCard").show();
-
-            setAmountPayable('');
-            setFormData(initialState);
-            $(form)[0].reset();
         }
     };
 
@@ -348,13 +362,6 @@ export const TransactionDetails = () => {
 
     return (
         <>
-            {isLoading ? (
-                <Spinner
-                    className="position-absolute start-50 loader-color"
-                    animation="border"
-                />
-            ) : null}
-
             <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { submitTransactionDetails(e) }} id='AddClientTransactionDetailsForm'>
                 <Row>
                     <Col className="me-5 ms-5">
@@ -388,7 +395,7 @@ export const TransactionDetails = () => {
 
                     <Col className="me-5 ms-5">
                         <Row className="mb-3">
-                            <Form.Label>Payment Mode</Form.Label>
+                            <Form.Label>Payment Mode<span className="text-danger">*</span></Form.Label>
                             <Form.Select id="txtPaymentMode" name="paymentMode" onChange={handleFieldChange} required>
                                 <option value=''>Select payment mode</option>
                                 <option value="CQ">Cheque</option>

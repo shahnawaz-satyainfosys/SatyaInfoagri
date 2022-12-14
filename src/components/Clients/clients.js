@@ -26,7 +26,6 @@ export const Client = () => {
   const [listData, setListData] = useState([]);
   const [perPage, setPerPage] = useState(15);
   const [isLoading, setIsLoading] = useState(false);
-  const [modalShow, setModalShow] = useState();
 
   const fetchUsers = async (page, size = perPage) => {
     let token = localStorage.getItem('Token');
@@ -182,8 +181,14 @@ export const Client = () => {
         toast.error(contactDetailErr.contactEmpty, {
           theme: 'colored'
         });
-      }, 1000);
+      }, 500);
       isValid = false;
+      $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
+
+      setTimeout(() => {
+        document.getElementById("ContactDetailsTable").scrollIntoView({ behavior: 'smooth' });
+      }, 500)
+
       setFormError(true);
       $("#TransactionDetailsListCard").show();
     }
@@ -196,6 +201,8 @@ export const Client = () => {
         });
       }, 1000);
       isValid = false;
+      if (!contactDetailErr.contactEmpty)
+        $('[data-rr-ui-event-key*="Transaction Details"]').trigger('click');
       setFormError(true);
     }
 
@@ -266,6 +273,31 @@ export const Client = () => {
     }
   }
 
+  const updateCallback = () => {
+
+    clientContactDetailChanged = {
+      clientContactDetailChanged: false
+    }
+
+    dispatch(contactDetailChangedAction(clientContactDetailChanged));
+
+    transactionDetailChanged = {
+      transactionDetailChanged: false
+    }
+
+    dispatch(transactionDetailChangedAction(transactionDetailChanged));
+
+    localStorage.removeItem("DeleteContactDetailsId");
+
+    toast.success("Client details updated successfully!", {
+      theme: 'colored'
+    });
+
+    $('#btnSave').attr('disabled', true)
+
+    fetchUsers(1);
+  }
+
   const updateClientDetails = () => {
     if (clientValidation()) {
       const updatedUserData = {
@@ -291,6 +323,16 @@ export const Client = () => {
         ModifyUser: localStorage.getItem("LoginUserName")
       }
 
+      var updateRequired = $("#AddClientDetailsForm").isChanged() ||        clientContactDetailChanged.contactDetailsChanged || transactionDetailChanged.transactionDetailChanged;
+
+      if (!updateRequired) {
+        toast.warning("Nothing to change!", {
+          theme: 'colored'
+        });
+
+        return;
+      }
+
       if ($("#AddClientDetailsForm").isChanged()) {
         setIsLoading(true);
         axios.post(process.env.REACT_APP_API_URL + '/update-client', updatedUserData, {
@@ -303,35 +345,55 @@ export const Client = () => {
                 theme: 'colored'
               });
             }
+            else if (!clientContactDetailChanged.contactDetailsChanged && !transactionDetailChanged.transactionDetailChanged) {
+              updateCallback();
+            }
           })
         $('#AddClientDetailsForm').get(0).reset();
       }
 
-      if (clientContactDetailChanged.contactDetailsChanged) {
-        contactDetailData.forEach(async contactDetails => {
+      var deleteContactDetailsId = localStorage.getItem("DeleteContactDetailsId")
 
-          if (!contactDetails.encryptedClientContactDetailsId) {
-            const addContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', contactDetails);
-            //To-do: Break loop if response is not 200
-            if (addContactDetailResponse.data.status != 200) {
-              toast.error(addContactDetailResponse.data.message, {
-                theme: 'colored'
-              });
+      if (clientContactDetailChanged.contactDetailsChanged) {
+        var loopBreaked = false;
+        var contactDetailIndex = 1;
+        contactDetailData.forEach(async contactDetails => {
+          if (!loopBreaked) {
+            if (contactDetails.encryptedClientContactDetailsId) {
+              const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
+              
+              if (updateContactDetailResponse.data.status != 200) {
+                toast.error(updateContactDetailResponse.data.message, {
+                  theme: 'colored'
+                });
+                loopBreaked = true;
+              }
+              else if (contactDetailIndex == contactDetailData.length && !loopBreaked && !deleteContactDetailsId) {
+                updateCallback();
+              }
+              else {
+                contactDetailIndex++;
+              }
             }
-          }
-          else if (contactDetails.encryptedClientContactDetailsId) {
-            const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
-            //To-do: Break loop if response is not 200
-            if (updateContactDetailResponse.data.status != 200) {
-              toast.error(updateContactDetailResponse.data.message, {
-                theme: 'colored'
-              });
+            else if (!contactDetails.encryptedClientContactDetailsId) {
+              const addContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', contactDetails);
+              if (addContactDetailResponse.data.status != 200) {
+                toast.error(addContactDetailResponse.data.message, {
+                  theme: 'colored'
+                });
+                loopBreaked = true;
+              }
+              else if (contactDetailIndex == contactDetailData.length && !loopBreaked && !deleteContactDetailsId) {
+                updateCallback();
+              }
+              else {
+                contactDetailIndex++;
+              }
             }
           }
         });
 
-        var deleteContactDetailsId = localStorage.getItem("DeleteContactDetailsId")
-        if (deleteContactDetailsId && clientContactDetailChanged.contactDetailsChanged) {
+        if (deleteContactDetailsId && clientContactDetailChanged.contactDetailsChanged && !loopBreaked) {
           const data = { encryptedClientContactDetailsId: deleteContactDetailsId }
           axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data })
             .then(res => {
@@ -340,22 +402,17 @@ export const Client = () => {
                 toast.error(res.data.message, {
                   theme: 'colored'
                 });
+                loopBreaked = true;
               }
-              else {
-                localStorage.removeItem("DeleteContactDetailsId");
+              else if (!loopBreaked && !transactionDetailChanged.transactionDetailChanged) {
+                updateCallback();
               }
             })
         }
-
-        clientContactDetailChanged = {
-          contactDetailsChanged: false
-        }
-
-        dispatch(contactDetailChangedAction(clientContactDetailChanged));
       }
 
-
-      if (transactionDetailChanged.transactionDetailChanged) {
+      if (transactionDetailChanged.transactionDetailChanged && !loopBreaked) {
+        var transactionDetailIndex = 1;
         transactionDetailData.filter(x => !x.encryptedClientRegisterationAuthorizationId).forEach(async transactionDetail => {
           if (transactionDetail.encryptedClientRegisterationAuthorizationId == '') {
             delete transactionDetail.encryptedClientRegisterationAuthorizationId;
@@ -364,20 +421,15 @@ export const Client = () => {
               toast.error(transactionDetailResponse.data.message, {
                 theme: 'colored'
               });
+
+              loopBreaked = true;
+            }
+            else if (transactionDetailIndex == transactionDetailData.length && !loopBreaked) {
+              updateCallback();
             }
           }
         })
-
-        transactionDetailChanged = {
-          transactionDetailChanged: false
-        }
-
-        dispatch(transactionDetailChangedAction(transactionDetailChanged));
       }
-
-      toast.success("Client details updated successfully!", {
-        theme: 'colored'
-      });
     }
   };
 
@@ -394,7 +446,6 @@ export const Client = () => {
         listColumnArray={listColumnArray}
         tabArray={tabArray}
         module="Client"
-        refreshList={fetchUsers}
         saveDetails={!clientData.encryptedClientCode ? addClientDetails : updateClientDetails}
       />
     </>

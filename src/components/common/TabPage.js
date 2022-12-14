@@ -17,7 +17,7 @@ import AdvanceTableFooter from 'components/common/advance-table/AdvanceTableFoot
 import AdvanceTableSearchBox from 'components/common/advance-table/AdvanceTableSearchBox';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { clientDetailsAction, clientContactDetailsAction, transactionDetailsAction, clientDetailsErrorAction } from '../../actions/index';
+import { clientDetailsAction, clientContactDetailsAction, transactionDetailsAction, clientDetailsErrorAction, contactDetailChangedAction, transactionDetailChangedAction } from '../../actions/index';
 
 
 import $ from 'jquery';
@@ -39,6 +39,8 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, ref
     trackChanges: function () {
       $(":input", this).change(function () {
         $(this.form).data("changed", true);
+        if($("#btnSave").attr('disabled'))
+          $("#btnSave").attr('disabled', false);
       });
     }
     ,
@@ -54,22 +56,17 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, ref
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
     $("#btnNew").show();
     $("#btnSave").hide();
+    $('#btnSave').attr('disabled', true)
     $("#btnCancel").hide();
   }, []);
-
-  if (Object.keys(clientError.contactDetailErr).length != 0) {
-    $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
-  }
-  if (Object.keys(clientError.transactionDetailErr).length != 0 && Object.keys(clientError.contactDetailErr).length === 0) {
-    $('[data-rr-ui-event-key*="Transaction Details"]').trigger('click');
-  }
 
   const clearClientReducers = () => {
     dispatch(clientDetailsAction(undefined));
     dispatch(clientContactDetailsAction(undefined));
     dispatch(transactionDetailsAction(undefined));
     dispatch(clientDetailsErrorAction(undefined));
-    //To-do: Clear contact, form, transaction changed reducers
+    dispatch(contactDetailChangedAction(undefined));
+    dispatch(transactionDetailChangedAction(undefined));
   }
 
   $('[data-rr-ui-event-key*="List"]').click(function () {
@@ -78,7 +75,6 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, ref
     $("#btnCancel").hide();
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
     $('[data-rr-ui-event-key*="List"]').attr('disabled', false);
-    refreshList(1);
     clearClientReducers();
   })
 
@@ -99,6 +95,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, ref
   $('#btnNew').click(function () {
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', false);
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
+    $('#btnSave').attr('disabled', false);
 
     clearClientReducers();
   })
