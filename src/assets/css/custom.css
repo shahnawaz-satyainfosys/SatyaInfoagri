@@ -24,11 +24,12 @@
     font-size: 15px;
 }
 
-.table-striped tr:hover{
+.table-striped tr:hover {
     cursor: pointer;
 }
 
-.row-selected, .table-striped tr:hover{
+.row-selected,
+.table-striped tr:hover {
     cursor: pointer;
     background-color: #5e6e8221;
 }
@@ -37,11 +38,11 @@
     background-color: var(--falcon-table-bg) !important;
 }
 
-.navbar{
+.navbar {
     padding: 0 10px 0 0 !important;
 }
 
-.navbar-top{
+.navbar-top {
     min-height: unset !important;
 }
 
@@ -50,19 +51,69 @@
     margin-bottom: -5px !important;
 }
 
-.toggle-logo{
+.toggle-logo {
     padding-bottom: 5px;
 }
 
-@media (min-width: 1200px)
-{
+@media (min-width:320px) {
+    /* smartphones, iPhone, portrait 480x320 phones */
+}
+
+@media (min-width:481px) {
+    /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
+}
+
+@media (min-width:641px) {
+    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
+}
+
+@media (min-width:961px) {}
+
+@media (min-width:1025px) {
     .navbar-vertical.navbar-expand-xl+.content {
-        margin-left: 13.5rem !important;
+        margin-left: 13.625rem !important;
+    }
+
+    .navbar-vertical-collapsed .navbar-vertical.navbar-expand-xl+.content {
+        margin-left: 2.125rem !important;
+    }
+
+    .footer-credits {
+        margin-left: 250px !important;
+    }
+
+    .tab-content .tab-page-list-card {
+        max-height: 350px;
+        overflow-y: scroll;
     }
 }
 
-.navbar-collapse
-{
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1400px !important;
+    }
+}
+
+@media (min-width:1281px) {
+    .footer-credits {
+        margin-left: 300px !important;
+    }
+
+    .navbar-vertical.navbar-expand-xl+.content {
+        margin-left: 13.625rem !important;
+    }
+
+    .navbar-vertical-collapsed .navbar-vertical.navbar-expand-xl+.content {
+        margin-left: 2.125rem !important;
+    }
+
+    .tab-content .tab-page-list-card {
+        max-height: 420px;
+        overflow-y: scroll;
+    }
+}
+
+.navbar-collapse {
     max-height: 1260px;
     overflow: scroll;
 }

@@ -262,8 +262,8 @@ export const Client = () => {
             toast.success(res.data.message, {
               theme: 'colored'
             });
-
-            $('[data-rr-ui-event-key*="List"]').click();
+            $("#AddClientDetailsForm").data("changed", false);
+            // $('[data-rr-ui-event-key*="List"]').click();
           } else {
             toast.error(res.data.message, {
               theme: 'colored'
@@ -274,6 +274,8 @@ export const Client = () => {
   }
 
   const updateCallback = () => {
+
+    $("#AddClientDetailsForm").data("changed", false);
 
     clientContactDetailChanged = {
       clientContactDetailChanged: false
@@ -332,7 +334,7 @@ export const Client = () => {
 
         return;
       }
-
+debugger
       if ($("#AddClientDetailsForm").isChanged()) {
         setIsLoading(true);
         axios.post(process.env.REACT_APP_API_URL + '/update-client', updatedUserData, {
@@ -357,6 +359,7 @@ export const Client = () => {
       if (clientContactDetailChanged.contactDetailsChanged) {
         var loopBreaked = false;
         var contactDetailIndex = 1;
+
         contactDetailData.forEach(async contactDetails => {
           if (!loopBreaked) {
             if (contactDetails.encryptedClientContactDetailsId) {
@@ -413,9 +416,10 @@ export const Client = () => {
 
       if (transactionDetailChanged.transactionDetailChanged && !loopBreaked) {
         var transactionDetailIndex = 1;
-        transactionDetailData.filter(x => !x.encryptedClientRegisterationAuthorizationId).forEach(async transactionDetail => {
-          if (transactionDetail.encryptedClientRegisterationAuthorizationId == '') {
-            delete transactionDetail.encryptedClientRegisterationAuthorizationId;
+        var newTransactions = transactionDetailData.filter(x => !x.encryptedClientRegisterationAuthorizationId);
+        newTransactions.forEach(async (transactionDetail) => {
+          // if (transactionDetail.encryptedClientRegisterationAuthorizationId == '') {
+          //   delete transactionDetail.encryptedClientRegisterationAuthorizationId;
             const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail);
             if (transactionDetailResponse.data.status != 200) {
               toast.error(transactionDetailResponse.data.message, {
@@ -424,10 +428,10 @@ export const Client = () => {
 
               loopBreaked = true;
             }
-            else if (transactionDetailIndex == transactionDetailData.length && !loopBreaked) {
+            else if (transactionDetailIndex == newTransactions.length && !loopBreaked) {
               updateCallback();
             }
-          }
+          //}
         })
       }
     }

@@ -19,8 +19,6 @@ const AdvanceTable = ({
   tableProps
 }) => {
 
-  var [srNo, setSrNo] = useState(0);
-
   const dispatch = useDispatch();
 
   const toTabPage = (rowData) => {
@@ -137,16 +135,12 @@ const AdvanceTable = ({
                 <tr key={i} className={rowClassName} {...row.getRowProps()} onDoubleClick={() => toTabPage(row.original)}>
                   {row.cells.map((cell, index) => {
 
-                    //setSrNo(1);
-
                     return (
                       <td
                         key={index}
                         {...cell.getCellProps(cell.column.cellProps)}
                       >
                         {
-                          index == 0 ?
-                            srNo++ :
                             cell.column.id != "status" ?
                               cell.render('Cell') :
                               cell.row.values.status == "Active" ?

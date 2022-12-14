@@ -20,7 +20,21 @@ export const AdvanceTableFooter = ({
   rowsPerPageOptions = [5, 10, 15],
   className
 }) => {
+
+  const changeSrNo = () => {
+    var srNoStart = pageSize * pageIndex + 1;
+
+    $("#advanceTable td:nth-child(1)").each(function() {
+      $(this).text(srNoStart++);
+    });
+  }
+
+  setTimeout(function() {
+    changeSrNo();
+  }, 100);
+
   return (
+
     <Flex
       className={classNames(
         className,

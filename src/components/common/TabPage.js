@@ -242,7 +242,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
           return (
             <Tab eventKey={tab} title={tab} className="border p-3">
               {index == 0 && listData && (
-                <FalconComponentCard>
+                <FalconComponentCard className="tab-page-list-card">
                   <FalconComponentCard.Body
                     code={searchableTableCode}
                     scope={{
