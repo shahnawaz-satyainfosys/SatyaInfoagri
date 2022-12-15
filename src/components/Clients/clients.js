@@ -447,7 +447,7 @@ export const Client = () => {
 
               const deleteContactResponse = await axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data });
               if (deleteContactResponse.data.status != 200) {
-                toast.error(res.data.message, {
+                toast.error(deleteContactResponse.data.message, {
                   theme: 'colored'
                 });
                 loopBreaked = true;

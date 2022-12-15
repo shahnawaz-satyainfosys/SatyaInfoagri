@@ -10,46 +10,46 @@ export const ClientDetails = () => {
   const dispatch = useDispatch();
 
   const resetClientData = () => {
-    clientData = {
-      "address1":"",
-      "address2":"",
-      "address3":"",
-      "billCountryCode":"",
-      "billStateCode":"",
-      "billingAddress1":"",
-      "billingAddress2":"",
-      "billingAddress3":"",
-      "billingCountry":"",
-      "billingPinCode":"",
-      "billingState":"",
-      "contactNo":"",
-      "contactPerson":"",
-      "country":"",
-      "countryCode":"",
-      "customerName":"",
-      "encryptedBillCountryCode":"",
-      "encryptedBillStateCode":"",
-      "encryptedClientCode":"",
-      "encryptedCountryCode":"",
-      "encryptedStateCode":"",
-      "fullAddress":"",
-      "gstNumber":"",
-      "noOfComapnies":1,
-      "noOfUsers":1,
-      "panNumber":"",
-      "pinCode":"",
-      "state":"",
-      "stateCode":"",
-      "status":"Active"
-   }
+    dispatch(clientDetailsAction({
+      "address1": "",
+      "address2": "",
+      "address3": "",
+      "billCountryCode": "",
+      "billStateCode": "",
+      "billingAddress1": "",
+      "billingAddress2": "",
+      "billingAddress3": "",
+      "billingCountry": "",
+      "billingPinCode": "",
+      "billingState": "",
+      "contactNo": "",
+      "contactPerson": "",
+      "country": "",
+      "countryCode": "",
+      "customerName": "",
+      "encryptedBillCountryCode": "",
+      "encryptedBillStateCode": "",
+      "encryptedClientCode": "",
+      "encryptedCountryCode": "",
+      "encryptedStateCode": "",
+      "fullAddress": "",
+      "gstNumber": "",
+      "noOfComapnies": 1,
+      "noOfUsers": 1,
+      "panNumber": "",
+      "pinCode": "",
+      "state": "",
+      "stateCode": "",
+      "status": "Active"
+    }));
   }
 
   const clientDetailsReducer = useSelector((state) => state.rootReducer.clientDetailsReducer)
   var clientData = clientDetailsReducer.clientDetails;
 
   if (!clientDetailsReducer.clientDetails ||
-       clientDetailsReducer.clientDetails.length <= 0) {
-        resetClientData();
+    clientDetailsReducer.clientDetails.length <= 0) {
+    resetClientData();
   }
 
   const clientDetailsErrorReducer = useSelector((state) => state.rootReducer.clientDetailsErrorReducer)

@@ -30,9 +30,6 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
   const transactionChanged = useSelector((state) => state.rootReducer.transactionDetailChangedReducer)
   let transactionDetailChanged = transactionChanged.transactionDetailChanged;
 
-  const clientDetailsErrorReducer = useSelector((state) => state.rootReducer.clientDetailsErrorReducer)
-  const clientError = clientDetailsErrorReducer.clientDetailsError;
-
   const dispatch = useDispatch();
 
   $.fn.extend({
