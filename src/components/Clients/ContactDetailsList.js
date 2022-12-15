@@ -37,18 +37,22 @@ const ContactDetailsList = () => {
 
   const ModalPreview = (encryptedClientContactDetailsId, contactMobileNoToDelete) => {
     setModalShow(true);
-    setParamsData({encryptedClientContactDetailsId, contactMobileNoToDelete});
+    setParamsData({ encryptedClientContactDetailsId, contactMobileNoToDelete });
   }
 
   const deleteContactDetails = () => {
 
-    if(!paramsData)
-        return false;
-    
+    if (!paramsData)
+      return false;
+
     var objectIndex = contactDetailReducer.clientContactDetails.findIndex(x => x.mobileNo == paramsData.contactMobileNoToDelete);
     contactDetailReducer.clientContactDetails.splice(objectIndex, 1)
 
-    localStorage.setItem("DeleteContactDetailsId", paramsData.encryptedClientContactDetailsId)
+    var deleteContactDetailId = localStorage.getItem("DeleteContactDetailsId");
+
+    var deleteContactDetail = deleteContactDetailId ? deleteContactDetailId + "," + paramsData.encryptedClientContactDetailsId : paramsData.encryptedClientContactDetailsId;
+
+    localStorage.setItem("DeleteContactDetailsId", deleteContactDetail);
 
     toast.success("Contact deleted successfully", {
       theme: 'colored'
@@ -56,9 +60,9 @@ const ContactDetailsList = () => {
 
     dispatch(clientContactDetailsAction(contactDetailReducer.clientContactDetails));
 
-    if($("#btnSave").attr('disabled'))
-          $("#btnSave").attr('disabled', false);
-          
+    if ($("#btnSave").attr('disabled'))
+      $("#btnSave").attr('disabled', false);
+
     setModalShow(false);
 
     const contactDetailDeleted = {

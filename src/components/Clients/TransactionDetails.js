@@ -90,6 +90,10 @@ export const TransactionDetails = () => {
             endDateErr.endDateEmpty = "Select end date";
             isValid = false;
             setFormError(true);
+        } else if (formData.endDate < formData.startDate) {
+            endDateErr.endDateInvalid = "End date cannot be lesser than Start Date";
+            isValid = false;
+            setFormError(true);
         }
 
         if (formData.amount <= 0) {
@@ -234,7 +238,6 @@ export const TransactionDetails = () => {
             transactionDetailData.forEach(transactionDetail => {
                 if (!loopBreaked) {
                     if (transactionDetail.moduleName == transactionData.moduleName) {
-                        debugger
                         if ((Moment(transactionDetail.startDate).format("YYYY-MM-DD") <= formData.startDate && Moment(transactionDetail.endDate).format("YYYY-MM-DD") >= formData.startDate) ||
                             (Moment(transactionDetail.startDate).format("YYYY-MM-DD") <= formData.endDate && Moment(transactionDetail.endDate).format("YYYY-MM-DD") >= formData.endDate)) {
                             toast.error(`For this date range ${transactionData.moduleName} already exists, please select other date range`, {
@@ -270,6 +273,7 @@ export const TransactionDetails = () => {
                 $(form)[0].reset();
                 setFormData(initialState);
                 clearStates();
+                $('.payment-mode-details').hide();
             }
         }
     };

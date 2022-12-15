@@ -48,6 +48,7 @@ export const Client = () => {
 
   useEffect(() => {
     fetchUsers(1);
+    localStorage.removeItem("DeleteContactDetailsId");
   }, []);
 
   const dispatch = useDispatch();
@@ -99,52 +100,61 @@ export const Client = () => {
     const transactionDetailErr = {};
 
     let isValid = true;
+    let isClientValid = true;
 
     if (!clientData.customerName) {
       customerNameErr.nameEmpty = "Enter customer name";
       isValid = false;
+      isClientValid = false;
       setFormError(true);
     }
 
     if (!clientData.address1) {
       clientAddressErr.addressEmpty = "Enter address";
       isValid = false;
+      isClientValid = false;
       setFormError(true);
     }
 
     if (!clientData.encryptedCountryCode) {
       countryErr.empty = "Select country";
       isValid = false;
+      isClientValid = false;
       setFormError(true);
     }
 
     if (!clientData.encryptedStateCode) {
       stateErr.empty = "Select state";
       isValid = false;
+      isClientValid = false;
       setFormError(true);
     }
 
     if (!clientData.billingAddress1) {
       billingAddressErr.billAddressEmpty = "Enter billing address";
       isValid = false;
+      isClientValid = false;
       setFormError(true);
     }
 
     if (!clientData.encryptedBillCountryCode) {
       billingCountryErr.billCountryEmpty = "Select billing country";
       isValid = false;
+      isClientValid = false;
       setFormError(true);
     }
 
     if (!clientData.encryptedBillStateCode) {
       billingStateErr.billStateEmpty = "Select billing state";
       isValid = false;
+      isClientValid = false;
       setFormError(true);
     }
 
     if (!clientData.panNumber) {
       panNoErr.panNoEmpty = "Enter PAN number";
       isValid = false;
+      isClientValid = false;
       setFormError(true);
     }
     // } else if (!(/[A-Z]{3}[CPHFATBLJG][A-Z]\d{4}[A-Z]/.test(clientData.PanNo))) {
@@ -156,6 +166,7 @@ export const Client = () => {
     if (!clientData.gstNumber) {
       gstNoErr.gstNoEmpty = "Enter GST number";
       isValid = false;
+      isClientValid = false;
       setFormError(true);
     }
     // else if (!(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(clientData.GstNo))) {
@@ -167,14 +178,25 @@ export const Client = () => {
     if (clientData.noOfComapnies <= 0 || clientData.noOfComapnies === null) {
       noOfCompaniesErr.noOfCompaniesEmpty = "Number of companies must be greater than 0";
       isValid = false;
+      isClientValid = false;
       setFormError(true);
     }
 
     if (clientData.noOfUsers <= 0 || clientData.noOfUsers === null) {
       noOfUsersErr.noOfUsersEmpty = "Number of users must be greater than 0";
       isValid = false;
+      isClientValid = false;
       setFormError(true);
     }
+
+    if(!isClientValid)
+    {
+      if(!$('[data-rr-ui-event-key*="Customer Details"]').hasClass('active'))
+      {
+        $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
+      }
+    }
+
     if (contactDetailData.length < 1) {
       contactDetailErr.contactEmpty = "At least one contact detail required";
       setTimeout(() => {
@@ -183,11 +205,17 @@ export const Client = () => {
         });
       }, 500);
       isValid = false;
-      $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
 
-      setTimeout(() => {
-        document.getElementById("ContactDetailsTable").scrollIntoView({ behavior: 'smooth' });
-      }, 500)
+      if (isClientValid) {
+        if(!$('[data-rr-ui-event-key*="Customer Details"]').hasClass('active'))
+        {
+          $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
+        }
+
+        setTimeout(() => {
+          document.getElementById("ContactDetailsTable").scrollIntoView({ behavior: 'smooth' });
+        }, 500)
+      }
 
       setFormError(true);
       $("#TransactionDetailsListCard").show();
@@ -201,8 +229,12 @@ export const Client = () => {
         });
       }, 1000);
       isValid = false;
-      if (!contactDetailErr.contactEmpty)
+
+      if (isClientValid && 
+          !contactDetailErr.contactEmpty && 
+          !$('[data-rr-ui-event-key*="Transaction Details"]').hasClass('active')) {
         $('[data-rr-ui-event-key*="Transaction Details"]').trigger('click');
+      }
       setFormError(true);
     }
 
@@ -262,7 +294,7 @@ export const Client = () => {
             toast.success(res.data.message, {
               theme: 'colored'
             });
-            updateCallback();
+            updateCallback(true);
             // To-do: Do not redirect to List, instead change Save button click function to updateClient after successfully add
             $('[data-rr-ui-event-key*="List"]').click();
           } else {
@@ -274,7 +306,7 @@ export const Client = () => {
     }
   }
 
-  const updateCallback = () => {
+  const updateCallback = (isAddClient = false) => {
 
     $("#AddClientDetailsForm").data("changed", false);
 
@@ -292,9 +324,11 @@ export const Client = () => {
 
     localStorage.removeItem("DeleteContactDetailsId");
 
-    toast.success("Client details updated successfully!", {
-      theme: 'colored'
-    });
+    if (!isAddClient) {
+      toast.success("Client details updated successfully!", {
+        theme: 'colored'
+      });
+    }
 
     $('#btnSave').attr('disabled', true)
 
@@ -355,7 +389,7 @@ export const Client = () => {
         $('#AddClientDetailsForm').get(0).reset();
       }
 
-      var deleteContactDetailsId = localStorage.getItem("DeleteContactDetailsId")
+      var deleteContactDetailsId = localStorage.getItem("DeleteContactDetailsId");
 
       if (clientContactDetailChanged.contactDetailsChanged) {
         var loopBreaked = false;
@@ -365,7 +399,6 @@ export const Client = () => {
           if (!loopBreaked) {
             if (contactDetails.encryptedClientContactDetailsId) {
               const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
-              
               if (updateContactDetailResponse.data.status != 200) {
                 toast.error(updateContactDetailResponse.data.message, {
                   theme: 'colored'
@@ -397,21 +430,32 @@ export const Client = () => {
           }
         });
 
-        if (deleteContactDetailsId && clientContactDetailChanged.contactDetailsChanged && !loopBreaked) {
-          const data = { encryptedClientContactDetailsId: deleteContactDetailsId }
-          axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data })
-            .then(res => {
-              setIsLoading(false);
-              if (res.data.status != 200) {
+        var deleteContactDetailList = deleteContactDetailsId ? deleteContactDetailsId.split(',') : null;
+
+        if(deleteContactDetailList)
+        {
+          var deleteContactDetailIndex = 1;
+
+          deleteContactDetailList.forEach(async deleteContactDetailId => {
+            if (!loopBreaked) {
+
+              const data = { encryptedClientContactDetailsId: deleteContactDetailId }
+  
+              const deleteContactResponse = await axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data });
+              if (deleteContactResponse.data.status != 200) {
                 toast.error(res.data.message, {
                   theme: 'colored'
                 });
                 loopBreaked = true;
               }
-              else if (!loopBreaked && !transactionDetailChanged.transactionDetailChanged) {
+              else if (deleteContactDetailIndex == deleteContactDetailList.length && !loopBreaked && !transactionDetailChanged.transactionDetailChanged) {
                 updateCallback();
               }
-            })
+              else{
+                deleteContactDetailIndex++;
+              }
+            }
+          });
         }
       }
 
@@ -419,20 +463,20 @@ export const Client = () => {
         var transactionDetailIndex = 1;
         var newTransactions = transactionDetailData.filter(x => !x.encryptedClientRegisterationAuthorizationId);
         newTransactions.forEach(async (transactionDetail) => {
-          // if (transactionDetail.encryptedClientRegisterationAuthorizationId == '') {
-          //   delete transactionDetail.encryptedClientRegisterationAuthorizationId;
-            const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail);
-            if (transactionDetailResponse.data.status != 200) {
-              toast.error(transactionDetailResponse.data.message, {
-                theme: 'colored'
-              });
+          const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail);
+          if (transactionDetailResponse.data.status != 200) {
+            toast.error(transactionDetailResponse.data.message, {
+              theme: 'colored'
+            });
 
-              loopBreaked = true;
-            }
-            else if (transactionDetailIndex == newTransactions.length && !loopBreaked) {
-              updateCallback();
-            }
-          //}
+            loopBreaked = true;
+          }
+          else if (transactionDetailIndex == newTransactions.length && !loopBreaked) {
+            updateCallback();
+          }
+          else{
+            transactionDetailIndex++;
+          }
         })
       }
     }

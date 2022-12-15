@@ -54,20 +54,20 @@ const TransactionDetailList = () => {
             </tr>
           </thead>
           <tbody>
-          
-           {transactionDetailReducer.transactionDetails.map(data =>
-            <tr>
-              <td>{data.moduleName}</td>
-              <td>{Moment(data.startDate).format("DD/MM/YYYY")}</td>
-              <td>{Moment(data.endDate).format("DD/MM/YYYY")}</td>
-              <td>{data.paymentMode == "CQ" ? "Cheque" :
-                data.paymentMode == "CS" ? "Cash" :
-                  data.paymentMode == "TT" ? "TT" :
-                    data.paymentMode == "GP" ? "GPay" : "NB"}</td>
-              <td>{data.amount}</td>
-              <td>{data.gstPercent}%</td>
-              <td>{data.totalAmount}</td>
-            </tr>)}
+
+            {transactionDetailReducer.transactionDetails.map(data =>
+              <tr>
+                <td>{data.moduleName}</td>
+                <td>{Moment(data.startDate).format("DD/MM/YYYY")}</td>
+                <td>{Moment(data.endDate).format("DD/MM/YYYY")}</td>
+                <td>{data.paymentMode == "CQ" ? "Cheque" :
+                  data.paymentMode == "CS" ? "Cash" :
+                    data.paymentMode == "TT" ? "TT" :
+                      data.paymentMode == "GP" ? "GPay" : "NetBanking"}</td>
+                <td>{data.amount}</td>
+                <td>{data.gstPercent}%</td>
+                <td>{data.totalAmount}</td>
+              </tr>)}
           </tbody>
         </Table>}
     </>
