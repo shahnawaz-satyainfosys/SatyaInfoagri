@@ -157,7 +157,7 @@ export const Client = () => {
       isClientValid = false;
       setFormError(true);
     }
-    // } else if (!(/[A-Z]{3}[CPHFATBLJG][A-Z]\d{4}[A-Z]/.test(clientData.PanNo))) {
+    // else if (!(/^([A-Z]){3}(C|P|H|F|A|T|B|L|J|G){1}([A-Z]){1}([0-9]){4}([A-Z]){1}?$/.test(clientData.PanNo))) {
     //   panNoErr.panNoInvalid = "Enter valid PAN number";
     //   isValid = false;
     //   setFormError(true);
@@ -180,6 +180,10 @@ export const Client = () => {
       isValid = false;
       isClientValid = false;
       setFormError(true);
+    }else if (!(/^\d{1,3}$/.test(clientData.noOfComapnies))) {
+      noOfCompaniesErr.noOfCompaniesInvalid = "Number of companies can not be greater than 999";
+      isValid = false;
+      setFormError(true);
     }
 
     if (clientData.noOfUsers <= 0 || clientData.noOfUsers === null) {
@@ -187,12 +191,14 @@ export const Client = () => {
       isValid = false;
       isClientValid = false;
       setFormError(true);
+    }else if (!(/^\d{1,3}$/.test(clientData.noOfUsers))) {
+      noOfUsersErr.noOfUsersInvalid = "Number of users can not be greater than 999";
+      isValid = false;
+      setFormError(true);
     }
 
-    if(!isClientValid)
-    {
-      if(!$('[data-rr-ui-event-key*="Customer Details"]').hasClass('active'))
-      {
+    if (!isClientValid) {
+      if (!$('[data-rr-ui-event-key*="Customer Details"]').hasClass('active')) {
         $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
       }
     }
@@ -207,8 +213,7 @@ export const Client = () => {
       isValid = false;
 
       if (isClientValid) {
-        if(!$('[data-rr-ui-event-key*="Customer Details"]').hasClass('active'))
-        {
+        if (!$('[data-rr-ui-event-key*="Customer Details"]').hasClass('active')) {
           $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
         }
 
@@ -230,9 +235,9 @@ export const Client = () => {
       }, 1000);
       isValid = false;
 
-      if (isClientValid && 
-          !contactDetailErr.contactEmpty && 
-          !$('[data-rr-ui-event-key*="Transaction Details"]').hasClass('active')) {
+      if (isClientValid &&
+        !contactDetailErr.contactEmpty &&
+        !$('[data-rr-ui-event-key*="Transaction Details"]').hasClass('active')) {
         $('[data-rr-ui-event-key*="Transaction Details"]').trigger('click');
       }
       setFormError(true);
@@ -432,15 +437,14 @@ export const Client = () => {
 
         var deleteContactDetailList = deleteContactDetailsId ? deleteContactDetailsId.split(',') : null;
 
-        if(deleteContactDetailList)
-        {
+        if (deleteContactDetailList) {
           var deleteContactDetailIndex = 1;
 
           deleteContactDetailList.forEach(async deleteContactDetailId => {
             if (!loopBreaked) {
 
               const data = { encryptedClientContactDetailsId: deleteContactDetailId }
-  
+
               const deleteContactResponse = await axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data });
               if (deleteContactResponse.data.status != 200) {
                 toast.error(res.data.message, {
@@ -451,7 +455,7 @@ export const Client = () => {
               else if (deleteContactDetailIndex == deleteContactDetailList.length && !loopBreaked && !transactionDetailChanged.transactionDetailChanged) {
                 updateCallback();
               }
-              else{
+              else {
                 deleteContactDetailIndex++;
               }
             }
@@ -474,7 +478,7 @@ export const Client = () => {
           else if (transactionDetailIndex == newTransactions.length && !loopBreaked) {
             updateCallback();
           }
-          else{
+          else {
             transactionDetailIndex++;
           }
         })

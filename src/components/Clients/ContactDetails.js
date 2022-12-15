@@ -35,10 +35,12 @@ const ContactDetails = () => {
   const [formHasError, setFormError] = useState(false);
   const [contactNameErr, setContactNameErr] = useState({});
   const [contactMobileNoErr, setContactMobileNoErr] = useState({});
+  const [emailIdErr, setEmailIdErr] = useState({});
 
   const validateContactDetailForm = () => {
     const contactNameErr = {};
     const contactMobileNoErr = {};
+    const emailIdErr = {};
 
     let isValid = true;
 
@@ -47,20 +49,43 @@ const ContactDetails = () => {
       isValid = false;
       setFormError(true);
     }
+
     if (!contactDetailData.mobileNo) {
       contactMobileNoErr.mobileNoEmpty = "Enter contact mobile number";
       isValid = false;
       setFormError(true);
+    } 
+    else if (!(/^(\+\d{1,3}[- ]?)?\d{10}$/.test(contactDetailData.mobileNo))) {
+      contactMobileNoErr.mobileNoInvalid = "Invalid mobile number, mobile number should be of 10 digits";
+      isValid = false;
+      setFormError(true);
+    }
+
+    if (contactDetailData.emailId) {
+      if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(contactDetailData.emailId))) {
+        emailIdErr.emailInvalid = "Invalid email address";
+        isValid = false;
+        setFormError(true);
+      }
     }
     if (!isValid) {
       setContactNameErr(contactNameErr);
       setContactMobileNoErr(contactMobileNoErr);
+      setEmailIdErr(emailIdErr);
     }
     return isValid;
   }
 
+  const clearStates = () => {
+    setFormError(false);
+    setContactNameErr({});
+    setContactMobileNoErr({});
+    setEmailIdErr({});
+  }
+
+
   const addContactDetailInList = () => {
-    
+
     if (validateContactDetailForm()) {
       const userData = {
         encryptedClientContactDetailsId: "",
@@ -81,8 +106,8 @@ const ContactDetails = () => {
 
       dispatch(contactDetailChangedAction(addContactDetail));
 
-      if($("#btnSave").attr('disabled'))
-          $("#btnSave").attr('disabled', false);
+      if ($("#btnSave").attr('disabled'))
+        $("#btnSave").attr('disabled', false);
 
       toast.success("Contact Added Successfully", {
         theme: 'colored'
@@ -120,8 +145,8 @@ const ContactDetails = () => {
 
       dispatch(contactDetailChangedAction(updateContactDetail));
 
-      if($("#btnSave").attr('disabled'))
-          $("#btnSave").attr('disabled', false);
+      if ($("#btnSave").attr('disabled'))
+        $("#btnSave").attr('disabled', false);
 
       toast.success("Contact Updated Successfully", {
         theme: 'colored'
@@ -146,6 +171,7 @@ const ContactDetails = () => {
     $("#btnAdd").show();
     dispatch(updateClientContactDetailsAction(undefined));
     resetContactDetailData();
+    clearStates();
   }
 
   return (
@@ -171,6 +197,9 @@ const ContactDetails = () => {
               <Row className="mb-3">
                 <Form.Label>Email Id</Form.Label>
                 <Form.Control id="txtEmailId" name="emailId" maxLength={50} value={contactDetailData.emailId} onChange={handleFieldChange} placeholder="Email Id" />
+                {Object.keys(emailIdErr).map((key) => {
+                  return <span className="error-message">{emailIdErr[key]}</span>
+                })}
               </Row>
             </Col>
             <Col>
