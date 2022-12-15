@@ -127,8 +127,7 @@ export const TransactionDetails = () => {
                 setFormError(true);
             }
         }
-
-        if (formData.paymentMode === "TT") {
+        else if (formData.paymentMode === "TT") {
             if (!formData.chequeNo) {
                 chequeNoErr.TTNoEmpty = "Enter TT no";
                 isValid = false;
@@ -147,8 +146,7 @@ export const TransactionDetails = () => {
                 setFormError(true);
             }
         }
-
-        if (formData.paymentMode === "GP") {
+        else if (formData.paymentMode === "GP") {
             if (!formData.chequeNo) {
                 chequeNoErr.gPayNoEmpty = "Enter GPay transaction no.";
                 isValid = false;
@@ -161,8 +159,7 @@ export const TransactionDetails = () => {
                 setFormError(true);
             }
         }
-
-        if (formData.paymentMode === "NB") {
+        else if (formData.paymentMode === "NB") {
             if (!formData.chequeNo) {
                 chequeNoErr.nBNoEmpty = "Enter NetBanking transaction no.";
                 isValid = false;
@@ -175,8 +172,7 @@ export const TransactionDetails = () => {
                 setFormError(true);
             }
         }
-
-        if (formData.paymentMode === "CS") {
+        else if (formData.paymentMode === "CS") {
             if (!formData.chequeDate) {
                 chequeDateErr.cashDateEmpty = "Select date";
                 isValid = false;
@@ -285,6 +281,12 @@ export const TransactionDetails = () => {
         });
 
         if (e.target.name == "paymentMode") {
+
+            setPaymentModeErr({});
+            setChequeNoErr({});
+            setChequeDateErr({});
+            setChequeBankErr({});
+
             if (e.target.value != '') {
                 if (e.target.value == "TT") {
                     $('#lblPaymentModeNo').text('TT No.').show();
