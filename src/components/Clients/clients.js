@@ -180,7 +180,7 @@ export const Client = () => {
       isValid = false;
       isClientValid = false;
       setFormError(true);
-    }else if (!(/^\d{1,3}$/.test(clientData.noOfComapnies))) {
+    } else if (!(/^\d{1,3}$/.test(clientData.noOfComapnies))) {
       noOfCompaniesErr.noOfCompaniesInvalid = "Number of companies can not be greater than 999";
       isValid = false;
       setFormError(true);
@@ -191,7 +191,7 @@ export const Client = () => {
       isValid = false;
       isClientValid = false;
       setFormError(true);
-    }else if (!(/^\d{1,3}$/.test(clientData.noOfUsers))) {
+    } else if (!(/^\d{1,3}$/.test(clientData.noOfUsers))) {
       noOfUsersErr.noOfUsersInvalid = "Number of users can not be greater than 999";
       isValid = false;
       setFormError(true);
@@ -340,7 +340,7 @@ export const Client = () => {
     fetchUsers(1);
   }
 
-  const updateClientDetails = () => {
+  const updateClientDetails = async () => {
     if (clientValidation()) {
       const updatedUserData = {
         EncryptedClientCode: clientData.encryptedClientCode,
@@ -377,7 +377,7 @@ export const Client = () => {
 
       if ($("#AddClientDetailsForm").isChanged()) {
         setIsLoading(true);
-        axios.post(process.env.REACT_APP_API_URL + '/update-client', updatedUserData, {
+        await axios.post(process.env.REACT_APP_API_URL + '/update-client', updatedUserData, {
           headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
         })
           .then(res => {
@@ -400,7 +400,8 @@ export const Client = () => {
         var loopBreaked = false;
         var contactDetailIndex = 1;
 
-        contactDetailData.forEach(async contactDetails => {
+        for (let i = 0; i < contactDetailData.length; i++) {
+          const contactDetails = contactDetailData[i];
           if (!loopBreaked) {
             if (contactDetails.encryptedClientContactDetailsId) {
               const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
@@ -433,7 +434,7 @@ export const Client = () => {
               }
             }
           }
-        });
+        }
 
         var deleteContactDetailList = deleteContactDetailsId ? deleteContactDetailsId.split(',') : null;
 
@@ -466,7 +467,9 @@ export const Client = () => {
       if (transactionDetailChanged.transactionDetailChanged && !loopBreaked) {
         var transactionDetailIndex = 1;
         var newTransactions = transactionDetailData.filter(x => !x.encryptedClientRegisterationAuthorizationId);
-        newTransactions.forEach(async (transactionDetail) => {
+        
+        for (let i = 0; i < newTransactions.length; i++) {
+          const transactionDetail = newTransactions[i];
           const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail);
           if (transactionDetailResponse.data.status != 200) {
             toast.error(transactionDetailResponse.data.message, {
@@ -481,7 +484,7 @@ export const Client = () => {
           else {
             transactionDetailIndex++;
           }
-        })
+        }
       }
     }
   };

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Tabs, Tab, Form, Row, Col, Button, Modal, Alert } from 'react-bootstrap';
+import { Tabs, Tab, Form, Row, Col, Button, Modal } from 'react-bootstrap';
 
 //Datatable Modules
 import FalconComponentCard from 'components/common/FalconComponentCard';
@@ -36,7 +36,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     trackChanges: function () {
       $(":input", this).change(function () {
         $(this.form).data("changed", true);
-        if($("#btnSave").attr('disabled'))
+        if ($("#btnSave").attr('disabled'))
           $("#btnSave").attr('disabled', false);
       });
     }
@@ -65,6 +65,19 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     $("#AddClientDetailsForm").data("changed", false);
   }
 
+  // const tabClick = (title) => {
+  //   debugger
+
+  //   if (title.endsWith('List')) {
+  //     $("#btnNew").show();
+  //     $("#btnSave").hide();
+  //     $("#btnCancel").hide();
+  //     $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
+  //     $('[data-rr-ui-event-key*="List"]').attr('disabled', false);
+  //     clearClientReducers();
+  //   }
+  // }
+
   $('[data-rr-ui-event-key*="List"]').click(function () {
     $("#btnNew").show();
     $("#btnSave").hide();
@@ -88,13 +101,13 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     $("#btnCancel").show();
   })
 
-  $('#btnNew').click(function () {
+  const newDetails = () => {
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', false);
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
     $('#btnSave').attr('disabled', false);
     $("#AddClientDetailsForm").trackChanges();
     clearClientReducers();
-  })
+  }
 
   const discardChanges = () => {
     if ($('#btnExit').attr('isExit') == 'true')
@@ -211,7 +224,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
         <Row>
           <Col>
             <div style={{ display: "flex", justifyContent: "left" }}>
-              <Button className='btn btn-primary me-2' id='btnNew'>
+              <Button className='btn btn-primary me-2' id='btnNew' onClick={newDetails}>
                 <span class="fas fa-plus me-1" data-fa-transform="shrink-3"></span>New
               </Button>
               <Button className='btn btn-success me-2' id='btnSave' onClick={saveDetails}>
@@ -228,6 +241,8 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
         </Row>
       </Form>
       <br />
+
+      {/* onSelect={ () => {tabClick(tab)}} */}
 
       <Tabs
         variant="pills"
