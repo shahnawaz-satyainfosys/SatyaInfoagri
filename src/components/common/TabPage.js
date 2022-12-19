@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { Tabs, Tab, Form, Row, Col, Button, Modal } from 'react-bootstrap';
+import { Tabs, Tab, Button, Modal } from 'react-bootstrap';
+import TabPageMainMenu from 'components/navbar/top/TabPageMainMenu';
 
 //Datatable Modules
 import FalconComponentCard from 'components/common/FalconComponentCard';
@@ -219,27 +220,12 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
           </Modal.Footer>
         </Modal>
       }
-      <Form>
-        <Row>
-          <Col>
-            <div style={{ display: "flex", justifyContent: "left", backgroundColor: "#c9ebcd", borderRadius: "8px" }}>
-              <Button className='btn btn-primary me-1' id='btnNew' onClick={newDetails}>
-                <span class="fas fa-plus me-1" data-fa-transform="shrink-3"></span>New
-              </Button>
-              <Button className='btn btn-success me-1' id='btnSave' onClick={saveDetails}>
-                <span class="fas fa-save me-1" data-fa-transform="shrink-3"></span>Save
-              </Button>
-              <Button className='btn btn-danger me-1' id='btnCancel' onClick={cancelClick}>
-                <span class="fas fa-times me-1" data-fa-transform="shrink-3"></span>Cancel
-              </Button>
-              <Button className='btn btn-info mr-4' id='btnExit' onClick={exitModule}>
-                <span class="fas fa-sign-out-alt me-1" data-fa-transform="shrink-3"></span>Exit
-              </Button>
-            </div>
-          </Col>
-        </Row>
-      </Form>
-      <br />
+
+      <TabPageMainMenu newClick={newDetails}
+        saveClick={saveDetails}
+        cancelClick={cancelClick}
+        exitClick={exitModule} />
+
       {/* onSelect={ () => {tabClick(tab)}} */}
 
       <Tabs
