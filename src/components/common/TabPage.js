@@ -19,7 +19,6 @@ import AdvanceTableSearchBox from 'components/common/advance-table/AdvanceTableS
 import { useDispatch, useSelector } from 'react-redux';
 import { clientDetailsAction, clientContactDetailsAction, transactionDetailsAction, clientDetailsErrorAction, contactDetailChangedAction, transactionDetailChangedAction } from '../../actions/index';
 
-
 import $ from 'jquery';
 
 const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) => {
@@ -223,14 +222,14 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
       <Form>
         <Row>
           <Col>
-            <div style={{ display: "flex", justifyContent: "left" }}>
-              <Button className='btn btn-primary me-2' id='btnNew' onClick={newDetails}>
+            <div style={{ display: "flex", justifyContent: "left", backgroundColor: "#c9ebcd", borderRadius: "8px" }}>
+              <Button className='btn btn-primary me-1' id='btnNew' onClick={newDetails}>
                 <span class="fas fa-plus me-1" data-fa-transform="shrink-3"></span>New
               </Button>
-              <Button className='btn btn-success me-2' id='btnSave' onClick={saveDetails}>
+              <Button className='btn btn-success me-1' id='btnSave' onClick={saveDetails}>
                 <span class="fas fa-save me-1" data-fa-transform="shrink-3"></span>Save
               </Button>
-              <Button className='btn btn-danger me-2' id='btnCancel' onClick={cancelClick}>
+              <Button className='btn btn-danger me-1' id='btnCancel' onClick={cancelClick}>
                 <span class="fas fa-times me-1" data-fa-transform="shrink-3"></span>Cancel
               </Button>
               <Button className='btn btn-info mr-4' id='btnExit' onClick={exitModule}>
@@ -241,7 +240,6 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
         </Row>
       </Form>
       <br />
-
       {/* onSelect={ () => {tabClick(tab)}} */}
 
       <Tabs
