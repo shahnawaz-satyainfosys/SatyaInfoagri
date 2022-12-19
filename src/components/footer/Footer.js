@@ -4,7 +4,7 @@ import { version } from 'config';
 
 const Footer = () => (
   <footer className="footer">
-    <Row className="justify-content-between fs--1 mt-4 mb-3 footer-credits">
+    <Row className="justify-content-between fs--1 mt-2 mb-2 footer-credits">
       <Col sm="auto">
         <p className="mb-0 text-600">
           Khalihan{' '}

@@ -18,7 +18,8 @@ import AdvanceTableFooter from 'components/common/advance-table/AdvanceTableFoot
 import AdvanceTableSearchBox from 'components/common/advance-table/AdvanceTableSearchBox';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { clientDetailsAction, clientContactDetailsAction, transactionDetailsAction, clientDetailsErrorAction, contactDetailChangedAction, transactionDetailChangedAction } from '../../actions/index';
+import { clientDetailsAction, clientContactDetailsAction, transactionDetailsAction,
+         clientDetailsErrorAction, contactDetailChangedAction, transactionDetailChangedAction } from '../../actions/index';
 
 import $ from 'jquery';
 
@@ -229,14 +230,12 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
       {/* onSelect={ () => {tabClick(tab)}} */}
 
       <Tabs
-        variant="pills"
-        defaultActiveKey="profile"
         id="uncontrolled-tab-example"
-        className="mb-3"
+        className="mb-2 mt-2"
       >
         {Object.values(tabArray).map((tab, index) => {
           return (
-            <Tab eventKey={tab} title={tab} className="border p-3">
+            <Tab eventKey={tab} title={tab} className="border p-3 tab-page-tab">
               {index == 0 && listData && (
                 <FalconComponentCard className="tab-page-list-card">
                   <FalconComponentCard.Body

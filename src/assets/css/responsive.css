@@ -6,6 +6,12 @@
     /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */
 }
 
+@media (min-width: 576px) {
+    .content {
+        padding-bottom: 2.2875rem !important;
+    }
+}
+
 @media (min-width:641px) {
     /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */
 }
@@ -20,7 +26,7 @@
 
 @media (min-width:1025px) {
     .navbar-vertical.navbar-expand-xl+.content {
-        margin-left: 13.625rem !important;
+        margin-left: 12.825rem !important;
     }
 
     .navbar-vertical-collapsed .navbar-vertical.navbar-expand-xl+.content {
@@ -28,24 +34,28 @@
     }
 
     .footer-credits {
-        margin-left: 250px !important;
+        margin-left: 230px !important;
     }
 
-    .tab-content .tab-page-list-card {
-        max-height: 350px;
+    .tab-page-tab {
+        max-height: 465px;
         overflow-y: scroll;
     }
 }
 
 @media (min-width: 1200px) {
     .container {
-        max-width: 1500px !important;
+        max-width: 1600px !important;
     }
 }
 
-@media (min-width:1281px) {
+@media (min-width:1280px) {
+    .container {
+        max-width: 1600px !important;
+    }
+
     .footer-credits {
-        margin-left: 300px !important;
+        margin-left: 360px !important;
     }
 
     .navbar-vertical.navbar-expand-xl+.content {
@@ -56,18 +66,23 @@
         margin-left: 2.125rem !important;
     }
 
-    .tab-content .tab-page-list-card {
-        max-height: 420px;
+    .tab-page-tab {
+        max-height: 465px;
         overflow-y: scroll;
     }
 }
 
 @media (min-width:1680px) {
     .container {
-        max-width: 1650px !important;
+        max-width: 1700px !important;
     }
 
     .footer-credits {
-        margin-left: 425px !important;
+        margin-left: 460px !important;
+    }
+
+    .tab-page-tab {
+        max-height: 665px;
+        overflow-y: scroll;
     }
 }

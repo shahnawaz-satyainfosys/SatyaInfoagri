@@ -65,7 +65,7 @@ const NavbarTop = () => {
         </button>
       </Navbar.Toggle>
 
-      <Logo at="navbar-top" width={40} id="topLogo" />
+      <Logo at="navbar-top" width={40} />
 
       {navbarPosition === 'top' || navbarPosition === 'combo' ? (
         <Navbar.Collapse

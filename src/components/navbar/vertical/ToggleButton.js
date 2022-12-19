@@ -15,6 +15,12 @@ const ToggleButton = () => {
   } = useContext(AppContext);
 
   const handleClick = () => {
+
+    if(!isNavbarVerticalCollapsed)
+      $('#topLogo').hide();
+    else 
+    $('#topLogo').show();
+
     document
       .getElementsByTagName('html')[0]
       .classList.toggle('navbar-vertical-collapsed');
