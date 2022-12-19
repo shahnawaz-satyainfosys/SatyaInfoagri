@@ -173,7 +173,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
           tableProps={{
             bordered: true,
             striped: true,
-            className: 'fs--1 mb-0 overflow-hidden'
+            className: 'mb-0 overflow-hidden'
           }}
         />
         <div className="mt-3">

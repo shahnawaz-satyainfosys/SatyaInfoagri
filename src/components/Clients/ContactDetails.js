@@ -179,7 +179,7 @@ const ContactDetails = () => {
       {contactDetailData &&
         <Form noValidate validated={formHasError} className="details-form" id='AddContactForm'>
           <Row>
-            <Col className="me-5 ms-5">
+            <Col className="me-3 ms-3">
               <Row className="mb-3">
                 <Form.Label className='details-form'>Contact Person<span className="text-danger">*</span></Form.Label>
                 <Form.Control id="txtContactPerson" name="contactPerson" maxLength={50} value={contactDetailData.contactPerson} onChange={handleFieldChange} placeholder="Contact person name" required />
@@ -202,7 +202,7 @@ const ContactDetails = () => {
                 })}
               </Row>
             </Col>
-            <Col>
+            <Col className="me-3 ms-3">
               <Row className="mb-3">
                 <Form.Label>Designation</Form.Label>
                 <Form.Control id="txtDesignation" name="designation" maxLength={50} value={contactDetailData.designation} onChange={handleFieldChange} placeholder="Designation" />

@@ -160,7 +160,7 @@ export const ClientDetails = () => {
 
         <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }} id='AddClientDetailsForm'>
           <Row>
-            <Col className="me-5 ms-5">
+            <Col className="me-3 ms-3">
               <Row className="mb-3">
                 <Form.Label>Customer Name<span className="text-danger">*</span></Form.Label>
                 <Form.Control id="txtCustomerName" name="customerName" maxLength={50} value={clientData.customerName} onChange={handleFieldChange} placeholder="Customer Name" required />
@@ -207,7 +207,7 @@ export const ClientDetails = () => {
               </Row>
             </Col>
 
-            <Col className="me-5 ms-5">
+            <Col className="me-3 ms-3">
               <Row className="mb-3">
                 <Form.Label>Billing Address<span className="text-danger">*</span></Form.Label>
                 <Form.Control id="txtBillingAddress" name="billingAddress1" maxLength={50} value={clientData.billingAddress1} onChange={handleFieldChange} className="mb-1" placeholder="Billing Address" required />
@@ -247,7 +247,7 @@ export const ClientDetails = () => {
               </Row>
             </Col>
 
-            <Col className="me-5 ms-5">
+            <Col className="me-3 ms-3">
               <Row className="mb-3">
                 <Form.Label>PAN No.<span className="text-danger">*</span></Form.Label>
                 <Form.Control id="txtPAN" name="panNumber" maxLength={20} value={clientData.panNumber} onChange={handleFieldChange} placeholder="PAN No." required />

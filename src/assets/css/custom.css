@@ -5,6 +5,7 @@
 
 .navbar-vertical .navbar-nav .nav-item .nav-link {
     cursor: pointer;
+    font-size: 13px;
 }
 
 .form-error {
@@ -72,4 +73,16 @@
 .nav-tabs .nav-link, .nav-tabs .nav-link {
     isolation: isolate;
     border-color: #6c757d47 !important;
+}
+
+.form-label, input::placeholder, .form-control, .form-select, .nav-tabs .nav-link {
+    font-size: 0.8rem !important;
+}
+
+.table-striped {
+    font-size: 0.733333rem!important;
+}
+
+.table-striped>tbody>tr:nth-of-type(2n)>* {
+    color: var(--bs-body-color) !important;
 }

@@ -370,7 +370,7 @@ export const TransactionDetails = () => {
         <>
             <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { submitTransactionDetails(e) }} id='AddClientTransactionDetailsForm'>
                 <Row>
-                    <Col className="me-5 ms-5">
+                    <Col className="me-3 ms-3">
                         <Row className="mb-3">
                             <Form.Label>Module Name<span className="text-danger">*</span></Form.Label>
                             <Form.Select name="moduleName" id="selModuleName" onChange={handleFieldChange} required>
@@ -399,7 +399,7 @@ export const TransactionDetails = () => {
                         </Row>
                     </Col>
 
-                    <Col className="me-5 ms-5">
+                    <Col className="me-3 ms-3">
                         <Row className="mb-3">
                             <Form.Label>Payment Mode<span className="text-danger">*</span></Form.Label>
                             <Form.Select id="txtPaymentMode" name="paymentMode" onChange={handleFieldChange} required>
@@ -437,7 +437,7 @@ export const TransactionDetails = () => {
                         </Row>
                     </Col>
 
-                    <Col className="me-5 ms-5">
+                    <Col className="me-3 ms-3">
                         <Row className="mb-3">
                             <Form.Label>Amount<span className="text-danger">*</span></Form.Label>
                             <Form.Control type='number' id="txtAmount" name="amount" min={0} onChange={handleAmountChange} placeholder="Enter amount" required />

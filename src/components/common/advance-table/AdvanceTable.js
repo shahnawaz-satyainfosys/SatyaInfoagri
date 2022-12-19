@@ -179,7 +179,7 @@ setTimeout(() => {
     $("#advanceTable tr.row-selected").removeClass("row-selected");
     $(this).addClass("row-selected");
   });
-}, 2000);
+}, 1000);
 
 AdvanceTable.propTypes = {
   getTableProps: PropTypes.func,
