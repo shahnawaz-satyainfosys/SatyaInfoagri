@@ -77,6 +77,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     $("#btnCancel").hide();
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
     $('[data-rr-ui-event-key*="List"]').attr('disabled', false);
+    $('#AddClientDetailsForm').get(0).reset();
     clearClientReducers();
   })
 
@@ -122,7 +123,6 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     }
     else {
       $('[data-rr-ui-event-key*="List"]').trigger('click');
-      $('#AddClientDetailsForm').get(0).reset();
     }
   }
 
