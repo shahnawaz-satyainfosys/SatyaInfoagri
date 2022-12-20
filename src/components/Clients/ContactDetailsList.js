@@ -103,7 +103,7 @@ const ContactDetailsList = () => {
       }
 
       <div>
-        <div className='mb-3 me-5' style={{ display: "flex", justifyContent: "end" }}>
+        <div style={{ display: "flex", justifyContent: "end" }}>
           <Button id='btnAdd' onClick={() => showAddContactDetailsForm()}>
             Add Contact Detail
           </Button>

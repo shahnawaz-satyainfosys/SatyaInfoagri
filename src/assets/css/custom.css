@@ -93,6 +93,6 @@
     border-top-right-radius: 0.375rem;
 }
 
-#TableFooterPanel{
+#TableFooterPanel, #ContactDetailsTable {
     margin-bottom: unset !important;
 }
