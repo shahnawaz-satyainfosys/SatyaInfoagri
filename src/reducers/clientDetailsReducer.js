@@ -1,5 +1,5 @@
 const initialState = {
-  clientDetails: []
+  clientDetails: {}
 };
 
 const clientDetailsReducer = (state = initialState, action) => {
