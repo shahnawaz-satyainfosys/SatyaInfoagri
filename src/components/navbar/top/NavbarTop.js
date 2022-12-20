@@ -36,7 +36,7 @@ const NavbarTop = () => {
 
   return (
     <Navbar
-      className={classNames('navbar-glass  fs--1 navbar-top sticky-kit', {
+      className={classNames('navbar-glass  fs--1 navbar-top sticky-kit default-navbar', {
         // 'navbar-glass-shadow': showDropShadow
         'navbar-glass-shadow': showDropShadow
       })}
@@ -45,6 +45,7 @@ const NavbarTop = () => {
           ? topNavbarBreakpoint
           : true
       }
+      style={{ 'display': 'none' }}
     >
       <Navbar.Toggle
         className={classNames('toggle-icon-wrapper me-md-3 me-2', {

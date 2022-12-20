@@ -25,7 +25,7 @@ const TabPageMainMenu = ({newClick, cancelClick, exitClick, saveClick} ) => {
 
   return (
     <Navbar
-      className={classNames('navbar-glass  fs--1 navbar-top sticky-kit', {
+      className={classNames('navbar-glass  fs--1 navbar-top sticky-kit tab-page-nav-bar', {
         'navbar-glass-shadow': showDropShadow
       })}
     >

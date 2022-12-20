@@ -4,6 +4,7 @@ import NavbarVertical from 'components/navbar/vertical/NavbarVertical';
 import AppContext from 'context/Context';
 import Footer from 'components/footer/Footer';
 import classNames from 'classnames';
+import NavbarTop from 'components/navbar/top/NavbarTop';
 
 const MainLayout = () => {
   const { hash, pathname } = useLocation();
@@ -27,6 +28,10 @@ const MainLayout = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    if($('.tab-page-nav-bar').length == 0)
+    {
+      $('.default-navbar').show();
+    }
   }, [pathname]);
 
   return (
@@ -35,6 +40,7 @@ const MainLayout = () => {
         <NavbarVertical />
       )}
         <div className={classNames('content', { 'pb-0': isKanban })}>
+          <NavbarTop />
           {/*------ Main Routes ------*/}
           <Outlet />
           {!isKanban && <Footer />}
