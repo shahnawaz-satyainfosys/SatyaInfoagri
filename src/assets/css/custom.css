@@ -75,7 +75,7 @@
     border-color: #6c757d47 !important;
 }
 
-.form-label, input::placeholder, .form-control, .form-select, .nav-tabs .nav-link {
+.form-label, input::placeholder, .form-control, .form-select, .nav-tabs .nav-link, .error-message {
     font-size: 0.8rem !important;
 }
 
@@ -85,4 +85,14 @@
 
 .table-striped>tbody>tr:nth-of-type(2n)>* {
     color: var(--bs-body-color) !important;
+}
+
+#TableFooterPanel .card-body{
+    padding: 0 15px 15px 15px;
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+}
+
+#TableFooterPanel{
+    margin-bottom: unset !important;
 }
