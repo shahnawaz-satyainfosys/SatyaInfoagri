@@ -72,12 +72,12 @@
     }
 
     .tab-page-tab {
-        max-height: 465px;
+        max-height: 475px;
         overflow-y: scroll;
     }
 
     .list-card {
-        max-height: 400px;
+        max-height: 355px;
         overflow-y: scroll;
     }
 }
@@ -92,12 +92,12 @@
     }
 
     .tab-page-tab {
-        max-height: 665px;
+        max-height: 680px;
         overflow-y: scroll;
     }
 
     .list-card {
-        max-height: 600px;
+        max-height: 555px;
         overflow-y: scroll;
     }
 }

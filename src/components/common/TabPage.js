@@ -101,6 +101,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
     $('#btnSave').attr('disabled', false);
     $("#AddClientDetailsForm").trackChanges();
+    $("#TransactionDetailsListCard").hide();
     clearClientReducers();
   }
 
