@@ -291,6 +291,22 @@ export const Client = () => {
         ClientRegistrationAuthorization: transactionDetailData
       }
 
+      const keys = ['ClientName', 'ClientAddress1', 'ClientAddress2', 'ClientAddress3', 'ClientBillAddress1', 'ClientBillAddress2', 'ClientBillAddress3', 'ClientPANNO', 'ClientGSTNO', 'AddUser']
+      for (const key of Object.keys(userData).filter((key) => keys.includes(key))) {
+        userData[key] = userData[key] ? userData[key].toUpperCase() : '';
+      }
+
+      const contactKeys = ['contactPerson', 'designation', 'addUser']
+      var index = 0;
+      for (var obj in userData.ClientContactDetails) {
+        var contactDetailObj = userData.ClientContactDetails[obj];
+
+        for (const key of Object.keys(contactDetailObj).filter((key) => contactKeys.includes(key))) {
+          contactDetailObj[key] = contactDetailObj[key] ? contactDetailObj[key].toUpperCase() : '';
+        }
+        userData.ClientContactDetails[index] = contactDetailObj;
+        index++;
+      }
       setIsLoading(true);
       axios.post(process.env.REACT_APP_API_URL + '/add-client', userData)
         .then(res => {
@@ -375,6 +391,12 @@ export const Client = () => {
         return;
       }
 
+      const keys = ['ClientName', 'ClientAddress1', 'ClientAddress2', 'ClientAddress3', 'ClientBillAddress1', 'ClientBillAddress2', 'ClientBillAddress3', 'ClientPANNO', 'ClientGSTNO', 'ModifyUser']
+      for (const key of Object.keys(updatedUserData).filter((key) => keys.includes(key))) {
+        debugger
+        updatedUserData[key] = updatedUserData[key] ? updatedUserData[key].toUpperCase() : '';
+      }
+
       if ($("#AddClientDetailsForm").isChanged()) {
         setIsLoading(true);
         await axios.post(process.env.REACT_APP_API_URL + '/update-client', updatedUserData, {
@@ -403,6 +425,12 @@ export const Client = () => {
         for (let i = 0; i < contactDetailData.length; i++) {
           const contactDetails = contactDetailData[i];
           if (!loopBreaked) {
+
+            const keys = ['contactPerson', 'designation']
+            for (const key of Object.keys(contactDetails).filter((key) => keys.includes(key))) {
+              contactDetails[key] = contactDetails[key] ? contactDetails[key].toUpperCase() : '';
+            }
+
             if (contactDetails.encryptedClientContactDetailsId) {
               const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
               if (updateContactDetailResponse.data.status != 200) {
@@ -467,7 +495,7 @@ export const Client = () => {
       if (transactionDetailChanged.transactionDetailChanged && !loopBreaked) {
         var transactionDetailIndex = 1;
         var newTransactions = transactionDetailData.filter(x => !x.encryptedClientRegisterationAuthorizationId);
-        
+
         for (let i = 0; i < newTransactions.length; i++) {
           const transactionDetail = newTransactions[i];
           const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail);

@@ -90,8 +90,8 @@ export const TransactionDetails = () => {
             endDateErr.endDateEmpty = "Select end date";
             isValid = false;
             setFormError(true);
-        } else if (formData.endDate < formData.startDate) {
-            endDateErr.endDateInvalid = "End date cannot be lesser than Start Date";
+        } else if (formData.endDate <= formData.startDate) {
+            endDateErr.endDateInvalid = "End date cannot be same or less than Start Date";
             isValid = false;
             setFormError(true);
         }

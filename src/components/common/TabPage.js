@@ -129,6 +129,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     }
     else {
       $('[data-rr-ui-event-key*="List"]').trigger('click');
+      $('#AddClientDetailsForm').get(0).reset();
     }
   }
 
