@@ -18,8 +18,10 @@ import AdvanceTableFooter from 'components/common/advance-table/AdvanceTableFoot
 import AdvanceTableSearchBox from 'components/common/advance-table/AdvanceTableSearchBox';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { clientDetailsAction, clientContactDetailsAction, transactionDetailsAction,
-         clientDetailsErrorAction, contactDetailChangedAction, transactionDetailChangedAction } from '../../actions/index';
+import {
+  clientDetailsAction, clientContactDetailsAction, transactionDetailsAction,
+  clientDetailsErrorAction, contactDetailChangedAction, transactionDetailChangedAction
+} from '../../actions/index';
 
 import $ from 'jquery';
 
@@ -54,6 +56,9 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     $("#btnSave").hide();
     $('#btnSave').attr('disabled', true)
     $("#btnCancel").hide();
+
+    $('.tab-page-list-card').removeClass('card');
+
   }, []);
 
   const clearClientReducers = () => {
@@ -161,11 +166,16 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
         pagination
         perPage={5}
       >
+        
+        <FalconComponentCard className="list-card">
+        <FalconComponentCard.Body>
+        
         <Row className="flex-end-center mb-3">
           <Col xs="auto" sm={6} lg={4}>
             <AdvanceTableSearchBox table/>
           </Col>
         </Row>
+
         <AdvanceTable
           table
           headerClassName="bg-200 text-900 text-nowrap align-middle"
@@ -177,7 +187,15 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
             className: 'mb-0 overflow-hidden'
           }}
         />
-        <div className="mt-3">
+
+        </FalconComponentCard.Body>
+        </FalconComponentCard>
+
+        <br />
+        
+        <FalconComponentCard id='TableFooterPanel'>
+        <FalconComponentCard.Body className="footer-pagination">
+        <div className="mt-3 advance-table-footer">
           <AdvanceTableFooter
             rowCount={data.length}
             table
@@ -186,6 +204,8 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
             rowsPerPageSelection
           />
         </div>
+        </FalconComponentCard.Body>
+        </FalconComponentCard>
       </AdvanceTableWrapper>
     );
   }
@@ -236,22 +256,25 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
       >
         {Object.values(tabArray).map((tab, index) => {
           return (
-            <Tab eventKey={tab} title={tab} className="border p-3 tab-page-tab">
+            <Tab eventKey={tab} title={tab} className={index == 0 ? "border p-3" : "border p-3 tab-page-tab"}>
               {index == 0 && listData && (
-                <FalconComponentCard className="tab-page-list-card">
-                  <FalconComponentCard.Body
-                    code={searchableTableCode}
-                    scope={{
-                      AdvanceTableWrapper,
-                      AdvanceTable,
-                      AdvanceTableFooter,
-                      AdvanceTableSearchBox
-                    }}
-                    language="jsx"
-                    noInline
-                    noLight
-                  />
-                </FalconComponentCard>
+                <>
+                  <FalconComponentCard className="tab-page-list-card">
+                    <FalconComponentCard.Body
+                      code={searchableTableCode}
+                      scope={{
+                        AdvanceTableWrapper,
+                        AdvanceTable,
+                        AdvanceTableFooter,
+                        AdvanceTableSearchBox,
+                        FalconComponentCard
+                      }}
+                      language="jsx"
+                      noInline
+                      noLight
+                    />
+                  </FalconComponentCard>
+                </>
               )}
               {index == 1 && module == "Client" && ClientDetails && (
                 <>

@@ -41,6 +41,11 @@
         max-height: 465px;
         overflow-y: scroll;
     }
+
+    .list-card {
+        max-height: 400px;
+        overflow-y: scroll;
+    }
 }
 
 @media (min-width: 1200px) {
@@ -70,6 +75,11 @@
         max-height: 465px;
         overflow-y: scroll;
     }
+
+    .list-card {
+        max-height: 400px;
+        overflow-y: scroll;
+    }
 }
 
 @media (min-width:1680px) {
@@ -83,6 +93,11 @@
 
     .tab-page-tab {
         max-height: 665px;
+        overflow-y: scroll;
+    }
+
+    .list-card {
+        max-height: 600px;
         overflow-y: scroll;
     }
 }
