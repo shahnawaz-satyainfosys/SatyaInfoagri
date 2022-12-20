@@ -168,7 +168,6 @@ const ContactDetails = () => {
   const hideForm = () => {
     $("#AddContactDetailsForm").hide();
     $("#ContactDetailsTable").show();
-    $("#btnAdd").show();
     dispatch(updateClientContactDetailsAction(undefined));
     resetContactDetailData();
     clearStates();

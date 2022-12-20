@@ -71,19 +71,6 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     $("#AddClientDetailsForm").data("changed", false);
   }
 
-  // const tabClick = (title) => {
-  //   debugger
-
-  //   if (title.endsWith('List')) {
-  //     $("#btnNew").show();
-  //     $("#btnSave").hide();
-  //     $("#btnCancel").hide();
-  //     $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
-  //     $('[data-rr-ui-event-key*="List"]').attr('disabled', false);
-  //     clearClientReducers();
-  //   }
-  // }
-
   $('[data-rr-ui-event-key*="List"]').click(function () {
     $("#btnNew").show();
     $("#btnSave").hide();
@@ -99,6 +86,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     $("#btnCancel").show();
     $("#AddContactDetailsForm").hide();
     $("#btnUpdateClientDetail").hide();
+    $("#ContactDetailsTable").show();
   })
 
   $('[data-rr-ui-event-key*="Transaction Details"]').click(function () {
@@ -168,43 +156,43 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
       >
         
         <FalconComponentCard className="list-card">
-        <FalconComponentCard.Body>
+          <FalconComponentCard.Body>
         
-        <Row className="flex-end-center mb-3">
-          <Col xs="auto" sm={6} lg={4}>
-            <AdvanceTableSearchBox table/>
-          </Col>
-        </Row>
+            <Row className="flex-end-center mb-3">
+              <Col xs="auto" sm={6} lg={4}>
+                <AdvanceTableSearchBox table/>
+              </Col>
+            </Row>
 
-        <AdvanceTable
-          table
-          headerClassName="bg-200 text-900 text-nowrap align-middle"
-          style = "padding-top : 0px"
-          rowClassName="align-middle white-space-nowrap"
-          tableProps={{
-            bordered: true,
-            striped: true,
-            className: 'mb-0 overflow-hidden'
-          }}
-        />
+            <AdvanceTable
+              table
+              headerClassName="bg-200 text-900 text-nowrap align-middle"
+              style = "padding-top : 0px"
+              rowClassName="align-middle white-space-nowrap"
+              tableProps={{
+                bordered: true,
+                striped: true,
+                className: 'mb-0 overflow-hidden'
+              }}
+            />
 
-        </FalconComponentCard.Body>
+          </FalconComponentCard.Body>
         </FalconComponentCard>
 
         <br />
         
         <FalconComponentCard id='TableFooterPanel'>
-        <FalconComponentCard.Body className="footer-pagination">
-        <div className="mt-3 advance-table-footer">
-          <AdvanceTableFooter
-            rowCount={data.length}
-            table
-            rowInfo
-            navButtons
-            rowsPerPageSelection
-          />
-        </div>
-        </FalconComponentCard.Body>
+          <FalconComponentCard.Body className="footer-pagination">
+            <div className="mt-3 advance-table-footer">
+              <AdvanceTableFooter
+                rowCount={data.length}
+                table
+                rowInfo
+                navButtons
+                rowsPerPageSelection
+              />
+            </div>
+          </FalconComponentCard.Body>
         </FalconComponentCard>
       </AdvanceTableWrapper>
     );

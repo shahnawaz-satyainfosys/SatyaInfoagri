@@ -31,6 +31,7 @@ const AdvanceTable = ({
     $("#AddContactDetailsForm").hide();
     $("#btnAddClientDetail").hide();
     $("#btnUpdateClientDetail").show();
+    $("#ContactDetailsTable").show();
     getContactDetailsList(rowData.encryptedClientCode);
     getTransactionDetailsList(rowData.encryptedClientCode);
   }

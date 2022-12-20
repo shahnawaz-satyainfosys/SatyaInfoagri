@@ -29,7 +29,6 @@ const ContactDetailsList = () => {
     $("#AddContactDetailsForm").show();
     $("#btnAddContactDetail").hide();
     $("#btnUpdateContactDetail").show();
-    $("#btnAdd").hide();
     $("#ContactDetailsTable").hide();
     localStorage.setItem("contactPersonMobileNoToUpdate", mobileNoToUpdate);
     dispatch(updateClientContactDetailsAction(data));
@@ -76,13 +75,7 @@ const ContactDetailsList = () => {
     $("#AddContactDetailsForm").show();
     $("#btnAddContactDetail").show();
     $("#btnUpdateContactDetail").hide();
-    $("#ContactDetailsTable").hide();
-    if ($('#ContactDetailsTable tr').length > 1) {
-      $("#ContactDetailsTable").show();
-    } else {
-      $("#ContactDetailsTable").hide();
-    }
-    $("#btnAdd").hide();
+    $('#ContactDetailsTable').hide();
   }
 
   return (
