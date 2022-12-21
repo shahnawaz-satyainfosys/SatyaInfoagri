@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import SimpleBarReact from 'simplebar-react';
 import { Badge, Table } from 'react-bootstrap';
 import axios from 'axios';
 import React, { useState } from 'react';
@@ -100,7 +99,6 @@ const AdvanceTable = ({
 
   return (
     <>
-      <SimpleBarReact>
         <Table id="advanceTable" {...getTableProps(tableProps)}>
           <thead className={headerClassName}>
             <tr>
@@ -167,7 +165,6 @@ const AdvanceTable = ({
             })}
           </tbody>
         </Table>
-      </SimpleBarReact>
     </>
   );
 };

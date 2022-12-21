@@ -154,13 +154,13 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
         data={data}
         sortable
         pagination
-        perPage={5}
+        perPage={10}
       >
         
-        <FalconComponentCard className="list-card">
+        <FalconComponentCard className="list-card mb-1">
           <FalconComponentCard.Body>
         
-            <Row className="flex-end-center mb-3">
+            <Row className="flex-end-center mb-2">
               <Col xs="auto" sm={6} lg={4}>
                 <AdvanceTableSearchBox table/>
               </Col>
@@ -181,8 +181,6 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
           </FalconComponentCard.Body>
         </FalconComponentCard>
 
-        <br />
-        
         <FalconComponentCard id='TableFooterPanel'>
           <FalconComponentCard.Body className="footer-pagination">
             <div className="mt-3 advance-table-footer">
@@ -238,15 +236,13 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
         cancelClick={cancelClick}
         exitClick={exitModule} />
 
-      {/* onSelect={ () => {tabClick(tab)}} */}
-
       <Tabs
         id="uncontrolled-tab-example"
         className="mb-2 mt-2"
       >
         {Object.values(tabArray).map((tab, index) => {
           return (
-            <Tab eventKey={tab} title={tab} className={index == 0 ? "border p-3" : "border p-3 tab-page-tab"}>
+            <Tab eventKey={tab} title={tab} className={index == 0 ? "border p-1" : "border p-1 tab-page-tab"}>
               {index == 0 && listData && (
                 <>
                   <FalconComponentCard className="tab-page-list-card">
@@ -295,7 +291,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard id='AddTransactionDetailsForm'>
+                  <FalconComponentCard id='AddTransactionDetailsForm' className="mb-0">
                     <FalconComponentCard.Body language="jsx">
                       <TransactionDetails />
                     </FalconComponentCard.Body>

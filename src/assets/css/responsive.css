@@ -60,7 +60,7 @@
     }
 
     .footer-credits {
-        margin-left: 360px !important;
+        margin-left: 250px !important;
     }
 
     .navbar-vertical.navbar-expand-xl+.content {
@@ -77,7 +77,19 @@
     }
 
     .list-card {
-        max-height: 355px;
+        max-height: 403px;
+        overflow-y: scroll;
+    }
+}
+
+@media (min-width:1400px) {
+    .tab-page-tab {
+        max-height: 545px;
+        overflow-y: scroll;
+    }
+
+    .list-card {
+        max-height: 470px;
         overflow-y: scroll;
     }
 }
@@ -97,7 +109,7 @@
     }
 
     .list-card {
-        max-height: 555px;
+        max-height: 605px;
         overflow-y: scroll;
     }
 }

@@ -96,3 +96,7 @@
 #TableFooterPanel, #ContactDetailsTable {
     margin-bottom: unset !important;
 }
+
+.list-card .card-body{
+    padding: 10px 10px 10px 10px;
+}
