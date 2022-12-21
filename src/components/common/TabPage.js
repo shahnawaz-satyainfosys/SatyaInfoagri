@@ -58,6 +58,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     $("#btnCancel").hide();
 
     $('.tab-page-list-card').removeClass('card');
+    localStorage.removeItem("EncryptedResponseClientCode")
 
   }, []);
 

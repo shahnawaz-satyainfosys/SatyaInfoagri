@@ -54,7 +54,7 @@ const ContactDetails = () => {
       contactMobileNoErr.mobileNoEmpty = "Enter contact mobile number";
       isValid = false;
       setFormError(true);
-    } 
+    }
     else if (!(/^(\+\d{1,3}[- ]?)?\d{10}$/.test(contactDetailData.mobileNo))) {
       contactMobileNoErr.mobileNoInvalid = "Invalid mobile number, mobile number should be of 10 digits";
       isValid = false;
@@ -94,7 +94,7 @@ const ContactDetails = () => {
         mobileNo: contactDetailData.mobileNo,
         emailId: contactDetailData.emailId,
         designation: contactDetailData.designation,
-        sendMail: contactDetailData.sendMail,
+        sendMail: contactDetailData.sendMail == "Y" ? "Y" : "N",
         addUser: localStorage.getItem("LoginUserName"),
       }
 

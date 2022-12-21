@@ -7,11 +7,10 @@ const Footer = () => (
     <Row className="justify-content-between fs--1 mt-2 mb-2 footer-credits">
       <Col sm="auto">
         <p className="mb-0 text-600">
-          Khalihan{' '}
-          <span className="d-none d-sm-inline-block">| </span>
-          <br className="d-sm-none" /> {new Date().getFullYear()} &copy;{' '}
-          <a href="http://satyainfosys.com">Satya Infosys</a>
-          <span className="mb-0 text-600"> Version {version}</span>
+        | <a href="http://khalihan.in">Khalihan</a> | 
+          <a href="http://satyainfosys.com">Satya Infosys</a> |
+          {new Date().getFullYear()} &copy; all right reserved |
+          <span className="mb-0 text-600"> Version {version} |</span>
         </p>
       </Col>
       <Col sm="auto"></Col>

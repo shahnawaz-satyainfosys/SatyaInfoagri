@@ -157,11 +157,12 @@ export const Client = () => {
       isClientValid = false;
       setFormError(true);
     }
-    // else if (!(/^([A-Z]){3}(C|P|H|F|A|T|B|L|J|G){1}([A-Z]){1}([0-9]){4}([A-Z]){1}?$/.test(clientData.PanNo))) {
-    //   panNoErr.panNoInvalid = "Enter valid PAN number";
-    //   isValid = false;
-    //   setFormError(true);
-    // }
+    else if (!(/^[A-Z]{3}[ABCFGHLJPT][A-Z][0-9]{4}[A-Z]$/.test(clientData.panNumber))) {
+      panNoErr.panNoInvalid = "Enter valid PAN number";
+      isValid = false;
+      isClientValid = false;
+      setFormError(true);
+    }
 
     if (!clientData.gstNumber) {
       gstNoErr.gstNoEmpty = "Enter GST number";
@@ -169,11 +170,12 @@ export const Client = () => {
       isClientValid = false;
       setFormError(true);
     }
-    // else if (!(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(clientData.GstNo))) {
-    //   gstNoErr.gstNoInvalid = "Enter valid GST number";
-    //   isValid = false;
-    //   setFormError(true);
-    // }
+    else if (!(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(clientData.gstNumber))) {
+      gstNoErr.gstNoInvalid = "Enter valid GST number";
+      isValid = false;
+      isClientValid = false;
+      setFormError(true);
+    }
 
     if (clientData.noOfComapnies <= 0 || clientData.noOfComapnies === null) {
       noOfCompaniesErr.noOfCompaniesEmpty = "Number of companies must be greater than 0";
@@ -330,6 +332,9 @@ export const Client = () => {
   const updateCallback = (isAddClient = false) => {
 
     $("#AddClientDetailsForm").data("changed", false);
+    $('#AddClientDetailsForm').get(0).reset();
+
+    dispatch(clientDetailsErrorAction(undefined));
 
     clientContactDetailChanged = {
       clientContactDetailChanged: false
@@ -337,13 +342,13 @@ export const Client = () => {
 
     dispatch(contactDetailChangedAction(clientContactDetailChanged));
 
+    localStorage.removeItem("DeleteContactDetailsId");
+
     transactionDetailChanged = {
       transactionDetailChanged: false
     }
 
     dispatch(transactionDetailChangedAction(transactionDetailChanged));
-
-    localStorage.removeItem("DeleteContactDetailsId");
 
     if (!isAddClient) {
       toast.success("Client details updated successfully!", {
@@ -393,7 +398,6 @@ export const Client = () => {
 
       const keys = ['ClientName', 'ClientAddress1', 'ClientAddress2', 'ClientAddress3', 'ClientBillAddress1', 'ClientBillAddress2', 'ClientBillAddress3', 'ClientPANNO', 'ClientGSTNO', 'ModifyUser']
       for (const key of Object.keys(updatedUserData).filter((key) => keys.includes(key))) {
-        debugger
         updatedUserData[key] = updatedUserData[key] ? updatedUserData[key].toUpperCase() : '';
       }
 
@@ -413,7 +417,6 @@ export const Client = () => {
               updateCallback();
             }
           })
-        $('#AddClientDetailsForm').get(0).reset();
       }
 
       var deleteContactDetailsId = localStorage.getItem("DeleteContactDetailsId");
