@@ -19,6 +19,7 @@ import Logout from 'components/authentication/card/Logout';
 import Spinners from 'components/doc-components/Spinners';
 import Dashboard from 'components/dashboards/default/dashboard';
 import Clients from 'components/Clients/clients';
+import CompanyMaster from 'components/Company/CompanyMaster';
 
 const Layout = () => {
   const HTMLClassList = document.getElementsByTagName('html')[0].classList;
@@ -55,6 +56,9 @@ const Layout = () => {
         </Route>
         <Route element={<MainLayout />}>
           <Route path="/clients" element={<Clients />} />
+        </Route>
+        <Route element={<MainLayout />}>
+          <Route path="/companies" element={<CompanyMaster />} />
         </Route>
       </Routes>
       <ToastContainer icon={false} position={toast.POSITION.TOP_RIGHT} />

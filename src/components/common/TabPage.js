@@ -50,7 +50,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
   });
 
   useEffect(() => {
-    $('[data-rr-ui-event-key*="List"]').trigger('click');
+    $('[data-rr-ui-event-key*="Customer List"]').trigger('click');
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
     $("#btnNew").show();
     $("#btnSave").hide();
@@ -72,13 +72,14 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
     $("#AddClientDetailsForm").data("changed", false);
   }
 
-  $('[data-rr-ui-event-key*="List"]').click(function () {
+  $('[data-rr-ui-event-key*="Customer List"]').click(function () {
     $("#btnNew").show();
     $("#btnSave").hide();
     $("#btnCancel").hide();
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
-    $('[data-rr-ui-event-key*="List"]').attr('disabled', false);
+    $('[data-rr-ui-event-key*="Customer List"]').attr('disabled', false);
     $('#AddClientDetailsForm').get(0).reset();
+    localStorage.removeItem("EncryptedResponseClientCode")
     clearClientReducers();
   })
 
