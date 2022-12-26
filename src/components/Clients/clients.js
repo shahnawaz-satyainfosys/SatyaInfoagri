@@ -3,10 +3,11 @@ import TabPage from 'components/common/TabPage';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { clientDetailsErrorAction } from 'actions';
-import { contactDetailChangedAction } from 'actions';
-import { transactionDetailChangedAction } from 'actions';
 import { Spinner } from 'react-bootstrap';
+import {
+  clientDetailsAction, clientContactDetailsAction, transactionDetailsAction,
+  clientDetailsErrorAction, contactDetailChangedAction, transactionDetailChangedAction
+} from '../../actions/index';
 
 const tabArray = ['Customer List', 'Customer Details', 'Transaction Details'];
 
@@ -83,6 +84,64 @@ export const Client = () => {
   });
 
   $("#AddClientDetailsForm").trackChanges();
+
+  const clearClientReducers = () => {
+    dispatch(clientDetailsAction(undefined));
+    dispatch(clientContactDetailsAction(undefined));
+    dispatch(transactionDetailsAction(undefined));
+    dispatch(clientDetailsErrorAction(undefined));
+    dispatch(contactDetailChangedAction(undefined));
+    dispatch(transactionDetailChangedAction(undefined));
+    $("#AddClientDetailsForm").data("changed", false);
+  }
+
+  $('[data-rr-ui-event-key*="Customer List"]').click(function () {
+    $("#btnNew").show();
+    $("#btnSave").hide();
+    $("#btnCancel").hide();
+    $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
+    $('[data-rr-ui-event-key*="Customer List"]').attr('disabled', false);
+    $('#AddClientDetailsForm').get(0).reset();
+    localStorage.removeItem("EncryptedResponseClientCode")
+    clearClientReducers();
+  })
+
+  $('[data-rr-ui-event-key*="Customer Details"]').click(function () {
+    $("#btnNew").hide();
+    $("#btnSave").show();
+    $("#btnCancel").show();
+    $("#AddContactDetailsForm").hide();
+    $("#btnUpdateClientDetail").hide();
+    $("#ContactDetailsTable").show();
+  })
+
+  $('[data-rr-ui-event-key*="Transaction Details"]').click(function () {
+    $("#btnNew").hide();
+    $("#btnSave").show();
+    $("#btnCancel").show();
+  })
+
+  const newDetails = () => {
+    $('[data-rr-ui-event-key*="Details"]').attr('disabled', false);
+    $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
+    $('#btnSave').attr('disabled', false);
+    $("#AddClientDetailsForm").trackChanges();
+    $("#TransactionDetailsListCard").hide();
+    clearClientReducers();
+  }
+
+  const cancelClick = () => {
+    $('#btnExit').attr('isExit', 'false');
+    if ($("#AddClientDetailsForm").isChanged() ||
+      clientContactDetailChanged.contactDetailsChanged ||
+      transactionDetailChanged.transactionDetailChanged
+    ) {
+      setModalShow(true);
+    }
+    else {
+      $('[data-rr-ui-event-key*="List"]').trigger('click');
+    }
+  }
 
   const clientValidation = () => {
     const customerNameErr = {};
@@ -520,6 +579,18 @@ export const Client = () => {
     }
   };
 
+  const exitModule = () => {
+    $('#btnExit').attr('isExit', 'true');
+    if (($("#AddClientDetailsForm").isChanged()) ||
+      (clientContactDetailChanged.contactDetailsChanged) ||
+      transactionDetailChanged.transactionDetailChanged) {
+      setModalShow(true);
+    }
+    else {
+      window.location.href = '/dashboard';
+    }
+  }
+
   return (
     <>
       {isLoading ? (
@@ -534,6 +605,9 @@ export const Client = () => {
         tabArray={tabArray}
         module="Client"
         saveDetails={!clientData.encryptedClientCode ? addClientDetails : updateClientDetails}
+        newDetails={newDetails}
+        cancelClick={cancelClick}
+        exitModule={exitModule}
       />
     </>
   )

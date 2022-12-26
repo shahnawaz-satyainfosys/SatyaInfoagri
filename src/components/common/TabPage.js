@@ -17,23 +17,9 @@ import AdvanceTable from 'components/common/advance-table/AdvanceTable';
 import AdvanceTableFooter from 'components/common/advance-table/AdvanceTableFooter';
 import AdvanceTableSearchBox from 'components/common/advance-table/AdvanceTableSearchBox';
 
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  clientDetailsAction, clientContactDetailsAction, transactionDetailsAction,
-  clientDetailsErrorAction, contactDetailChangedAction, transactionDetailChangedAction
-} from '../../actions/index';
-
 import $ from 'jquery';
 
-const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) => {
-
-  const contactChanged = useSelector((state) => state.rootReducer.contactDetailChangedReducer)
-  let clientContactDetailChanged = contactChanged.contactDetailChanged;
-
-  const transactionChanged = useSelector((state) => state.rootReducer.transactionDetailChangedReducer)
-  let transactionDetailChanged = transactionChanged.transactionDetailChanged;
-
-  const dispatch = useDispatch();
+const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, newDetails, cancelClick, exitModule }) => {
 
   $.fn.extend({
     trackChanges: function () {
@@ -62,51 +48,6 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
 
   }, []);
 
-  const clearClientReducers = () => {
-    dispatch(clientDetailsAction(undefined));
-    dispatch(clientContactDetailsAction(undefined));
-    dispatch(transactionDetailsAction(undefined));
-    dispatch(clientDetailsErrorAction(undefined));
-    dispatch(contactDetailChangedAction(undefined));
-    dispatch(transactionDetailChangedAction(undefined));
-    $("#AddClientDetailsForm").data("changed", false);
-  }
-
-  $('[data-rr-ui-event-key*="Customer List"]').click(function () {
-    $("#btnNew").show();
-    $("#btnSave").hide();
-    $("#btnCancel").hide();
-    $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
-    $('[data-rr-ui-event-key*="Customer List"]').attr('disabled', false);
-    $('#AddClientDetailsForm').get(0).reset();
-    localStorage.removeItem("EncryptedResponseClientCode")
-    clearClientReducers();
-  })
-
-  $('[data-rr-ui-event-key*="Customer Details"]').click(function () {
-    $("#btnNew").hide();
-    $("#btnSave").show();
-    $("#btnCancel").show();
-    $("#AddContactDetailsForm").hide();
-    $("#btnUpdateClientDetail").hide();
-    $("#ContactDetailsTable").show();
-  })
-
-  $('[data-rr-ui-event-key*="Transaction Details"]').click(function () {
-    $("#btnNew").hide();
-    $("#btnSave").show();
-    $("#btnCancel").show();
-  })
-
-  const newDetails = () => {
-    $('[data-rr-ui-event-key*="Details"]').attr('disabled', false);
-    $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
-    $('#btnSave').attr('disabled', false);
-    $("#AddClientDetailsForm").trackChanges();
-    $("#TransactionDetailsListCard").hide();
-    clearClientReducers();
-  }
-
   const discardChanges = () => {
     if ($('#btnExit').attr('isExit') == 'true')
       window.location.href = '/dashboard';
@@ -114,31 +55,6 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails }) =
       $('[data-rr-ui-event-key*="List"]').trigger('click');
 
     setModalShow(false);
-  }
-
-  const cancelClick = () => {
-    $('#btnExit').attr('isExit', 'false');
-    if ($("#AddClientDetailsForm").isChanged() ||
-      clientContactDetailChanged.contactDetailsChanged ||
-      transactionDetailChanged.transactionDetailChanged
-    ) {
-      setModalShow(true);
-    }
-    else {
-      $('[data-rr-ui-event-key*="List"]').trigger('click');
-    }
-  }
-
-  const exitModule = () => {
-    $('#btnExit').attr('isExit', 'true');
-    if (($("#AddClientDetailsForm").isChanged()) ||
-      (clientContactDetailChanged.contactDetailsChanged) ||
-      transactionDetailChanged.transactionDetailChanged) {
-      setModalShow(true);
-    }
-    else {
-      window.location.href = '/dashboard';
-    }
   }
 
   const data = `const columns = ${JSON.stringify(listColumnArray)};

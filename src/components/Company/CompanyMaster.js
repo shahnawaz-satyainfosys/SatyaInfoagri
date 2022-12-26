@@ -26,7 +26,7 @@ export const CompanyMaster = () => {
         const listFilter = {
             pageNumber: page,
             pageSize: size,
-            EncryptedClientCode : localStorage.getItem("EncryptedClientCode")
+            EncryptedClientCode: localStorage.getItem("EncryptedClientCode")
         };
 
         const response = await axios
@@ -41,9 +41,22 @@ export const CompanyMaster = () => {
     };
 
     useEffect(() => {
-        fetchCompanyList(1);        
-      }, []);
-      
+        fetchCompanyList(1);
+        $("#btnNew").show();
+        $("#btnSave").hide();
+        $("#btnCancel").hide();
+        $('[data-rr-ui-event-key*="Maintenance"]').attr('disabled', true);
+        $('[data-rr-ui-event-key*="Company Bank"]').attr('disabled', true);
+    }, []);
+
+    $('[data-rr-ui-event-key*="Company List"]').click(function () {
+        $("#btnNew").show();
+        $("#btnSave").hide();
+        $("#btnCancel").hide();
+        $('[data-rr-ui-event-key*="Maintenance"]').attr('disabled', true);
+        $('[data-rr-ui-event-key*="Company Bank"]').attr('disabled', true);
+    })
+
     return (
         <>
             {isLoading ? (
