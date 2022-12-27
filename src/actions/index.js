@@ -60,3 +60,31 @@ export const transactionDetailChangedAction = (payload) => {
     payload
   };
 };
+
+export const companyDetailsAction = (payload) => {
+  return {
+    type: 'COMPANYDETAILS',
+    payload
+  };
+};
+
+export const commonContactDetailsAction = (payload) => {
+  return {
+    type: 'COMMONCONTACTDETAILS',
+    payload
+  };
+};
+
+export const commonContactDetailsListAction = (payload) => {
+  return {
+    type: 'COMMONCONTACTDETAILSLIST',
+    payload
+  };
+};
+
+export const companyDetailsErrorAction = (payload) => {
+  return {
+    type: 'COMPANYDETAILSERROR',
+    payload
+  };
+};

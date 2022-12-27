@@ -3,7 +3,7 @@ import { Badge, Table } from 'react-bootstrap';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { clientContactDetailsAction } from '../../../actions/index';
+import { clientContactDetailsAction, companyDetailsAction } from '../../../actions/index';
 import { transactionDetailsAction } from '../../../actions/index';
 import { clientDetailsAction } from '../../../actions/index';
 import $ from 'jquery'
@@ -21,18 +21,25 @@ const AdvanceTable = ({
   const dispatch = useDispatch();
 
   const toTabPage = (rowData) => {
-    dispatch(clientDetailsAction(rowData));
-    $('[data-rr-ui-event-key*="Details"]').attr('disabled', false);
-    $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
-    $("#AddClientDetailsForm").trackChanges();
-    $('#btnSave').attr('disabled', true);
-    localStorage.setItem('EncryptedResponseClientCode', rowData.encryptedClientCode);
-    $("#AddContactDetailsForm").hide();
-    $("#btnAddClientDetail").hide();
-    $("#btnUpdateClientDetail").show();
-    $("#ContactDetailsTable").show();
-    getContactDetailsList(rowData.encryptedClientCode);
-    getTransactionDetailsList(rowData.encryptedClientCode);
+    if (rowData.hasOwnProperty('encryptedClientCode')) {
+      dispatch(clientDetailsAction(rowData));
+      $('[data-rr-ui-event-key*="Details"]').attr('disabled', false);
+      $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
+      $("#AddClientDetailsForm").trackChanges();
+      $('#btnSave').attr('disabled', true);
+      localStorage.setItem('EncryptedResponseClientCode', rowData.encryptedClientCode);
+      $("#AddContactDetailsForm").hide();
+      $("#btnAddClientDetail").hide();
+      $("#btnUpdateClientDetail").show();
+      $("#ContactDetailsTable").show();
+      getContactDetailsList(rowData.encryptedClientCode);
+      getTransactionDetailsList(rowData.encryptedClientCode);
+    }
+    else if(rowData.hasOwnProperty('encryptedCompanyCode')){
+      dispatch(companyDetailsAction(rowData));
+      $('[data-rr-ui-event-key*="Maintenance"]').attr('disabled', false);
+      $('[data-rr-ui-event-key*="Maintenance"]').trigger('click');
+    }
   }
 
   const getContactDetailsList = async (encryptedClientCode) => {
@@ -99,72 +106,72 @@ const AdvanceTable = ({
 
   return (
     <>
-        <Table id="advanceTable" {...getTableProps(tableProps)}>
-          <thead className={headerClassName}>
-            <tr>
-              {headers.map((column, index) => (
-                <th
-                  key={index}
-                  {...column.getHeaderProps(
-                    column.getSortByToggleProps(column.headerProps)
-                  )}
-                >
-                  {column.render('Header')}
-                  {column.canSort ? (
-                    column.isSorted ? (
-                      column.isSortedDesc ? (
-                        <span className="sort desc" />
-                      ) : (
-                        <span className="sort asc" />
-                      )
+      <Table id="advanceTable" {...getTableProps(tableProps)}>
+        <thead className={headerClassName}>
+          <tr>
+            {headers.map((column, index) => (
+              <th
+                key={index}
+                {...column.getHeaderProps(
+                  column.getSortByToggleProps(column.headerProps)
+                )}
+              >
+                {column.render('Header')}
+                {column.canSort ? (
+                  column.isSorted ? (
+                    column.isSortedDesc ? (
+                      <span className="sort desc" />
                     ) : (
-                      <span className="sort" />
+                      <span className="sort asc" />
                     )
                   ) : (
-                    ''
-                  )}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {page.map((row, i) => {
-              prepareRow(row);
-              return (
-                <tr key={i} className={rowClassName} {...row.getRowProps()} onDoubleClick={() => toTabPage(row.original)}>
-                  {row.cells.map((cell, index) => {
+                    <span className="sort" />
+                  )
+                ) : (
+                  ''
+                )}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {page.map((row, i) => {
+            prepareRow(row);
+            return (
+              <tr key={i} className={rowClassName} {...row.getRowProps()} onDoubleClick={() => toTabPage(row.original)}>
+                {row.cells.map((cell, index) => {
 
-                    return (
-                      <td
-                        key={index}
-                        {...cell.getCellProps(cell.column.cellProps)}
-                      >
-                        {
-                            cell.column.id != "status" ?
-                              cell.render('Cell') :
-                              cell.row.values.status == "Active" ?
-                                <Badge
-                                  pill
-                                  bg="success"
-                                >
-                                  {cell.render('Cell')}
-                                </Badge> :
-                                cell.row.values.status == "Suspended" ?
-                                  <Badge
-                                    pill
-                                    bg="secondary"
-                                  >
-                                    {cell.render('Cell')}
-                                  </Badge> : ''
-                        }
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
+                  return (
+                    <td
+                      key={index}
+                      {...cell.getCellProps(cell.column.cellProps)}
+                    >
+                      {
+                        cell.column.id != "status" ?
+                          cell.render('Cell') :
+                          cell.row.values.status == "Active" ?
+                            <Badge
+                              pill
+                              bg="success"
+                            >
+                              {cell.render('Cell')}
+                            </Badge> :
+                            cell.row.values.status == "Suspended" ?
+                              <Badge
+                                pill
+                                bg="secondary"
+                              >
+                                {cell.render('Cell')}
+                              </Badge> : ''
+                      }
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </Table>
     </>
   );
 };

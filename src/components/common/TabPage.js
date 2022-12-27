@@ -17,6 +17,8 @@ import AdvanceTable from 'components/common/advance-table/AdvanceTable';
 import AdvanceTableFooter from 'components/common/advance-table/AdvanceTableFooter';
 import AdvanceTableSearchBox from 'components/common/advance-table/AdvanceTableSearchBox';
 
+import Maintenance from 'components/Company/Maintenance';
+import CommonContactDetails from 'components/Company/CommonContactDetails';
 import $ from 'jquery';
 
 const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, newDetails, cancelClick, exitModule }) => {
@@ -179,7 +181,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                   </FalconComponentCard>
                 </>
               )}
-              {index == 1 && module == "Client" && ClientDetails && (
+              {index == 1 && module == "Client" && (
                 <>
                   <FalconComponentCard>
                     <FalconComponentCard.Body language="jsx">
@@ -200,7 +202,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                   </FalconComponentCard>
                 </>
               )}
-              {index == 2 && module == "Client" && TransactionDetails && (
+              {index == 2 && module == "Client" && (
                 <>
                   <FalconComponentCard id='TransactionDetailsListCard'>
                     <FalconComponentCard.Body language="jsx">
@@ -213,6 +215,21 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                       <TransactionDetails />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
+                </>
+              )}
+               {index == 1 && module == "CompanyMaster" && (
+                <>
+                  <FalconComponentCard>
+                    <FalconComponentCard.Body language="jsx">
+                      <Maintenance />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard id='CommonContactDetailsForm'>
+                    <FalconComponentCard.Body language="jsx">
+                      <CommonContactDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>            
                 </>
               )}
             </Tab>
