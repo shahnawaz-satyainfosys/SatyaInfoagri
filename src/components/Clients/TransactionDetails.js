@@ -234,8 +234,9 @@ export const TransactionDetails = () => {
             transactionDetailData.forEach(transactionDetail => {
                 if (!loopBreaked) {
                     if (transactionDetail.moduleName == transactionData.moduleName) {
-                        if ((Moment(transactionDetail.startDate).format("YYYY-MM-DD") <= formData.startDate && Moment(transactionDetail.endDate).format("YYYY-MM-DD") >= formData.startDate) ||
-                            (Moment(transactionDetail.startDate).format("YYYY-MM-DD") <= formData.endDate && Moment(transactionDetail.endDate).format("YYYY-MM-DD") >= formData.endDate)) {
+                        if ((Moment(transactionDetail.startDate).format("YYYY-MM-DD") <= formData.startDate && Moment(transactionDetail.endDate).format("YYYY-MM-DD") >= formData.startDate) ||                        
+                            (Moment(transactionDetail.startDate).format("YYYY-MM-DD") <= formData.endDate && Moment(transactionDetail.endDate).format("YYYY-MM-DD") >= formData.endDate) ||
+                            (Moment(transactionDetail.startDate).format("YYYY-MM-DD") >= formData.startDate)) {
                             toast.error(`For this date range ${transactionData.moduleName} already exists, please select other date range`, {
                                 theme: 'colored'
                             });
