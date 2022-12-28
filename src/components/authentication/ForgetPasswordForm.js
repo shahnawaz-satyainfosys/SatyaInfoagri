@@ -28,7 +28,8 @@ const ForgetPasswordForm = () => {
             setTimeout(() => { navigate('/confirm-mail') }, 1000);
           } else {
             toast.error(res.data.message, {
-              theme: 'colored'
+              theme: 'colored',
+              autoClose: 10000
             });
           }
         })

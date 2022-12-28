@@ -21,7 +21,14 @@ const AdvanceTable = ({
   const dispatch = useDispatch();
 
   const toTabPage = (rowData) => {
-    if (rowData.hasOwnProperty('encryptedClientCode')) {
+    if (rowData.hasOwnProperty('encryptedCompanyCode')) {
+      dispatch(companyDetailsAction(rowData));
+      $('[data-rr-ui-event-key*="Maintenance"]').attr('disabled', false);
+      $('[data-rr-ui-event-key*="Maintenance"]').trigger('click');
+      $("#AddCompanyDetailsForm").trackChanges();
+      localStorage.setItem('EncryptedResponseCompanyCode', rowData.encryptedCompanyCode);
+    }
+    else if (!rowData.hasOwnProperty('encryptedCompanyCode')) {
       dispatch(clientDetailsAction(rowData));
       $('[data-rr-ui-event-key*="Details"]').attr('disabled', false);
       $('[data-rr-ui-event-key*="Customer Details"]').trigger('click');
@@ -34,11 +41,6 @@ const AdvanceTable = ({
       $("#ContactDetailsTable").show();
       getContactDetailsList(rowData.encryptedClientCode);
       getTransactionDetailsList(rowData.encryptedClientCode);
-    }
-    else if(rowData.hasOwnProperty('encryptedCompanyCode')){
-      dispatch(companyDetailsAction(rowData));
-      $('[data-rr-ui-event-key*="Maintenance"]').attr('disabled', false);
-      $('[data-rr-ui-event-key*="Maintenance"]').trigger('click');
     }
   }
 

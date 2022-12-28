@@ -3,7 +3,7 @@ import TabPage from 'components/common/TabPage';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { Spinner } from 'react-bootstrap';
+import { Spinner, Modal, Button } from 'react-bootstrap';
 import {
   clientDetailsAction, clientContactDetailsAction, transactionDetailsAction,
   clientDetailsErrorAction, contactDetailChangedAction, transactionDetailChangedAction
@@ -23,10 +23,11 @@ const listColumnArray = [
 ];
 
 export const Client = () => {
-
+  const dispatch = useDispatch();
   const [listData, setListData] = useState([]);
   const [perPage, setPerPage] = useState(15);
   const [isLoading, setIsLoading] = useState(false);
+  const [modalShow, setModalShow] = useState(false);
 
   const fetchUsers = async (page, size = perPage) => {
     let token = localStorage.getItem('Token');
@@ -52,7 +53,6 @@ export const Client = () => {
     localStorage.removeItem("DeleteContactDetailsId");
   }, []);
 
-  const dispatch = useDispatch();
 
   const clientDetailsReducer = useSelector((state) => state.rootReducer.clientDetailsReducer)
   const clientData = clientDetailsReducer.clientDetails;
@@ -374,14 +374,16 @@ export const Client = () => {
           setIsLoading(false);
           if (res.data.status == 200) {
             toast.success(res.data.message, {
-              theme: 'colored'
+              theme: 'colored',
+              autoClose: 10000
             });
             updateCallback(true);
             // To-do: Do not redirect to List, instead change Save button click function to updateClient after successfully add
             $('[data-rr-ui-event-key*="List"]').click();
           } else {
             toast.error(res.data.message, {
-              theme: 'colored'
+              theme: 'colored',
+              autoClose: 10000
             });
           }
         })
@@ -469,7 +471,8 @@ export const Client = () => {
             setIsLoading(false);
             if (res.data.status != 200) {
               toast.error(res.data.message, {
-                theme: 'colored'
+                theme: 'colored',
+                autoClose: 10000
               });
             }
             else if (!clientContactDetailChanged.contactDetailsChanged && !transactionDetailChanged.transactionDetailChanged) {
@@ -497,7 +500,8 @@ export const Client = () => {
               const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
               if (updateContactDetailResponse.data.status != 200) {
                 toast.error(updateContactDetailResponse.data.message, {
-                  theme: 'colored'
+                  theme: 'colored',
+                  autoClose: 10000
                 });
                 loopBreaked = true;
               }
@@ -512,7 +516,8 @@ export const Client = () => {
               const addContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', contactDetails);
               if (addContactDetailResponse.data.status != 200) {
                 toast.error(addContactDetailResponse.data.message, {
-                  theme: 'colored'
+                  theme: 'colored',
+                  autoClose: 10000
                 });
                 loopBreaked = true;
               }
@@ -539,7 +544,8 @@ export const Client = () => {
               const deleteContactResponse = await axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data });
               if (deleteContactResponse.data.status != 200) {
                 toast.error(deleteContactResponse.data.message, {
-                  theme: 'colored'
+                  theme: 'colored',
+                  autoClose: 10000
                 });
                 loopBreaked = true;
               }
@@ -563,7 +569,8 @@ export const Client = () => {
           const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail);
           if (transactionDetailResponse.data.status != 200) {
             toast.error(transactionDetailResponse.data.message, {
-              theme: 'colored'
+              theme: 'colored',
+              autoClose: 10000
             });
 
             loopBreaked = true;
@@ -591,6 +598,15 @@ export const Client = () => {
     }
   }
 
+  const discardChanges = () => {
+    if ($('#btnExit').attr('isExit') == 'true')
+      window.location.href = '/dashboard';
+    else
+      $('[data-rr-ui-event-key*="List"]').trigger('click');
+
+    setModalShow(false);
+  }
+
   return (
     <>
       {isLoading ? (
@@ -599,6 +615,29 @@ export const Client = () => {
           animation="border"
         />
       ) : null}
+
+      {modalShow &&
+        <Modal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          size="md"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          backdrop="static"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">Confirmation</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h4>Do you want to save changes?</h4>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="success" onClick={!clientData.encryptedClientCode ? addClientDetails : updateClientDetails}>Save</Button>
+            <Button variant="danger" onClick={discardChanges}>Discard</Button>
+          </Modal.Footer>
+        </Modal>
+      }
+
       <TabPage
         listData={listData}
         listColumnArray={listColumnArray}

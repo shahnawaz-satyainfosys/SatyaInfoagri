@@ -59,7 +59,8 @@ const LoginForm = ({ hasLabel }) => {
             setIsLoading(false)
             if (res.data.status == 200) {
               toast.success(`Logged in as ${formData.userId}`, {
-                theme: 'colored'
+                theme: 'colored',
+                autoClose: 10000
               });
               setLocalStorages(res.data.data);
               setTimeout(() => {
@@ -67,7 +68,8 @@ const LoginForm = ({ hasLabel }) => {
               }, 1000);
             } else {
               toast.error(res.data.message, {
-                theme: 'colored'
+                theme: 'colored',
+                autoClose: 10000
               });
             }
           })

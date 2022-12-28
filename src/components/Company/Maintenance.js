@@ -3,6 +3,7 @@ import { Col, Form, Row } from 'react-bootstrap';
 import axios from 'axios';
 import { companyDetailsAction } from 'actions';
 import { useDispatch, useSelector } from 'react-redux';
+import Moment from "moment";
 
 export const Maintenance = () => {
 
@@ -137,6 +138,10 @@ export const Maintenance = () => {
                     <Row>
                         <Col className="me-3 ms-3">
                             <Row className="mb-3">
+                                <Form.Label>Company Logo</Form.Label>
+                                <Form.Control type="file" />
+                            </Row>
+                            <Row className="mb-3">
                                 <Form.Label>Company Name<span className="text-danger">*</span></Form.Label>
                                 <Form.Control id="txtCompanyName" name="companyName" maxLength={50} value={companyData.companyName} onChange={handleFieldChange} placeholder="Company Name" required />
                                 {Object.keys(companyError.companyNameErr).map((key) => {
@@ -167,6 +172,9 @@ export const Maintenance = () => {
                                 <Form.Label>Pincode</Form.Label>
                                 <Form.Control id="txtPincode" name="pinCode" maxLength={10} value={companyData.pinCode} onChange={handleFieldChange} placeholder="Pincode" />
                             </Row>
+                        </Col>
+
+                        <Col className="me-3 ms-3">
                             <Row className="mb-3">
                                 <Form.Label>Country<span className="text-danger">*</span></Form.Label>
                                 <Form.Select id="txtCountry" name="encryptedCountryCode" defaultValue={companyData.countryCode} onChange={handleFieldChange} required>
@@ -179,9 +187,6 @@ export const Maintenance = () => {
                                     return <span className="error-message">{companyError.countryErr[key]}</span>
                                 })}
                             </Row>
-                        </Col>
-
-                        <Col className="me-3 ms-3">
                             <Row className="mb-3">
                                 <Form.Label>State<span className="text-danger">*</span></Form.Label>
                                 <Form.Select id="txtState" name="encryptedStateCode" defaultValue={companyData.stateCode} onChange={handleFieldChange} required>
@@ -196,7 +201,7 @@ export const Maintenance = () => {
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Company Registration Date</Form.Label>
-                                <Form.Control type='date' id="dtRegDate" name="companyRegDate" value={companyData.companyRegDate} onChange={handleFieldChange} />
+                                <Form.Control type='date' id="dtRegDate" name="companyRegDate" value={Moment(companyData.companyRegDate).format("YYYY-MM-DD")} onChange={handleFieldChange} />
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Company Registration No.</Form.Label>
@@ -228,10 +233,6 @@ export const Maintenance = () => {
                             <Row className="mb-3">
                                 <Form.Label>Company Exp-Imp No.</Form.Label>
                                 <Form.Control id="txtExpImpNo" name="companyExpImp" maxLength={10} value={companyData.companyExpImp} onChange={handleFieldChange} placeholder="Company export-import no" />
-                            </Row>
-                            <Row className="mb-3">
-                                <Form.Label>Company Logo</Form.Label>
-                                <Form.Control id="txtLogo" name="companyLogo" maxLength={10} value={companyData.companyLogo} onChange={handleFieldChange} placeholder="Company logo" />
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Status</Form.Label>

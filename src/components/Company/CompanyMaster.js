@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import TabPage from 'components/common/TabPage';
 import axios from 'axios';
-import { Spinner } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import { Spinner, Modal, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { companyDetailsAction, commonContactDetailsAction, companyDetailsErrorAction } from '../../actions/index';
+import { companyDetailsAction, commonContactDetailsAction, companyDetailsErrorAction, commonContactDetailsListAction, commonContactDetailChangedAction } from '../../actions/index';
 
 const tabArray = ['Company List', 'Maintenance'];
 
@@ -21,6 +22,7 @@ export const CompanyMaster = () => {
     const [listData, setListData] = useState([]);
     const [perPage, setPerPage] = useState(15);
     const [isLoading, setIsLoading] = useState(false);
+    const [modalShow, setModalShow] = useState(false);
     const dispatch = useDispatch();
 
     const fetchCompanyList = async (page, size = perPage) => {
@@ -44,15 +46,18 @@ export const CompanyMaster = () => {
     };
 
     useEffect(() => {
-        fetchCompanyList(1);
-        $("#btnNew").show();
-        $("#btnSave").hide();
-        $("#btnCancel").hide();
+        fetchCompanyList(1); 
         $('[data-rr-ui-event-key*="Maintenance"]').attr('disabled', true);
     }, []);
 
     const companyDetailsReducer = useSelector((state) => state.rootReducer.companyDetailsReducer)
     const companyData = companyDetailsReducer.companyDetails;
+
+    const commonContactChanged = useSelector((state) => state.rootReducer.commonContactDetailChangedReducer)
+    let commonContactDetailChanged = commonContactChanged.commonContactDetailChanged;
+
+    const commonContactDetailListReducer = useSelector((state) => state.rootReducer.commonContactDetailsListReducer)
+    const commonContactDetailList = commonContactDetailListReducer.commonContactDetailsList;
 
     const [formHasError, setFormError] = useState(false);
 
@@ -75,6 +80,8 @@ export const CompanyMaster = () => {
         dispatch(companyDetailsAction(undefined));
         dispatch(commonContactDetailsAction(undefined));
         dispatch(companyDetailsErrorAction(undefined));
+        dispatch(commonContactDetailsListAction(undefined));
+        dispatch(commonContactDetailChangedAction(undefined));
         $("#AddCompanyDetailsForm").data("changed", false);
     }
 
@@ -91,6 +98,8 @@ export const CompanyMaster = () => {
         $("#btnNew").hide();
         $("#btnSave").show();
         $("#btnCancel").show();
+        $("#CommonContactDetailsForm").hide();
+        $("#CommonContactDetailsTable").show();
     })
 
     const newDetails = () => {
@@ -102,25 +111,37 @@ export const CompanyMaster = () => {
     }
 
     const cancelClick = () => {
-    $('#btnExit').attr('isExit', 'false');
-    if ($("#AddCompanyDetailsForm").isChanged()
-    ) {
-      setModalShow(true);
+        debugger
+        $('#btnExit').attr('isExit', 'false');
+        if ($("#AddCompanyDetailsForm").isChanged() ||
+            commonContactDetailChanged.commonContactDetailsChanged
+        ) {
+            setModalShow(true);
+        }
+        else {
+            $('[data-rr-ui-event-key*="Company List"]').trigger('click');
+        }
     }
-    else {
-      $('[data-rr-ui-event-key*="List"]').trigger('click');
-    }
-  }
 
-  const exitModule = () => {
-    $('#btnExit').attr('isExit', 'true');
-    if (($("#AddCompanyDetailsForm").isChanged())) {
-      setModalShow(true);
+    const exitModule = () => {
+        $('#btnExit').attr('isExit', 'true');
+        if (($("#AddCompanyDetailsForm").isChanged()) ||
+            commonContactDetailChanged.commonContactDetailsChanged) {
+            setModalShow(true);
+        }
+        else {
+            window.location.href = '/dashboard';
+        }
     }
-    else {
-      window.location.href = '/dashboard';
+
+    const discardChanges = () => {
+        if ($('#btnExit').attr('isExit') == 'true')
+            window.location.href = '/dashboard';
+        else
+            $('[data-rr-ui-event-key*="Company List"]').trigger('click');
+
+        setModalShow(false);
     }
-  }
 
     const companyValidation = () => {
         const companyNameErr = {};
@@ -138,7 +159,7 @@ export const CompanyMaster = () => {
         }
 
         if (!companyData.companyType) {
-            companyTypeErr.addressEmpty = "Enter address";
+            companyTypeErr.addressEmpty = "Enter company type";
             isValid = false;
             setFormError(true);
         }
@@ -181,6 +202,7 @@ export const CompanyMaster = () => {
                 encryptedClientCode: localStorage.getItem("EncryptedClientCode"),
                 companyName: companyData.companyName,
                 companyShortName: companyData.companyShortName,
+                companyType: companyData.companyType,
                 address1: companyData.address1,
                 address2: companyData.address2 ? companyData.address2 : '',
                 address3: companyData.address3 ? companyData.address3 : '',
@@ -197,8 +219,28 @@ export const CompanyMaster = () => {
                 companyLogo: companyData.companyLogo ? companyData.companyLogo : '',
                 pinCode: companyData.pinCode ? companyData.pinCode : '',
                 activeStatus: companyData.status == null || companyData.status == "Active" ? "A" : "S",
-                addUser: localStorage.getItem("LoginUserName")
+                addUser: localStorage.getItem("LoginUserName"),
+                commonContactDetails: commonContactDetailList
             }
+
+            setIsLoading(true);
+            axios.post(process.env.REACT_APP_API_URL + '/add-company', requestData)
+                .then(res => {
+                    setIsLoading(false);
+                    if (res.data.status == 200) {
+                        toast.success(res.data.message, {
+                            theme: 'colored',
+                            autoClose: 10000
+                        });
+                        fetchCompanyList(1);
+                        $('[data-rr-ui-event-key*="Company List"]').click();
+                    } else {
+                        toast.error(res.data.message, {
+                            theme: 'colored',
+                            autoClose: 10000
+                        });
+                    }
+                })
         }
     }
 
@@ -210,6 +252,29 @@ export const CompanyMaster = () => {
                     animation="border"
                 />
             ) : null}
+
+            {modalShow &&
+                <Modal
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                    size="md"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    backdrop="static"
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-title-vcenter">Confirmation</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <h4>Do you want to save changes?</h4>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="success" onClick={addCompanyDetails}>Save</Button>
+                        <Button variant="danger" onClick={discardChanges}>Discard</Button>
+                    </Modal.Footer>
+                </Modal>
+            }
+
             <TabPage
                 listData={listData}
                 listColumnArray={listColumnArray}

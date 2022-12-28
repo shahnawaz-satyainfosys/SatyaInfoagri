@@ -88,3 +88,10 @@ export const companyDetailsErrorAction = (payload) => {
     payload
   };
 };
+
+export const commonContactDetailChangedAction = (payload) => {
+  return {
+    type: 'COMMONCONTACTDETAILCHANGED',
+    payload
+  };
+};

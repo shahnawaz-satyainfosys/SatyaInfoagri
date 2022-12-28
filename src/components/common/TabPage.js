@@ -19,6 +19,8 @@ import AdvanceTableSearchBox from 'components/common/advance-table/AdvanceTableS
 
 import Maintenance from 'components/Company/Maintenance';
 import CommonContactDetails from 'components/Company/CommonContactDetails';
+import CommonContactDetailList from 'components/Company/CommonContactDetailList';
+
 import $ from 'jquery';
 
 const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, newDetails, cancelClick, exitModule }) => {
@@ -217,7 +219,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                   </FalconComponentCard>
                 </>
               )}
-               {index == 1 && module == "CompanyMaster" && (
+               {index == 1 && module == "CompanyMaster" &&  (
                 <>
                   <FalconComponentCard>
                     <FalconComponentCard.Body language="jsx">
@@ -229,7 +231,13 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                     <FalconComponentCard.Body language="jsx">
                       <CommonContactDetails />
                     </FalconComponentCard.Body>
-                  </FalconComponentCard>            
+                  </FalconComponentCard>   
+
+                  <FalconComponentCard id='CommonContactDetailsTable'>
+                    <FalconComponentCard.Body language="jsx">
+                      <CommonContactDetailList />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>         
                 </>
               )}
             </Tab>

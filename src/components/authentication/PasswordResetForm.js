@@ -83,14 +83,16 @@ const PasswordResetForm = ({ hasLabel, encryptedSecurityUserId }) => {
           if (res.data.status == 200) {
             toast.success(
               res.data.message, {
-              theme: 'colored'
+              theme: 'colored',
+              autoClose: 10000
             });
             setTimeout(() => {
               navigate('/login');
             }, 1000);
           } else {
             toast.error(res.data.message, {
-              theme: 'colored'
+              theme: 'colored',
+              autoClose: 10000
             });
           }
         });
