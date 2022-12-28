@@ -13,13 +13,13 @@ const commonContactDetailsListReducer = (state = initialState, action) => {
       {
         return{
           ...state,
-          commonContactDetails : action.payload
+          commonContactDetailsList : action.payload
         }
       }
       else{
         return{
           ...state,
-          commonContactDetails : [...state.commonContactDetails, action.payload]
+          commonContactDetailsList : [...state.commonContactDetailsList, action.payload]
         }
       }
     default:

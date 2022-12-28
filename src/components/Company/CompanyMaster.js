@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import TabPage from 'components/common/TabPage';
 import axios from 'axios';
-import { Spinner } from 'react-bootstrap';
+import { Spinner, Modal, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { companyDetailsAction, commonContactDetailsAction, companyDetailsErrorAction } from '../../actions/index';
+import { companyDetailsAction, commonContactDetailsAction, companyDetailsErrorAction, commonContactDetailsListAction, commonContactDetailChangedAction } from '../../actions/index';
 
 const tabArray = ['Company List', 'Maintenance'];
 
@@ -21,6 +21,7 @@ export const CompanyMaster = () => {
     const [listData, setListData] = useState([]);
     const [perPage, setPerPage] = useState(15);
     const [isLoading, setIsLoading] = useState(false);
+    const [modalShow, setModalShow] = useState(false);
     const dispatch = useDispatch();
 
     const fetchCompanyList = async (page, size = perPage) => {
@@ -54,6 +55,9 @@ export const CompanyMaster = () => {
     const companyDetailsReducer = useSelector((state) => state.rootReducer.companyDetailsReducer)
     const companyData = companyDetailsReducer.companyDetails;
 
+    const commonContactChanged = useSelector((state) => state.rootReducer.commonContactDetailChangedReducer)
+    let commonContactDetailChanged = commonContactChanged.commonContactDetailChanged;
+
     const [formHasError, setFormError] = useState(false);
 
 
@@ -75,6 +79,8 @@ export const CompanyMaster = () => {
         dispatch(companyDetailsAction(undefined));
         dispatch(commonContactDetailsAction(undefined));
         dispatch(companyDetailsErrorAction(undefined));
+        dispatch(commonContactDetailsListAction(undefined));
+        dispatch(commonContactDetailChangedAction(undefined));
         $("#AddCompanyDetailsForm").data("changed", false);
     }
 
@@ -91,6 +97,8 @@ export const CompanyMaster = () => {
         $("#btnNew").hide();
         $("#btnSave").show();
         $("#btnCancel").show();
+        $("#CommonContactDetailsForm").hide();
+        $("#CommonContactDetailsTable").show();
     })
 
     const newDetails = () => {
@@ -102,25 +110,37 @@ export const CompanyMaster = () => {
     }
 
     const cancelClick = () => {
-    $('#btnExit').attr('isExit', 'false');
-    if ($("#AddCompanyDetailsForm").isChanged()
-    ) {
-      setModalShow(true);
+        debugger
+        $('#btnExit').attr('isExit', 'false');
+        if ($("#AddCompanyDetailsForm").isChanged() ||
+            commonContactDetailChanged.commonContactDetailsChanged
+        ) {
+            setModalShow(true);
+        }
+        else {
+            $('[data-rr-ui-event-key*="Company List"]').trigger('click');
+        }
     }
-    else {
-      $('[data-rr-ui-event-key*="List"]').trigger('click');
-    }
-  }
 
-  const exitModule = () => {
-    $('#btnExit').attr('isExit', 'true');
-    if (($("#AddCompanyDetailsForm").isChanged())) {
-      setModalShow(true);
+    const exitModule = () => {
+        $('#btnExit').attr('isExit', 'true');
+        if (($("#AddCompanyDetailsForm").isChanged()) ||
+            commonContactDetailChanged.commonContactDetailsChanged) {
+            setModalShow(true);
+        }
+        else {
+            window.location.href = '/dashboard';
+        }
     }
-    else {
-      window.location.href = '/dashboard';
+
+    const discardChanges = () => {
+        if ($('#btnExit').attr('isExit') == 'true')
+            window.location.href = '/dashboard';
+        else
+            $('[data-rr-ui-event-key*="Company List"]').trigger('click');
+
+        setModalShow(false);
     }
-  }
 
     const companyValidation = () => {
         const companyNameErr = {};
@@ -210,6 +230,29 @@ export const CompanyMaster = () => {
                     animation="border"
                 />
             ) : null}
+
+            {modalShow &&
+                <Modal
+                    show={modalShow}
+                    onHide={() => setModalShow(false)}
+                    size="md"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    backdrop="static"
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-title-vcenter">Confirmation</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <h4>Do you want to save changes?</h4>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="success" onClick={addCompanyDetails}>Save</Button>
+                        <Button variant="danger" onClick={discardChanges}>Discard</Button>
+                    </Modal.Footer>
+                </Modal>
+            }
+
             <TabPage
                 listData={listData}
                 listColumnArray={listColumnArray}
