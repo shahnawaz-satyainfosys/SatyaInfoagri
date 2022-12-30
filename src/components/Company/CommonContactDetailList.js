@@ -108,7 +108,6 @@ const CommonContactDetailList = () => {
                             <thead>
                                 <tr>
                                     <th>Contact Person</th>
-                                    <th>Designation</th>
                                     <th>Contact Type</th>
                                     <th>Contact Details</th>
                                     <th>Send Mail</th>
@@ -123,14 +122,15 @@ const CommonContactDetailList = () => {
                                     (data &&
                                         <tr>
                                             <td>{data.contactPerson}</td>
-                                            <td>{data.designationName}</td>
-                                            <td>{data.contactType == "OMOB" ? "Office Mobile No" :
-                                                data.contactType == "OEXT" ? "Office Extension No" :
-                                                    data.contactType == "OFAX" ? "Office Fax No" :
-                                                        data.contactType == "OE" ? "Office Email" :
-                                                            data.contactType == "PPN" ? "Personal PP No" :
-                                                                data.contactType == "MOB" ? "Personal Mobile No" :
-                                                                    data.contactType == "PLL" ? "Personal Land Line No" : "Spouse Mob No"}</td>
+                                            <td>{data.contactType == "OFE" ? "Office Email Id" :
+                                                data.contactType == "OFM" ? "Office Mobile No" :
+                                                    data.contactType == "OFL" ? "Office Land Line No" :
+                                                        data.contactType == "OFX" ? "Office Ext No" :
+                                                            data.contactType == "OFF" ? "Office Fax No" :
+                                                                data.contactType == "PPP" ? "PP No" :
+                                                                    data.contactType == "PMN" ? "Personal Mobile No" :
+                                                                        data.contactType == "PRL" ? "Land Line No" :
+                                                                            data.contactType == "PRS" ? "Spouse Mob No" : "Personal Mail"}</td>
                                             <td>{data.contactDetails}</td>
                                             <td>{data.flag == '1' ? "Yes" : "No"}</td>
                                             <td><i className="fa fa-pencil me-2" onClick={() => { editCommonContactDetails(data, data.contactDetails) }} />
