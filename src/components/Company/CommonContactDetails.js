@@ -8,7 +8,6 @@ import { commonContactDetailsListAction, commonContactDetailsAction, commonConta
 const CommonContactDetails = () => {
 
     const dispatch = useDispatch();
-    const [designationList, setDesignationList] = useState([]);
     const [formHasError, setFormError] = useState(false);
     const [contactNameErr, setContactNameErr] = useState({});
     const [contactTypeErr, setContactTypeErr] = useState({});
@@ -24,10 +23,6 @@ const CommonContactDetails = () => {
         }
     }
 
-    useEffect(() => {
-        getDesignations();
-    }, []);
-
     const commonContactDetailListReducer = useSelector((state) => state.rootReducer.commonContactDetailsListReducer)
     const commonContactDetailList = commonContactDetailListReducer.commonContactDetailsList;
 
@@ -37,30 +32,6 @@ const CommonContactDetails = () => {
     if (!commonContactDetailsReducer.commonContactDetails ||
         commonContactDetailsReducer.commonContactDetails.length <= 0) {
         resetCommonContactDetailData();
-    }
-
-    const getDesignations = async () => {
-
-        const requestData = {
-            EncryptedClientCode: localStorage.getItem("EncryptedClientCode")
-        }
-
-        axios.post(process.env.REACT_APP_API_URL + '/designation-list', requestData, {
-            headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
-        })
-            .then(res => {
-                let designationData = [];
-                if (res.data.status == 200) {
-                    if (res.data && res.data.data.length > 0)
-                        res.data.data.forEach(designation => {
-                            designationData.push({
-                                key: designation.designationName,
-                                value: designation.encryptedDesignationCode
-                            });
-                        });
-                    setDesignationList(designationData);
-                }
-            });
     }
 
     const validateCommonContactDetailForm = () => {
@@ -111,8 +82,6 @@ const CommonContactDetails = () => {
                 contactPerson: commonContactDetailData.contactPerson,
                 contactType: commonContactDetailData.contactType,
                 contactDetails: commonContactDetailData.contactDetails,
-                designationName: $("#selDesignation").find("option:selected").text(),
-                encryptedDesignationCode: commonContactDetailData.encryptedDesignationCode,
                 flag: commonContactDetailData.flag == "1" ? "1" : "0",
                 originatedFrom: commonContactDetailData.originatedFrom,
                 addUser: localStorage.getItem("LoginUserName"),
@@ -148,8 +117,6 @@ const CommonContactDetails = () => {
                 contactPerson: commonContactDetailData.contactPerson,
                 contactType: commonContactDetailData.contactType,
                 contactDetails: commonContactDetailData.contactDetails,
-                encryptedDesignationCode: commonContactDetailData.encryptedDesignationCode,
-                designationName: $("#selDesignation").find("option:selected").text(),
                 flag: commonContactDetailData.flag == "1" ? "1" : "0",
                 addUser: commonContactDetailData.addUser,
                 originatedFrom: commonContactDetailData.originatedFrom,
@@ -214,34 +181,27 @@ const CommonContactDetails = () => {
                                 })}
                             </Row>
                             <Row className="mb-3">
-                                <Form.Label>Designation</Form.Label>
-                                <Form.Select id="selDesignation" name="encryptedDesignationCode" defaultValue={commonContactDetailData.designationCode} onChange={handleFieldChange}>
-                                    <option value=''>Select designation</option>
-                                    {designationList.map((option, index) => (
-                                        <option key={index} value={option.value}>{option.key}</option>
-                                    ))}
-                                </Form.Select>
-                            </Row>
-                        </Col>
-
-                        <Col className="me-3 ms-3">
-                            <Row className="mb-3">
                                 <Form.Label>Contact Type<span className="text-danger">*</span></Form.Label>
                                 <Form.Select id="txtContactType" name="contactType" value={commonContactDetailData.contactType} onChange={handleFieldChange} required>
-                                    <option value=''>Select contact type</option>                                    
-                                    <option value="OMOB">Office Mobile No.</option>
-                                    <option value="OEXT">Office Extension No.</option>
-                                    <option value="OFAX">Office Fax No.</option>
-                                    <option value="OE">Office Email</option>
-                                    <option value="PPN">Personal PP No.</option>
-                                    <option value="MOB">Personal Mobile No.</option>
-                                    <option value="PLL">Personal Land Line No.</option>
-                                    <option value="SMOB">Spouse Mob No.</option>
+                                    <option value=''>Select contact type</option>
+                                    <option value="OFE">Office Email Id</option>
+                                    <option value="OFM">Office Mobile No</option>
+                                    <option value="OFL">Office Land Line No</option>
+                                    <option value="OFX">Office Ext No</option>
+                                    <option value="OFF">Office Fax No</option>
+                                    <option value="PPP">PP No</option>
+                                    <option value="PMN">Personal Mobile No</option>
+                                    <option value="PRL">Personal Land Line No</option>
+                                    <option value="PRS">Spouse Mob No</option>
+                                    <option value="PRe">Personal Mail</option>
                                 </Form.Select>
                                 {Object.keys(contactTypeErr).map((key) => {
                                     return <span className="error-message">{contactTypeErr[key]}</span>
                                 })}
                             </Row>
+                        </Col>
+
+                        <Col className="me-3 ms-3">
                             <Row className="mb-3">
                                 <Form.Label>Contact Details<span className="text-danger">*</span></Form.Label>
                                 <Form.Control id="txtContactDetails" name="contactDetails" maxLength={30} value={commonContactDetailData.contactDetails} onChange={handleFieldChange} placeholder="Contact details" required />

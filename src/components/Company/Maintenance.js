@@ -201,7 +201,7 @@ export const Maintenance = () => {
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Company Registration Date</Form.Label>
-                                <Form.Control type='date' id="dtRegDate" name="companyRegDate" value={Moment(companyData.companyRegDate).format("YYYY-MM-DD")} onChange={handleFieldChange} />
+                                <Form.Control type='date' id="dtRegDate" name="companyRegDate" value={companyData.companyRegDate ? Moment(companyData.companyRegDate).format("YYYY-MM-DD") : ""} onChange={handleFieldChange} />
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Company Registration No.</Form.Label>

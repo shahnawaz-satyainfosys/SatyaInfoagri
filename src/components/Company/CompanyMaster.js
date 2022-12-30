@@ -46,7 +46,7 @@ export const CompanyMaster = () => {
     };
 
     useEffect(() => {
-        fetchCompanyList(1); 
+        fetchCompanyList(1);
         $('[data-rr-ui-event-key*="Maintenance"]').attr('disabled', true);
     }, []);
 
@@ -91,6 +91,7 @@ export const CompanyMaster = () => {
         $("#btnCancel").hide();
         $('[data-rr-ui-event-key*="Maintenance"]').attr('disabled', true);
         $('#AddCompanyDetailsForm').get(0).reset();
+        localStorage.removeItem("EncryptedResponseCompanyCode")
         clearCompanyReducers();
     })
 
@@ -208,7 +209,7 @@ export const CompanyMaster = () => {
                 address3: companyData.address3 ? companyData.address3 : '',
                 encryptedCountryCode: companyData.encryptedCountryCode,
                 encryptedStateCode: companyData.encryptedStateCode,
-                companyRegDate: companyData.companyRegDate ? companyData.companyRegDate : '',
+                companyRegDate: companyData.companyRegDate ? companyData.companyRegDate : new Date(),
                 companyRegNo: companyData.companyRegNo ? companyData.companyRegNo : '',
                 companySalesTax: companyData.companySalesTax ? companyData.companySalesTax : '',
                 companyTinNo: companyData.companyTinNo ? companyData.companyTinNo : '',
@@ -224,7 +225,9 @@ export const CompanyMaster = () => {
             }
 
             setIsLoading(true);
-            axios.post(process.env.REACT_APP_API_URL + '/add-company', requestData)
+            axios.post(process.env.REACT_APP_API_URL + '/add-company', requestData, {
+                headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+            })
                 .then(res => {
                     setIsLoading(false);
                     if (res.data.status == 200) {
