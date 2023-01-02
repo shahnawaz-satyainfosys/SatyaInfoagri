@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { Col, Form, Row } from 'react-bootstrap';
 import { Button, Modal, Table } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 import { commonContactDetailsAction, commonContactDetailsListAction, commonContactDetailChangedAction } from '../../actions/index';
 
 const CommonContactDetailList = () => {
@@ -12,9 +14,9 @@ const CommonContactDetailList = () => {
     const [modalShow, setModalShow] = useState(false);
 
     useEffect(() => {
-        const count = $('#CommonContactDetailsTable tr').length;
+        const count = $('#CommonContactDetailsCard tr').length;
         if (count > 1) {
-            $("#CommonContactDetailsTable").show();
+            $("#CommonContactDetailsCard").show();
         }
     }, []);
 
@@ -22,7 +24,7 @@ const CommonContactDetailList = () => {
         $("#CommonContactDetailsForm").show();
         $("#btnAddCommonContactDetail").hide();
         $("#btnUpdateCommonContactDetail").show();
-        $("#CommonContactDetailsTable").hide();
+        $("#CommonContactDetailsCard").hide();
         localStorage.setItem("contactPersonDetailsToUpdate", contactDetailsToUpdate);
         dispatch(commonContactDetailsAction(data));
     }
@@ -68,7 +70,56 @@ const CommonContactDetailList = () => {
         $("#CommonContactDetailsForm").show();
         $("#btnAddCommonContactDetail").show();
         $("#btnUpdateCommonContactDetail").hide();
-        $('#CommonContactDetailsTable').hide();
+        $('#CommonContactDetailsCard').hide();
+    }
+
+    const setContactDetailData = (contactObj) => {
+        var contactListData = [];
+        for (let i = 0; i < contactObj.length; i++) {
+            let contactDetailsData = {
+                encryptedClientCode: contactObj[i].encryptedClientCode,
+                contactPerson: contactObj[i].contactPerson ? contactObj[i].contactPerson : '',
+                contactType: contactObj[i].contactType ? contactObj[i].contactType : 'PRE',
+                contactDetails: contactObj[i].emailId ? contactObj[i].emailId : contactObj[i].mobileNo,
+                flag: contactObj[i].sendMail == 'Y' ? '1' : '0'
+            };
+
+            contactListData.push(contactDetailsData);
+        }
+        dispatch(commonContactDetailsListAction(contactListData));
+    }
+
+    const onCheckChanged = () => {
+        const request = {
+            EncryptedClientCode: localStorage.getItem("EncryptedClientCode")
+        }
+
+        if ($('#contactListChkBox').is(":checked")) {
+            if (commonContactDetailListReducer.commonContactDetailsList.length > 0){
+                setContactDetailData(commonContactDetailListReducer.commonContactDetailsList)
+            }
+            else{
+                axios
+                .post(process.env.REACT_APP_API_URL + '/get-client-contact-detail-list', request)
+                .then(res => {
+
+                    if (res.data.status == 200) {
+                        if (res.data && res.data.data.length > 0) {
+                            $("#CompanyContactDetailsTable").show();
+                        } else {
+                            $("#CompanyContactDetailsTable").hide();
+                        }
+                        setContactDetailData(res.data.data)            
+                    }
+                    else {
+                        $("#CompanyContactDetailsTable").hide();
+                    }
+                });
+            }
+        }
+        else {
+            $("#CompanyContactDetailsTable").hide();
+        }
     }
 
     return (
@@ -96,6 +147,20 @@ const CommonContactDetailList = () => {
             }
 
             <div>
+                <Row className="justify-content-between align-items-center">
+                    <Col xs="auto">
+                        <Form.Check type="checkbox" id="contactListChkBox" className="mb-0">
+                            <Form.Check.Input
+                                type="checkbox"
+                                name="Same as client"
+                                onChange={onCheckChanged}
+                            />
+                            <Form.Check.Label className="mb-0 text-700">
+                                Same as client
+                            </Form.Check.Label>
+                        </Form.Check>
+                    </Col>
+                </Row>
                 <div style={{ display: "flex", justifyContent: "end" }}>
                     <Button id='btnAddCommonContact' onClick={() => showAddCommonContactDetailsForm()}>
                         Add Common Contact Detail

@@ -233,7 +233,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                     </FalconComponentCard.Body>
                   </FalconComponentCard>   
 
-                  <FalconComponentCard id='CommonContactDetailsTable'>
+                  <FalconComponentCard id='CommonContactDetailsCard'>
                     <FalconComponentCard.Body language="jsx">
                       <CommonContactDetailList />
                     </FalconComponentCard.Body>

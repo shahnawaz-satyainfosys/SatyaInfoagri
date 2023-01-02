@@ -3,7 +3,7 @@ import { Badge, Table } from 'react-bootstrap';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { clientContactDetailsAction, companyDetailsAction } from '../../../actions/index';
+import { clientContactDetailsAction, companyDetailsAction, commonContactDetailsListAction } from '../../../actions/index';
 import { transactionDetailsAction } from '../../../actions/index';
 import { clientDetailsAction } from '../../../actions/index';
 import $ from 'jquery'
@@ -26,6 +26,7 @@ const AdvanceTable = ({
       $('[data-rr-ui-event-key*="Maintenance"]').attr('disabled', false);
       $('[data-rr-ui-event-key*="Maintenance"]').trigger('click');
       $("#AddCompanyDetailsForm").trackChanges();
+      getCommonContactDetailsList(rowData.encryptedCompanyCode);
       localStorage.setItem('EncryptedResponseCompanyCode', rowData.encryptedCompanyCode);
     }
     else if (!rowData.hasOwnProperty('encryptedCompanyCode')) {
@@ -102,6 +103,35 @@ const AdvanceTable = ({
         }
         else {
           $("#TransactionDetailsTable").hide();
+        }
+      });
+  }
+
+  const getCommonContactDetailsList = async (encryptedCompanyCode) => {
+    const request = {
+      EncryptedCompanyCode: encryptedCompanyCode
+    }
+
+    axios
+      .post(process.env.REACT_APP_API_URL + '/get-common-contact-detail-list', request)
+      .then(res => {
+
+        if (res.data.status == 200) {
+          let commonContactDetailsData = [];
+          if ($('#CommonContactDetailsCard tbody tr').length > 1) {
+            $('#CommonContactDetailsCard tbody tr').remove();
+          }
+          commonContactDetailsData = res.data.data;
+          dispatch(commonContactDetailsListAction(commonContactDetailsData));
+
+          if (res.data && res.data.data.length > 0) {
+            $("#CompanyContactDetailsTable").show();
+          } else {
+            $("#CompanyContactDetailsTable").hide();
+          }
+        }
+        else {
+          $("#CompanyContactDetailsTable").hide();
         }
       });
   }

@@ -107,11 +107,10 @@ const CommonContactDetails = () => {
 
     const updateCommonContactDetails = () => {
         if (validateCommonContactDetailForm()) {
-
             var contactPersonDetailsToUpdate = localStorage.getItem("contactPersonDetailsToUpdate");
 
             const commonContactDetail = {
-                encryptedCommonContactDetailsId: commonContactDetailData.encryptedClientContactDetailsId,
+                encryptedCommonContactDetailsId: commonContactDetailData.encryptedCommonContactDetailsId,
                 encryptedClientCode: commonContactDetailData.encryptedClientCode,
                 encryptedCompanyCode: commonContactDetailData.encryptedCompanyCode,
                 contactPerson: commonContactDetailData.contactPerson,
@@ -161,7 +160,7 @@ const CommonContactDetails = () => {
 
     const hideCommonContactForm = () => {
         $("#CommonContactDetailsForm").hide();
-        $("#CommonContactDetailsTable").show();
+        $("#CommonContactDetailsCard").show();
         dispatch(commonContactDetailsAction(undefined))
         resetCommonContactDetailData();
         clearStates();
@@ -193,7 +192,7 @@ const CommonContactDetails = () => {
                                     <option value="PMN">Personal Mobile No</option>
                                     <option value="PRL">Personal Land Line No</option>
                                     <option value="PRS">Spouse Mob No</option>
-                                    <option value="PRe">Personal Mail</option>
+                                    <option value="PRE">Personal Mail</option>
                                 </Form.Select>
                                 {Object.keys(contactTypeErr).map((key) => {
                                     return <span className="error-message">{contactTypeErr[key]}</span>

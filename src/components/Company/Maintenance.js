@@ -130,8 +130,72 @@ export const Maintenance = () => {
         }
     };
 
+    const onCheckChanged = () => {
+        const request = {
+            EncryptedClientCode: localStorage.getItem("EncryptedClientCode")
+        }
+        if ($('#clientChkBox').is(":checked")) {
+
+            if (companyData.encryptedClientCode) {
+                setCompanyData(companyData)
+            }
+            else {
+                axios.post(process.env.REACT_APP_API_URL + '/get-client', request, {
+                    headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+                })
+                    .then(res => {
+                        if (res.data.status == 200) {
+
+                            setCompanyData(res.data.data)
+                        } else {
+                            toast.error(res.data.message, {
+                                theme: 'colored',
+                                autoClose: 10000
+                            });
+                        }
+                    })
+            }
+        } else {
+            $('#AddCompanyDetailsForm input').val("");
+        }
+    }
+
+    const setCompanyData = (objCompany) => {
+        const responseData = {
+            encryptedClientCode: objCompany.encryptedClientCode,
+            companyName: objCompany.customerName? objCompany.customerName : objCompany.companyName,
+            address1: objCompany.address1,
+            address2: objCompany.address2 ? objCompany.address2 : '',
+            address3: objCompany.address3 ? objCompany.address3 : '',
+            companyGstNo: objCompany.gstNumber? objCompany.gstNumber : objCompany.companyGstNo,
+            companyPan: objCompany.panNumber? objCompany.panNumber : objCompany.companyPan,
+            pinCode: objCompany.pinCode,
+            state: objCompany.state,
+            encryptedStateCode: objCompany.encryptedStateCode,
+            country: objCompany.country,
+            encryptedCountryCode: objCompany.encryptedCountryCode,
+            status: objCompany.status
+        }
+        dispatch(companyDetailsAction(responseData))
+    }
+
+
     return (
         <>
+            <Row className="justify-content-between align-items-center">
+                <Col xs="auto">
+                    <Form.Check type="checkbox" id="clientChkBox" className="mb-0">
+                        <Form.Check.Input
+                            type="checkbox"
+                            name="Same as client"
+                            onChange={onCheckChanged}
+                        />
+                        <Form.Check.Label className="mb-0 text-700">
+                            Same as client
+                        </Form.Check.Label>
+                    </Form.Check>
+                </Col>
+            </Row>
             {companyData &&
 
                 <Form noValidate validated={formHasError} className="details-form" onSubmit={e => { handleSubmit(e) }} id='AddCompanyDetailsForm'>
