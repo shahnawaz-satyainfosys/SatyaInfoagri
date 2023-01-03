@@ -4,7 +4,10 @@ const initialState = {
     companyTypeErr: {},
     addressErr: {},
     countryErr: {},
-    stateErr:{}
+    stateErr:{},
+    gstNoErr:{},
+    panNoErr:{},
+    regDateErr:{}
   }
 };
 

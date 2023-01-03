@@ -46,7 +46,9 @@ export const TransactionDetails = () => {
 
     const getModule = async () => {
         axios
-            .get(process.env.REACT_APP_API_URL + '/security-module-master-list')
+            .get(process.env.REACT_APP_API_URL + '/security-module-master-list',{
+                headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+            })
             .then(res => {
                 if (res.data.status == 200) {
                     let moduleData = [];

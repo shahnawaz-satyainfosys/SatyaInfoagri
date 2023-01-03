@@ -68,6 +68,13 @@ export const companyDetailsAction = (payload) => {
   };
 };
 
+export const clientDataAction = (payload) => {
+  return {
+    type: 'CLIENTDATA',
+    payload
+  };
+};
+
 export const commonContactDetailsAction = (payload) => {
   return {
     type: 'COMMONCONTACTDETAILS',
@@ -78,6 +85,13 @@ export const commonContactDetailsAction = (payload) => {
 export const commonContactDetailsListAction = (payload) => {
   return {
     type: 'COMMONCONTACTDETAILSLIST',
+    payload
+  };
+};
+
+export const clientContactListAction = (payload) => {
+  return {
+    type: 'CLIENTCONTACTLIST',
     payload
   };
 };

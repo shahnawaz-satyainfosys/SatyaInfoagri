@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { Spinner, Modal, Button } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { companyDetailsAction, commonContactDetailsAction, companyDetailsErrorAction, commonContactDetailsListAction, commonContactDetailChangedAction } from '../../actions/index';
+import Moment from "moment";
 
 const tabArray = ['Company List', 'Maintenance'];
 
@@ -109,6 +110,10 @@ export const CompanyMaster = () => {
     const newDetails = () => {
         $('[data-rr-ui-event-key*="Maintenance"]').attr('disabled', false);
         $('[data-rr-ui-event-key*="Maintenance"]').trigger('click');
+        $("#clientChkBoxRow").show();
+        $("#contactListChkBoxRow").show();
+        $('#clientChkBox').prop('checked', false);
+        $('#contactListChkBox').prop('checked', false);
         $('#btnSave').attr('disabled', false);
         $("#AddCompanyDetailsForm").data("changed", false);
         clearCompanyReducers();
@@ -152,6 +157,9 @@ export const CompanyMaster = () => {
         const addressErr = {};
         const countryErr = {};
         const stateErr = {};
+        const panNoErr = {};
+        const gstNoErr = {};
+        const regDateErr = {};
 
         let isValid = true;
 
@@ -185,13 +193,34 @@ export const CompanyMaster = () => {
             setFormError(true);
         }
 
+        if (companyData.companyPan && !(/^[A-Z]{3}[ABCFGHLJPT][A-Z][0-9]{4}[A-Z]$/.test(companyData.companyPan))) {
+            panNoErr.panNoInvalid = "Enter valid PAN number";
+            isValid = false;
+            setFormError(true);
+        }
+
+        if (companyData.companyGstNo && !(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(companyData.companyGstNo))) {
+            gstNoErr.gstNoEmpty = "Enter valid GST number";
+            isValid = false;
+            setFormError(true);
+        }
+
+        if(companyData.companyRegDate && Moment(companyData.companyRegDate).format("YYYY-MM-DD") >= Moment(new Date()).format("YYYY-MM-DD")){
+            regDateErr.invalidRegDate = "Registration date can not be greater than or equal to today's date";
+            isValid = false;
+            setFormError(true);
+        }
+
         if (!isValid) {
             var errorObject = {
                 companyNameErr,
                 companyTypeErr,
                 addressErr,
                 countryErr,
-                stateErr
+                stateErr,
+                panNoErr,
+                gstNoErr,
+                regDateErr
             }
             dispatch(companyDetailsErrorAction(errorObject))
         }
@@ -251,7 +280,7 @@ export const CompanyMaster = () => {
                 addUser: localStorage.getItem("LoginUserName"),
                 commonContactDetails: commonContactDetailList
             }
-            
+
             const keys = ['companyName', 'companyShortName', 'companyType', 'address1', 'address2', 'address3', 'companyPan', 'companyGstNo', 'addUser']
             for (const key of Object.keys(requestData).filter((key) => keys.includes(key))) {
                 requestData[key] = requestData[key] ? requestData[key].toUpperCase() : '';
@@ -265,7 +294,7 @@ export const CompanyMaster = () => {
                 for (const key of Object.keys(contactDetailObj).filter((key) => contactKeys.includes(key))) {
                     contactDetailObj[key] = contactDetailObj[key] ? contactDetailObj[key].toUpperCase() : '';
                 }
-                userData.ClientContactDetails[index] = contactDetailObj;
+                requestData.commonContactDetails[index] = contactDetailObj;
                 index++;
             }
             setIsLoading(true);
@@ -345,7 +374,7 @@ export const CompanyMaster = () => {
                                 autoClose: 10000
                             });
                         }
-                        else if (!commonContactDetailChanged.commonContactDetailChanged) {
+                        else if (!commonContactDetailChanged.commonContactDetailsChanged) {
                             updateCompanyCallback();
                         }
                     })
@@ -367,7 +396,9 @@ export const CompanyMaster = () => {
                         }
 
                         if (commonContactDetails.encryptedCommonContactDetailsId) {
-                            const updateCommonContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-common-contact-detail', commonContactDetails);
+                            const updateCommonContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-common-contact-detail', commonContactDetails, {
+                                headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+                            });
                             if (updateCommonContactDetailResponse.data.status != 200) {
                                 toast.error(updateCommonContactDetailResponse.data.message, {
                                     theme: 'colored',
@@ -383,7 +414,9 @@ export const CompanyMaster = () => {
                             }
                         }
                         else if (!commonContactDetails.encryptedCommonContactDetailsId) {
-                            const addCommonContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-common-contact-details', commonContactDetails);
+                            const addCommonContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-common-contact-details', commonContactDetails, {
+                                headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+                            });
                             if (addCommonContactDetailResponse.data.status != 200) {
                                 toast.error(addCommonContactDetailResponse.data.message, {
                                     theme: 'colored',
@@ -410,8 +443,9 @@ export const CompanyMaster = () => {
                         if (!loopBreaked) {
 
                             const data = { encryptedCommonContactDetailsId: deleteCommonContactDetailsId }
+                            const headers = { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
 
-                            const deleteCommonContactResponse = await axios.delete(process.env.REACT_APP_API_URL + '/delete-common-contact-detail', { data });
+                            const deleteCommonContactResponse = await axios.delete(process.env.REACT_APP_API_URL + '/delete-common-contact-detail', { headers, data });
                             if (deleteCommonContactResponse.data.status != 200) {
                                 toast.error(deleteCommonContactResponse.data.message, {
                                     theme: 'colored',

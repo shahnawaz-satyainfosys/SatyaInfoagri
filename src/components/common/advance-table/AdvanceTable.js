@@ -23,6 +23,8 @@ const AdvanceTable = ({
   const toTabPage = (rowData) => {
     if (rowData.hasOwnProperty('encryptedCompanyCode')) {
       dispatch(companyDetailsAction(rowData));
+      $("#contactListChkBoxRow").hide();
+      $("#clientChkBoxRow").hide();
       $('[data-rr-ui-event-key*="Maintenance"]').attr('disabled', false);
       $('[data-rr-ui-event-key*="Maintenance"]').trigger('click');
       $("#AddCompanyDetailsForm").trackChanges();
@@ -52,7 +54,9 @@ const AdvanceTable = ({
     }
 
     axios
-      .post(process.env.REACT_APP_API_URL + '/get-client-contact-detail-list', requestParams)
+      .post(process.env.REACT_APP_API_URL + '/get-client-contact-detail-list', requestParams, {
+        headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+      })
       .then(res => {
 
         if (res.data.status == 200) {
@@ -82,7 +86,9 @@ const AdvanceTable = ({
     }
 
     axios
-      .post(process.env.REACT_APP_API_URL + '/client-registration-authorization-list', requestParams)
+      .post(process.env.REACT_APP_API_URL + '/client-registration-authorization-list', requestParams, {
+        headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+      })
       .then(res => {
 
         if ($('#TransactionDetailsTable tbody tr').length > 1) {
@@ -113,7 +119,9 @@ const AdvanceTable = ({
     }
 
     axios
-      .post(process.env.REACT_APP_API_URL + '/get-common-contact-detail-list', request)
+      .post(process.env.REACT_APP_API_URL + '/get-common-contact-detail-list', request,{
+        headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+      })
       .then(res => {
 
         if (res.data.status == 200) {

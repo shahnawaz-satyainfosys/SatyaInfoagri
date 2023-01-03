@@ -4,12 +4,15 @@ import { Button, Modal, Table } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import { commonContactDetailsAction, commonContactDetailsListAction, commonContactDetailChangedAction } from '../../actions/index';
+import { commonContactDetailsAction, commonContactDetailsListAction, commonContactDetailChangedAction, clientContactListAction } from '../../actions/index';
 
 const CommonContactDetailList = () => {
     const dispatch = useDispatch();
     const [paramsData, setParamsData] = useState({});
     const commonContactDetailListReducer = useSelector((state) => state.rootReducer.commonContactDetailsListReducer)
+
+    const clientContactListReducer = useSelector((state) => state.rootReducer.clientContactListReducer)
+    var clientContactListData = clientContactListReducer.clientContactList
 
     const [modalShow, setModalShow] = useState(false);
 
@@ -77,48 +80,68 @@ const CommonContactDetailList = () => {
         var contactListData = [];
         for (let i = 0; i < contactObj.length; i++) {
             let contactDetailsData = {
+                encryptedClientContactDetailsId: contactObj[i].encryptedClientContactDetailsId,
                 encryptedClientCode: contactObj[i].encryptedClientCode,
                 contactPerson: contactObj[i].contactPerson ? contactObj[i].contactPerson : '',
                 contactType: contactObj[i].contactType ? contactObj[i].contactType : 'PRE',
                 contactDetails: contactObj[i].emailId ? contactObj[i].emailId : contactObj[i].mobileNo,
-                flag: contactObj[i].sendMail == 'Y' ? '1' : '0'
+                originatedFrom: contactObj[i].originatedFrom ? contactObj[i].originatedFrom : 'CM',
+                flag: contactObj[i].sendMail == 'Y' ? '1' : '0',
+                addUser: localStorage.getItem("LoginUserName")
             };
 
             contactListData.push(contactDetailsData);
         }
-        dispatch(commonContactDetailsListAction(contactListData));
+
+        if (commonContactDetailListReducer.commonContactDetailsList.length > 0) {
+            var commonContactListData = contactListData.concat(commonContactDetailListReducer.commonContactDetailsList)
+            dispatch(commonContactDetailsListAction(commonContactListData))
+        }
+        else
+            dispatch(commonContactDetailsListAction(contactListData));
     }
 
-    const onCheckChanged = () => {
+    const contactSameAsClientChanged = () => {
         const request = {
             EncryptedClientCode: localStorage.getItem("EncryptedClientCode")
         }
 
         if ($('#contactListChkBox').is(":checked")) {
-            if (commonContactDetailListReducer.commonContactDetailsList.length > 0){
-                setContactDetailData(commonContactDetailListReducer.commonContactDetailsList)
+            if (clientContactListData.length > 0) {
+                setContactDetailData(clientContactListData)
             }
-            else{
+            else {
                 axios
-                .post(process.env.REACT_APP_API_URL + '/get-client-contact-detail-list', request)
-                .then(res => {
+                    .post(process.env.REACT_APP_API_URL + '/get-client-contact-detail-list', request, {
+                        headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+                    })
+                    .then(res => {
 
-                    if (res.data.status == 200) {
-                        if (res.data && res.data.data.length > 0) {
-                            $("#CompanyContactDetailsTable").show();
-                        } else {
+                        if (res.data.status == 200) {
+                            if (res.data && res.data.data.length > 0) {
+                                $("#CompanyContactDetailsTable").show();
+                            } else {
+                                $("#CompanyContactDetailsTable").hide();
+                            }
+                            dispatch(clientContactListAction(res.data.data));
+                            setContactDetailData(res.data.data);
+                        }
+                        else {
                             $("#CompanyContactDetailsTable").hide();
                         }
-                        setContactDetailData(res.data.data)            
-                    }
-                    else {
-                        $("#CompanyContactDetailsTable").hide();
-                    }
-                });
+                    });
             }
         }
         else {
-            $("#CompanyContactDetailsTable").hide();
+            commonContactDetailListReducer.commonContactDetailsList.filter(x => x.encryptedClientContactDetailsId)
+                .forEach(x => commonContactDetailListReducer.commonContactDetailsList.splice(commonContactDetailListReducer.commonContactDetailsList.indexOf(x), 1));
+
+            dispatch(commonContactDetailsListAction(commonContactDetailListReducer.commonContactDetailsList));
+
+            if (("#CompanyContactDetailsTable tr").length > 1)
+                $("#CompanyContactDetailsTable").show();
+            else
+                $("#CompanyContactDetailsTable").hide();
         }
     }
 
@@ -147,24 +170,26 @@ const CommonContactDetailList = () => {
             }
 
             <div>
-                <Row className="justify-content-between align-items-center">
-                    <Col xs="auto">
-                        <Form.Check type="checkbox" id="contactListChkBox" className="mb-0">
-                            <Form.Check.Input
-                                type="checkbox"
-                                name="Same as client"
-                                onChange={onCheckChanged}
-                            />
-                            <Form.Check.Label className="mb-0 text-700">
-                                Same as client
-                            </Form.Check.Label>
-                        </Form.Check>
-                    </Col>
-                </Row>
                 <div style={{ display: "flex", justifyContent: "end" }}>
                     <Button id='btnAddCommonContact' onClick={() => showAddCommonContactDetailsForm()}>
-                        Add Common Contact Detail
+                        Add Contact Detail
                     </Button>
+                </div>
+                <div>
+                    <Row className="justify-content-between align-items-center" id="contactListChkBoxRow">
+                        <Col xs="auto">
+                            <Form.Check type="checkbox" id="contactListChkBox" className="mb-1">
+                                <Form.Check.Input
+                                    type="checkbox"
+                                    name="Same as client"
+                                    onChange={contactSameAsClientChanged}
+                                />
+                                <Form.Check.Label className="mb-0 text-700">
+                                    Same as client
+                                </Form.Check.Label>
+                            </Form.Check>
+                        </Col>
+                    </Row>
                 </div>
                 {commonContactDetailListReducer &&
                     commonContactDetailListReducer.commonContactDetailsList &&

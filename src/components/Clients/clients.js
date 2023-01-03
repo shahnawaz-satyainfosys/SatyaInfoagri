@@ -497,7 +497,9 @@ export const Client = () => {
             }
 
             if (contactDetails.encryptedClientContactDetailsId) {
-              const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails);
+              const updateContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-client-contact-detail', contactDetails, {
+                headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+              });
               if (updateContactDetailResponse.data.status != 200) {
                 toast.error(updateContactDetailResponse.data.message, {
                   theme: 'colored',
@@ -513,7 +515,9 @@ export const Client = () => {
               }
             }
             else if (!contactDetails.encryptedClientContactDetailsId) {
-              const addContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', contactDetails);
+              const addContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-contact-details', contactDetails, {
+                headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+              });
               if (addContactDetailResponse.data.status != 200) {
                 toast.error(addContactDetailResponse.data.message, {
                   theme: 'colored',
@@ -540,8 +544,8 @@ export const Client = () => {
             if (!loopBreaked) {
 
               const data = { encryptedClientContactDetailsId: deleteContactDetailId }
-
-              const deleteContactResponse = await axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { data });
+              const headers = { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+              const deleteContactResponse = await axios.delete(process.env.REACT_APP_API_URL + '/delete-client-contact-detail', { headers, data });
               if (deleteContactResponse.data.status != 200) {
                 toast.error(deleteContactResponse.data.message, {
                   theme: 'colored',
@@ -566,7 +570,9 @@ export const Client = () => {
 
         for (let i = 0; i < newTransactions.length; i++) {
           const transactionDetail = newTransactions[i];
-          const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail);
+          const transactionDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-client-registration-authorization', transactionDetail, {
+            headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+          });
           if (transactionDetailResponse.data.status != 200) {
             toast.error(transactionDetailResponse.data.message, {
               theme: 'colored',

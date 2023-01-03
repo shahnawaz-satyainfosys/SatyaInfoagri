@@ -112,13 +112,12 @@ const CommonContactDetails = () => {
             const commonContactDetail = {
                 encryptedCommonContactDetailsId: commonContactDetailData.encryptedCommonContactDetailsId,
                 encryptedClientCode: commonContactDetailData.encryptedClientCode,
-                encryptedCompanyCode: commonContactDetailData.encryptedCompanyCode,
+                encryptedCompanyCode: commonContactDetailData.encryptedCompanyCode ? commonContactDetailData.encryptedCompanyCode : localStorage.getItem("EncryptedResponseCompanyCode"),
                 contactPerson: commonContactDetailData.contactPerson,
                 contactType: commonContactDetailData.contactType,
                 contactDetails: commonContactDetailData.contactDetails,
                 flag: commonContactDetailData.flag == "1" ? "1" : "0",
-                addUser: commonContactDetailData.addUser,
-                originatedFrom: commonContactDetailData.originatedFrom,
+                originatedFrom: commonContactDetailData.originatedFrom ? commonContactDetailData.originatedFrom : "CM",
                 modifyUser: localStorage.getItem("LoginUserName"),
             }
 
@@ -208,9 +207,6 @@ const CommonContactDetails = () => {
                                     return <span className="error-message">{contactDetailsErr[key]}</span>
                                 })}
                             </Row>
-                        </Col>
-
-                        <Col className="me-3 ms-3">
                             <Row className="mb-3">
                                 <Form.Label>Send Mail</Form.Label>
                                 <Form.Select id="txtFlag" name="flag" value={commonContactDetailData.flag} onChange={handleFieldChange}>
@@ -219,19 +215,22 @@ const CommonContactDetails = () => {
                                     <option value="0">No</option>
                                 </Form.Select>
                             </Row>
-                            <Row className="mb-3">
+                        </Col>
+
+                        <Col className="me-3 ms-3">
+                            <Row className="mb-1 mt-4">
                                 <Button variant="primary" id='btnAddCommonContactDetail' type="button" onClick={() => addCommonContactDetailInList()}>
                                     Add
                                 </Button>
                             </Row>
                             <Row className="mb-3">
-                                <Button variant="danger" onClick={() => hideCommonContactForm()}>
-                                    Cancel
+                                <Button variant="primary" id='btnUpdateCommonContactDetail' type="button" onClick={() => updateCommonContactDetails()}>
+                                    Update
                                 </Button>
                             </Row>
                             <Row className="mb-3">
-                                <Button variant="primary" id='btnUpdateCommonContactDetail' type="button" onClick={() => updateCommonContactDetails()}>
-                                    Update
+                                <Button variant="danger" onClick={() => hideCommonContactForm()}>
+                                    Cancel
                                 </Button>
                             </Row>
                         </Col>
