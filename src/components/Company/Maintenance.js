@@ -131,6 +131,13 @@ export const Maintenance = () => {
             else
                 getStates(e.target.value);
         }
+
+        if (e.target.name == 'companyLogo') {
+            dispatch(companyDetailsAction({
+                ...companyData,
+                companyLogo: e.target.files[0]
+            }));
+        }
     };
 
     const sameAsClientCompanyDataChanged = () => {
@@ -209,7 +216,10 @@ export const Maintenance = () => {
                         <Col className="me-3 ms-3">
                             <Row className="mb-3">
                                 <Form.Label>Company Logo</Form.Label>
-                                <Form.Control type="file" />
+                                <Form.Control type="file" id='logoFile' name='companyLogo' onChange={handleFieldChange} />
+                                {Object.keys(companyError.imageTypeErr).map((key) => {
+                                    return <span className="error-message">{companyError.imageTypeErr[key]}</span>
+                                })}
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Company Name<span className="text-danger">*</span></Form.Label>

@@ -119,6 +119,7 @@ const CommonContactDetails = () => {
                 flag: commonContactDetailData.flag == "1" ? "1" : "0",
                 originatedFrom: commonContactDetailData.originatedFrom ? commonContactDetailData.originatedFrom : "CM",
                 modifyUser: localStorage.getItem("LoginUserName"),
+                addUser: localStorage.getItem("LoginUserName"),
             }
 
             var objectIndex = commonContactDetailList.findIndex(x => x.contactDetails == contactPersonDetailsToUpdate);

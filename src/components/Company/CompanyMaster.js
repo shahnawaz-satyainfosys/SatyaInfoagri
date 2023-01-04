@@ -160,9 +160,9 @@ export const CompanyMaster = () => {
         const panNoErr = {};
         const gstNoErr = {};
         const regDateErr = {};
+        let imageTypeErr = {};
 
         let isValid = true;
-
         if (!companyData.companyName) {
             companyNameErr.nameEmpty = "Enter company name";
             isValid = false;
@@ -205,10 +205,25 @@ export const CompanyMaster = () => {
             setFormError(true);
         }
 
-        if(companyData.companyRegDate && Moment(companyData.companyRegDate).format("YYYY-MM-DD") >= Moment(new Date()).format("YYYY-MM-DD")){
+        if (companyData.companyRegDate && Moment(companyData.companyRegDate).format("YYYY-MM-DD") >= Moment(new Date()).format("YYYY-MM-DD")) {
             regDateErr.invalidRegDate = "Registration date can not be greater than or equal to today's date";
             isValid = false;
             setFormError(true);
+        }
+
+        if (companyData.companyLogo) {
+            var imageType = ['image/jpeg', 'image/jpg', 'image/png'];
+            if (imageType.indexOf(companyData.companyLogo.type) === -1) {
+                imageTypeErr.invalidImage = "Selected image is invalid";
+                isValid = false;
+                setFormError(true);
+            }
+
+            if (companyData.companyLogo.size > 1024 * 1024 * 10) {
+                imageTypeErr.invalidSize = "File size must be under 10 MB";
+                isValid = false;
+                setFormError(true);
+            }
         }
 
         if (!isValid) {
@@ -220,11 +235,11 @@ export const CompanyMaster = () => {
                 stateErr,
                 panNoErr,
                 gstNoErr,
-                regDateErr
+                regDateErr,
+                imageTypeErr
             }
             dispatch(companyDetailsErrorAction(errorObject))
         }
-
         return isValid;
     }
 
@@ -252,6 +267,34 @@ export const CompanyMaster = () => {
         $('#btnSave').attr('disabled', true)
 
         fetchCompanyList(1);
+    }
+
+    const uploadCompanyLogo = (companyLogo, encryptedCompanyCode) => {
+
+        var formData = new FormData();
+        formData.append("CompanyLogo", companyLogo);
+        formData.append("EncryptedCompanyCode", encryptedCompanyCode)
+
+        axios.post(process.env.REACT_APP_API_URL + '/upload-company-logo', formData, {
+            headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+        })
+            .then(res => {
+                setIsLoading(false);
+                if (res.data.status == 200) {
+                    toast.success(res.data.message, {
+                        theme: 'colored',
+                        autoClose: 10000
+                    });
+
+                    updateCompanyCallback(true);
+                    $('[data-rr-ui-event-key*="Company List"]').click();
+                } else {
+                    toast.error(res.data.message, {
+                        theme: 'colored',
+                        autoClose: 10000
+                    });
+                }
+            })
     }
 
     const addCompanyDetails = () => {
@@ -297,6 +340,7 @@ export const CompanyMaster = () => {
                 requestData.commonContactDetails[index] = contactDetailObj;
                 index++;
             }
+
             setIsLoading(true);
             axios.post(process.env.REACT_APP_API_URL + '/add-company', requestData, {
                 headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
@@ -304,12 +348,18 @@ export const CompanyMaster = () => {
                 .then(res => {
                     setIsLoading(false);
                     if (res.data.status == 200) {
-                        toast.success(res.data.message, {
-                            theme: 'colored',
-                            autoClose: 10000
-                        });
-                        updateCompanyCallback(true);
-                        $('[data-rr-ui-event-key*="Company List"]').click();
+                        if (companyData.companyLogo) {
+                            uploadCompanyLogo(companyData.companyLogo, res.data.data.encryptedCompanyCode);
+                        } else {
+                            toast.success(res.data.message, {
+                                theme: 'colored',
+                                autoClose: 10000
+                            });
+
+                            updateCompanyCallback(true);
+                            $('[data-rr-ui-event-key*="Company List"]').click();
+                        }
+
                     } else {
                         toast.error(res.data.message, {
                             theme: 'colored',

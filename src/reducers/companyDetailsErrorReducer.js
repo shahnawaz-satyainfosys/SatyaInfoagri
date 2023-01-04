@@ -7,7 +7,8 @@ const initialState = {
     stateErr:{},
     gstNoErr:{},
     panNoErr:{},
-    regDateErr:{}
+    regDateErr:{},
+    imageTypeErr:{}
   }
 };
 
