@@ -214,7 +214,7 @@ export const CompanyMaster = () => {
             setFormError(true);
         }
 
-        if (companyData.companyLogo) {
+        if (companyData.companyLogo.type) {
             var imageType = ['image/jpeg', 'image/jpg', 'image/png'];
             if (imageType.indexOf(companyData.companyLogo.type) === -1) {
                 imageTypeErr.invalidImage = "Selected image is invalid";
@@ -271,24 +271,28 @@ export const CompanyMaster = () => {
         fetchCompanyList(1);
     }
 
-    const uploadCompanyLogo = (companyLogo, encryptedCompanyCode) => {
+    const uploadCompanyLogo = (companyLogo, encryptedCompanyCode, isUpdate) => {
 
         var formData = new FormData();
         formData.append("CompanyLogo", companyLogo);
         formData.append("EncryptedCompanyCode", encryptedCompanyCode)
+        formData.append("IsUpdate", isUpdate)
+        debugger
         axios.post(process.env.REACT_APP_API_URL + '/upload-company-logo', formData, {
             headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
         })
             .then(res => {
                 setIsLoading(false);
                 if (res.data.status == 200) {
-                    toast.success(res.data.message, {
-                        theme: 'colored',
-                        autoClose: 10000
-                    });
-
-                    updateCompanyCallback(true);
-                    $('[data-rr-ui-event-key*="Company List"]').click();
+                    if(!isUpdate)
+                    {
+                        toast.success(res.data.message, {
+                            theme: 'colored',
+                            autoClose: 10000
+                        });
+                        $('[data-rr-ui-event-key*="Company List"]').click();
+                    }
+                    updateCompanyCallback(!isUpdate);                    
                 } else {
                     toast.error(res.data.message, {
                         theme: 'colored',
@@ -347,10 +351,10 @@ export const CompanyMaster = () => {
                 headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
             })
                 .then(res => {
-                    
+
                     if (res.data.status == 200) {
                         if (companyData.companyLogo) {
-                            uploadCompanyLogo(companyData.companyLogo, res.data.data.encryptedCompanyCode);
+                            uploadCompanyLogo(companyData.companyLogo, res.data.data.encryptedCompanyCode, false);
                         } else {
                             setIsLoading(false);
                             toast.success(res.data.message, {
@@ -363,6 +367,7 @@ export const CompanyMaster = () => {
                         }
 
                     } else {
+                        setIsLoading(false);
                         toast.error(res.data.message, {
                             theme: 'colored',
                             autoClose: 10000
@@ -425,9 +430,13 @@ export const CompanyMaster = () => {
                                 theme: 'colored',
                                 autoClose: 10000
                             });
-                        }
-                        else if (!commonContactDetailChanged.commonContactDetailsChanged) {
-                            updateCompanyCallback();
+                        } else if (res.data.status == 200) {
+                            if (companyData.companyLogo.type) {
+                                uploadCompanyLogo(companyData.companyLogo, companyData.encryptedCompanyCode, true);
+                            }
+                            else if (!commonContactDetailChanged.commonContactDetailsChanged) {
+                                updateCompanyCallback();
+                            }
                         }
                     })
             }
@@ -447,7 +456,7 @@ export const CompanyMaster = () => {
                             commonContactDetails[key] = commonContactDetails[key] ? commonContactDetails[key].toUpperCase() : '';
                         }
 
-                        if (commonContactDetails.encryptedCommonContactDetailsId) {                            
+                        if (commonContactDetails.encryptedCommonContactDetailsId) {
                             setIsLoading(true);
                             const updateCommonContactDetailResponse =
                                 await axios.post(process.env.REACT_APP_API_URL + '/update-common-contact-detail', commonContactDetails, {
@@ -461,14 +470,15 @@ export const CompanyMaster = () => {
                                 });
                                 loopBreaked = true;
                             }
-                            else if (commoncontactDetailIndex == commonContactDetailList.length && !loopBreaked && !deleteCommonContactDetailsId) {
+                            else if (commoncontactDetailIndex == commonContactDetailList.length && !loopBreaked && !deleteCommonContactDetailsId && !companyData.companyLogo.type) {
+                                debugger
                                 updateCompanyCallback();
                             }
                             else {
                                 commoncontactDetailIndex++;
                             }
                         }
-                        else if (!commonContactDetails.encryptedCommonContactDetailsId) {                            
+                        else if (!commonContactDetails.encryptedCommonContactDetailsId) {
                             setIsLoading(true);
                             const addCommonContactDetailResponse =
                                 await axios.post(process.env.REACT_APP_API_URL + '/add-common-contact-details', commonContactDetails, {
@@ -482,7 +492,8 @@ export const CompanyMaster = () => {
                                 });
                                 loopBreaked = true;
                             }
-                            else if (commoncontactDetailIndex == commonContactDetailList.length && !loopBreaked && !deleteCommonContactDetailsId) {
+                            else if (commoncontactDetailIndex == commonContactDetailList.length && !loopBreaked && !deleteCommonContactDetailsId && !companyData.companyLogo.type) {
+                                debugger
                                 updateCompanyCallback();
                             }
                             else {
@@ -512,7 +523,7 @@ export const CompanyMaster = () => {
                                 });
                                 loopBreaked = true;
                             }
-                            else if (deleteContactDetailIndex == deleteCommonContactDetailList.length && !loopBreaked) {
+                            else if (deleteContactDetailIndex == deleteCommonContactDetailList.length && !loopBreaked && !companyData.companyLogo.type) {
                                 updateCompanyCallback();
                             }
                             else {
