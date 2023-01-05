@@ -46,13 +46,16 @@ const CommonContactDetailList = () => {
         var objectIndex = commonContactDetailListReducer.commonContactDetailsList.findIndex(x => x.contactDetails == paramsData.contactDetailsToDelete);
         commonContactDetailListReducer.commonContactDetailsList.splice(objectIndex, 1)
 
-        var deleteCommonContactDetailId = localStorage.getItem("DeleteCommonContactDetailsId");
+        if(paramsData.encryptedCommonContactDetailsId)
+        {
+            var deleteCommonContactDetailId = localStorage.getItem("DeleteCommonContactDetailsId");
 
-        var deleteCommonContactDetail = deleteCommonContactDetailId ? deleteCommonContactDetailId + "," + paramsData.encryptedCommonContactDetailsId : paramsData.encryptedCommonContactDetailsId;
-
-        localStorage.setItem("DeleteCommonContactDetailsId", deleteCommonContactDetail);
-
-        dispatch(commonContactDetailsListAction(commonContactDetailListReducer.commonContactDetailsList));
+            var deleteCommonContactDetail = deleteCommonContactDetailId ? deleteCommonContactDetailId + "," + paramsData.encryptedCommonContactDetailsId : paramsData.encryptedCommonContactDetailsId;
+    
+            localStorage.setItem("DeleteCommonContactDetailsId", deleteCommonContactDetail);
+    
+            dispatch(commonContactDetailsListAction(commonContactDetailListReducer.commonContactDetailsList));
+        }
 
         if ($("#btnSave").attr('disabled'))
             $("#btnSave").attr('disabled', false);
