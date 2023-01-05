@@ -214,7 +214,7 @@ export const CompanyMaster = () => {
             setFormError(true);
         }
 
-        if (companyData.companyLogo.type) {
+        if (companyData.companyLogo && companyData.companyLogo.type) {
             var imageType = ['image/jpeg', 'image/jpg', 'image/png'];
             if (imageType.indexOf(companyData.companyLogo.type) === -1) {
                 imageTypeErr.invalidImage = "Selected image is invalid";
