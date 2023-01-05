@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Form, Row } from 'react-bootstrap';
+import { Col, Form, Row, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import { companyDetailsAction, clientDataAction } from 'actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -53,6 +53,7 @@ export const Maintenance = () => {
 
     const [countryList, setCountryList] = useState([]);
     const [stateList, setStateList] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const [formHasError, setFormError] = useState(false);
 
@@ -149,10 +150,12 @@ export const Maintenance = () => {
                 setCompanyData(clientCompanyData)
             }
             else {
+                setIsLoading(true);
                 axios.post(process.env.REACT_APP_API_URL + '/get-client', request, {
                     headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
                 })
                     .then(res => {
+                        setIsLoading(false);
                         if (res.data.status == 200) {
                             dispatch(clientDataAction(res.data.data))
                             setCompanyData(res.data.data)
@@ -192,6 +195,12 @@ export const Maintenance = () => {
 
     return (
         <>
+            {isLoading ? (
+                <Spinner
+                    className="position-absolute start-50 loader-color"
+                    animation="border"
+                />
+            ) : null}
             <div>
                 <Row className="justify-content-between align-items-center" id='clientChkBoxRow'>
                     <Col xs="auto">
