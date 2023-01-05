@@ -100,3 +100,12 @@
 .list-card .card-body{
     padding: 10px 10px 10px 10px;
 }
+
+.no-pad .card-body{
+    padding: 0px;
+}
+
+.no-pb, .no-pb .card-body{
+    padding-bottom: 0px !important;
+    margin-bottom: 0px !important;
+}

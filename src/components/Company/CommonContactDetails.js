@@ -218,18 +218,18 @@ const CommonContactDetails = () => {
                             </Row>
                         </Col>
 
-                        <Col className="me-3 ms-3">
-                            <Row className="mb-1 mt-4">
-                                <Button variant="primary" id='btnAddCommonContactDetail' type="button" onClick={() => addCommonContactDetailInList()}>
+                        <Col className="me-3 ms-3 mt-4">
+                            <Row className="mb-2" id='btnAddCommonContactDetail'>
+                                <Button variant="primary" type="button" onClick={() => addCommonContactDetailInList()}>
                                     Add
                                 </Button>
                             </Row>
-                            <Row className="mb-3">
-                                <Button variant="primary" id='btnUpdateCommonContactDetail' type="button" onClick={() => updateCommonContactDetails()}>
+                            <Row className="mb-2" id='btnUpdateCommonContactDetail'>
+                                <Button variant="primary" type="button" onClick={() => updateCommonContactDetails()}>
                                     Update
                                 </Button>
                             </Row>
-                            <Row className="mb-3">
+                            <Row className="mb-2">
                                 <Button variant="danger" onClick={() => hideCommonContactForm()}>
                                     Cancel
                                 </Button>

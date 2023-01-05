@@ -171,7 +171,7 @@ const CommonContactDetailList = () => {
 
             <div>
                 <div style={{ display: "flex", justifyContent: "end" }}>
-                    <Button id='btnAddCommonContact' onClick={() => showAddCommonContactDetailsForm()}>
+                    <Button id='btnAddCommonContact' onClick={() => showAddCommonContactDetailsForm()} className="mb-2">
                         Add Contact Detail
                     </Button>
                 </div>
@@ -194,7 +194,7 @@ const CommonContactDetailList = () => {
                 {commonContactDetailListReducer &&
                     commonContactDetailListReducer.commonContactDetailsList &&
                     commonContactDetailListReducer.commonContactDetailsList.length > 0 && (
-                        <Table striped responsive id="CompanyContactDetailsTable">
+                        <Table striped responsive id="CompanyContactDetailsTable" className='no-pb'>
                             <thead>
                                 <tr>
                                     <th>Contact Person</th>

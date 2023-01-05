@@ -163,7 +163,8 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
       >
         {Object.values(tabArray).map((tab, index) => {
           return (
-            <Tab eventKey={tab} title={tab} className={index == 0 ? "border p-1" : "border p-1 tab-page-tab"}>
+            <Tab eventKey={tab} title={tab} className={index == 0 ? "border p-1" : 
+                                                       tab != "Transaction Details" ? "border p-1 tab-page-tab" : ""}>
               {index == 0 && listData && (
                 <>
                   <FalconComponentCard className="tab-page-list-card">
@@ -185,7 +186,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
               )}
               {index == 1 && module == "Client" && (
                 <>
-                  <FalconComponentCard>
+                  <FalconComponentCard className="mb-2 no-pb">
                     <FalconComponentCard.Body language="jsx">
                       <ClientDetails />
                     </FalconComponentCard.Body>
@@ -197,7 +198,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard id='ContactDetailsTable'>
+                  <FalconComponentCard id='ContactDetailsTable' className="tab-page-button-table-card no-pb">
                     <FalconComponentCard.Body language="jsx">
                       <ContactDetailsList />
                     </FalconComponentCard.Body>
@@ -206,13 +207,13 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
               )}
               {index == 2 && module == "Client" && (
                 <>
-                  <FalconComponentCard id='TransactionDetailsListCard'>
+                  <FalconComponentCard id='TransactionDetailsListCard' className="tab-page-table-card mb-2 no-pad">
                     <FalconComponentCard.Body language="jsx">
                       <TransactionDetailList />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard id='AddTransactionDetailsForm' className="mb-0">
+                  <FalconComponentCard id='AddTransactionDetailsForm' className="mb-0 no-pb">
                     <FalconComponentCard.Body language="jsx">
                       <TransactionDetails />
                     </FalconComponentCard.Body>
@@ -221,7 +222,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
               )}
                {index == 1 && module == "CompanyMaster" &&  (
                 <>
-                  <FalconComponentCard>
+                  <FalconComponentCard className="no-pb mb-2">
                     <FalconComponentCard.Body language="jsx">
                       <Maintenance />
                     </FalconComponentCard.Body>
@@ -233,7 +234,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                     </FalconComponentCard.Body>
                   </FalconComponentCard>   
 
-                  <FalconComponentCard id='CommonContactDetailsCard'>
+                  <FalconComponentCard id='CommonContactDetailsCard' className="tab-page-button-table-card no-pb">
                     <FalconComponentCard.Body language="jsx">
                       <CommonContactDetailList />
                     </FalconComponentCard.Body>

@@ -104,14 +104,14 @@ const ContactDetailsList = () => {
 
       <div>
         <div style={{ display: "flex", justifyContent: "end" }}>
-          <Button id='btnAdd' onClick={() => showAddContactDetailsForm()}>
+          <Button id='btnAdd' onClick={() => showAddContactDetailsForm()} className="mb-2">
             Add Contact Detail
           </Button>
         </div>
         {
-          clientError.contactDetailErr &&
+          clientError.contactDetailErr && clientError.contactDetailErr.contactEmpty &&
           (
-            <div className='mb-3'>
+            <div className='mb-2'>
               <span className="error-message">{clientError.contactDetailErr.contactEmpty}</span>
             </div>
           )
@@ -119,7 +119,7 @@ const ContactDetailsList = () => {
         {contactDetailReducer &&
           contactDetailReducer.clientContactDetails &&
           contactDetailReducer.clientContactDetails.length > 0 && (
-            <Table striped responsive id="ClientContactDetailsTable">
+            <Table striped responsive id="ClientContactDetailsTable" className='no-pb'>
               <thead>
                 <tr>
                   <th>Contact Person</th>

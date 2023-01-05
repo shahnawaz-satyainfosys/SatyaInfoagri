@@ -28,13 +28,11 @@ const TransactionDetailList = () => {
 
   return (
     <>
-      {
-        clientError.transactionDetailErr &&
-        (
-          <div className='mb-3'>
+      {clientError.transactionDetailErr && clientError.transactionDetailErr.transactionEmpty &&
+        
+          (<div className='p-1'>
             <span className="error-message">{clientError.transactionDetailErr.transactionEmpty}</span>
-          </div>
-        )
+          </div>)
       }
 
       {transactionDetailReducer &&
