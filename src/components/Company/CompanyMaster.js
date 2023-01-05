@@ -35,11 +35,14 @@ export const CompanyMaster = () => {
             EncryptedClientCode: localStorage.getItem("EncryptedClientCode")
         };
 
-        const response = await axios
+        const response =
+            setIsLoading(true);
+        await axios
             .post(process.env.REACT_APP_API_URL + '/company-list', listFilter, {
                 headers: { Authorization: `Bearer ${JSON.parse(token).value}` }
             })
             .then(res => {
+                setIsLoading(false);
                 if (res.data.status == 200) {
                     setListData(res.data.data);
                 }
@@ -244,7 +247,6 @@ export const CompanyMaster = () => {
     }
 
     const updateCompanyCallback = (isAddCompany = false) => {
-
         $("#AddCompanyDetailsForm").data("changed", false);
         $('#AddCompanyDetailsForm').get(0).reset();
 
@@ -274,7 +276,6 @@ export const CompanyMaster = () => {
         var formData = new FormData();
         formData.append("CompanyLogo", companyLogo);
         formData.append("EncryptedCompanyCode", encryptedCompanyCode)
-
         axios.post(process.env.REACT_APP_API_URL + '/upload-company-logo', formData, {
             headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
         })
@@ -346,11 +347,12 @@ export const CompanyMaster = () => {
                 headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
             })
                 .then(res => {
-                    setIsLoading(false);
+                    
                     if (res.data.status == 200) {
                         if (companyData.companyLogo) {
                             uploadCompanyLogo(companyData.companyLogo, res.data.data.encryptedCompanyCode);
                         } else {
+                            setIsLoading(false);
                             toast.success(res.data.message, {
                                 theme: 'colored',
                                 autoClose: 10000
@@ -445,10 +447,13 @@ export const CompanyMaster = () => {
                             commonContactDetails[key] = commonContactDetails[key] ? commonContactDetails[key].toUpperCase() : '';
                         }
 
-                        if (commonContactDetails.encryptedCommonContactDetailsId) {
-                            const updateCommonContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/update-common-contact-detail', commonContactDetails, {
-                                headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
-                            });
+                        if (commonContactDetails.encryptedCommonContactDetailsId) {                            
+                            setIsLoading(true);
+                            const updateCommonContactDetailResponse =
+                                await axios.post(process.env.REACT_APP_API_URL + '/update-common-contact-detail', commonContactDetails, {
+                                    headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+                                });
+                            setIsLoading(false);
                             if (updateCommonContactDetailResponse.data.status != 200) {
                                 toast.error(updateCommonContactDetailResponse.data.message, {
                                     theme: 'colored',
@@ -463,10 +468,13 @@ export const CompanyMaster = () => {
                                 commoncontactDetailIndex++;
                             }
                         }
-                        else if (!commonContactDetails.encryptedCommonContactDetailsId) {
-                            const addCommonContactDetailResponse = await axios.post(process.env.REACT_APP_API_URL + '/add-common-contact-details', commonContactDetails, {
-                                headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
-                            });
+                        else if (!commonContactDetails.encryptedCommonContactDetailsId) {                            
+                            setIsLoading(true);
+                            const addCommonContactDetailResponse =
+                                await axios.post(process.env.REACT_APP_API_URL + '/add-common-contact-details', commonContactDetails, {
+                                    headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+                                });
+                            setIsLoading(false);
                             if (addCommonContactDetailResponse.data.status != 200) {
                                 toast.error(addCommonContactDetailResponse.data.message, {
                                     theme: 'colored',
@@ -494,8 +502,9 @@ export const CompanyMaster = () => {
 
                             const data = { encryptedCommonContactDetailsId: deleteCommonContactDetailsId }
                             const headers = { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
-
+                            setIsLoading(true);
                             const deleteCommonContactResponse = await axios.delete(process.env.REACT_APP_API_URL + '/delete-common-contact-detail', { headers, data });
+                            setIsLoading(false);
                             if (deleteCommonContactResponse.data.status != 200) {
                                 toast.error(deleteCommonContactResponse.data.message, {
                                     theme: 'colored',

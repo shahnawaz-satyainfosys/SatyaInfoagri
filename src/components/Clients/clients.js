@@ -37,11 +37,14 @@ export const Client = () => {
       pageSize: size
     };
 
-    const response = await axios
+    const response = 
+    setIsLoading(true);
+    await axios
       .post(process.env.REACT_APP_API_URL + '/client-list', listFilter, {
         headers: { Authorization: `Bearer ${JSON.parse(token).value}` }
       })
       .then(res => {
+        setIsLoading(false);
         if (res.data.status == 200) {
           setListData(res.data.data);
         }

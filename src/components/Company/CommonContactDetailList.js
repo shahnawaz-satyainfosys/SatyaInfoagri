@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Form, Row } from 'react-bootstrap';
-import { Button, Modal, Table } from 'react-bootstrap';
+import { Button, Modal, Table, Spinner } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -9,6 +9,7 @@ import { commonContactDetailsAction, commonContactDetailsListAction, commonConta
 const CommonContactDetailList = () => {
     const dispatch = useDispatch();
     const [paramsData, setParamsData] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
     const commonContactDetailListReducer = useSelector((state) => state.rootReducer.commonContactDetailsListReducer)
 
     const clientContactListReducer = useSelector((state) => state.rootReducer.clientContactListReducer)
@@ -83,7 +84,7 @@ const CommonContactDetailList = () => {
                 encryptedClientContactDetailsId: contactObj[i].encryptedClientContactDetailsId,
                 encryptedClientCode: contactObj[i].encryptedClientCode,
                 contactPerson: contactObj[i].contactPerson ? contactObj[i].contactPerson : '',
-                contactType: contactObj[i].contactType ? contactObj[i].contactType : 'PRE',
+                contactType: contactObj[i].emailId ? 'PRE' : contactObj[i].mobileNo ? 'PMN' : '',
                 contactDetails: contactObj[i].emailId ? contactObj[i].emailId : contactObj[i].mobileNo,
                 originatedFrom: contactObj[i].originatedFrom ? contactObj[i].originatedFrom : 'CM',
                 flag: contactObj[i].sendMail == 'Y' ? '1' : '0',
@@ -111,12 +112,13 @@ const CommonContactDetailList = () => {
                 setContactDetailData(clientContactListData)
             }
             else {
+                setIsLoading(true);
                 axios
                     .post(process.env.REACT_APP_API_URL + '/get-client-contact-detail-list', request, {
                         headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
                     })
                     .then(res => {
-
+                        setIsLoading(false);
                         if (res.data.status == 200) {
                             if (res.data && res.data.data.length > 0) {
                                 $("#CompanyContactDetailsTable").show();
@@ -147,6 +149,12 @@ const CommonContactDetailList = () => {
 
     return (
         <>
+            {isLoading ? (
+                <Spinner
+                    className="position-absolute start-50 loader-color"
+                    animation="border"
+                />
+            ) : null}
             {modalShow && paramsData &&
                 <Modal
                     show={modalShow}

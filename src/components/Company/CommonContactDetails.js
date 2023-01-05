@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Col, Form, Row, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 import { commonContactDetailsListAction, commonContactDetailsAction, commonContactDetailChangedAction } from '../../actions/index';
 
 const CommonContactDetails = () => {
