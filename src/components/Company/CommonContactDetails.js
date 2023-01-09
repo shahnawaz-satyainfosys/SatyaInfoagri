@@ -178,6 +178,8 @@ const CommonContactDetails = () => {
                                     return <span className="error-message">{contactNameErr[key]}</span>
                                 })}
                             </Row>
+                        </Col>
+                        <Col className="me-3 ms-3">
                             <Row className="mb-3">
                                 <Form.Label>Contact Type<span className="text-danger">*</span></Form.Label>
                                 <Form.Select id="txtContactType" name="contactType" value={commonContactDetailData.contactType} onChange={handleFieldChange} required>
@@ -198,7 +200,6 @@ const CommonContactDetails = () => {
                                 })}
                             </Row>
                         </Col>
-
                         <Col className="me-3 ms-3">
                             <Row className="mb-3">
                                 <Form.Label>Contact Details<span className="text-danger">*</span></Form.Label>
@@ -207,6 +208,8 @@ const CommonContactDetails = () => {
                                     return <span className="error-message">{contactDetailsErr[key]}</span>
                                 })}
                             </Row>
+                        </Col>
+                        <Col className="me-3 ms-3">
                             <Row className="mb-3">
                                 <Form.Label>Send Mail</Form.Label>
                                 <Form.Select id="txtFlag" name="flag" value={commonContactDetailData.flag} onChange={handleFieldChange}>
@@ -215,9 +218,6 @@ const CommonContactDetails = () => {
                                     <option value="0">No</option>
                                 </Form.Select>
                             </Row>
-                        </Col>
-
-                        <Col className="me-3 ms-3 mt-4">
                             <Row className="mb-2" id='btnAddCommonContactDetail'>
                                 <Button variant="primary" type="button" onClick={() => addCommonContactDetailInList()}>
                                     Add

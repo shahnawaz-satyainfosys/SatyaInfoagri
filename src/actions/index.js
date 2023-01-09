@@ -109,3 +109,10 @@ export const commonContactDetailChangedAction = (payload) => {
     payload
   };
 };
+
+export const userDetailsAction = (payload) => {
+  return {
+    type: 'USERDETAILS',
+    payload
+  };
+};

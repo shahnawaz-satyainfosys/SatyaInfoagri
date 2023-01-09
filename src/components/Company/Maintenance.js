@@ -120,6 +120,10 @@ export const Maintenance = () => {
         $('#txtStatus option:contains(' + companyData.status + ')').prop('selected', true);
     }
 
+    if (companyData.companyType && $('#txtCompanyType').val()) {
+        $('#txtCompanyType option:contains(' + companyData.companyType + ')').prop('selected', true);
+    }
+
     const handleFieldChange = e => {
         dispatch(companyDetailsAction({
             ...companyData,
@@ -136,8 +140,10 @@ export const Maintenance = () => {
         if (e.target.name == 'companyLogo') {
             dispatch(companyDetailsAction({
                 ...companyData,
-                companyLogo: e.target.files[0]
+                companyLogo: e.target.files[0],
+                companyLogoURl: URL.createObjectURL(e.target.files[0])
             }));
+            $("#imgCompanyLogo").show();
         }
     };
 
@@ -189,7 +195,12 @@ export const Maintenance = () => {
             encryptedCountryCode: clientCompanyData.encryptedCountryCode,
             status: clientCompanyData.status
         }
-        dispatch(companyDetailsAction(responseData))
+        if (companyData.companyLogo && companyData.companyLogo.type) {
+            var companyDetailData = Object.assign(responseData, companyData)
+            dispatch(companyDetailsAction(companyDetailData))
+        } else {
+            dispatch(companyDetailsAction(responseData))
+        }
     }
 
 
@@ -224,13 +235,6 @@ export const Maintenance = () => {
                     <Row>
                         <Col className="me-3 ms-3">
                             <Row className="mb-3">
-                                <Form.Label>Company Logo</Form.Label>
-                                <Form.Control type="file" id='logoFile' name='companyLogo' onChange={handleFieldChange} />
-                                {Object.keys(companyError.imageTypeErr).map((key) => {
-                                    return <span className="error-message">{companyError.imageTypeErr[key]}</span>
-                                })}
-                            </Row>
-                            <Row className="mb-3">
                                 <Form.Label>Company Name<span className="text-danger">*</span></Form.Label>
                                 <Form.Control id="txtCompanyName" name="companyName" maxLength={50} value={companyData.companyName} onChange={handleFieldChange} placeholder="Company Name" required />
                                 {Object.keys(companyError.companyNameErr).map((key) => {
@@ -238,34 +242,16 @@ export const Maintenance = () => {
                                 })}
                             </Row>
                             <Row className="mb-3">
-                                <Form.Label>Company Shortname</Form.Label>
-                                <Form.Control id="txtCompanyShortName" name="companyShortName" maxLength={20} value={companyData.companyShortName} onChange={handleFieldChange} placeholder="Company Shortname" />
-                            </Row>
-                            <Row className="mb-3">
-                                <Form.Label>Company Type<span className="text-danger">*</span></Form.Label>
-                                <Form.Control id="txtCompanyType" name="companyType" maxLength={3} value={companyData.companyType} onChange={handleFieldChange} placeholder="Company Type" required />
-                                {Object.keys(companyError.companyTypeErr).map((key) => {
-                                    return <span className="error-message">{companyError.companyTypeErr[key]}</span>
-                                })}
-                            </Row>
-                            <Row className="mb-3">
                                 <Form.Label>Company Address<span className="text-danger">*</span></Form.Label>
-                                <Form.Control id="txtCompanyAddress" name="address1" maxLength={30} value={companyData.address1} onChange={handleFieldChange} className="mb-1" placeholder="Address" required />
+                                <Form.Control id="txtCompanyAddress" name="address1" maxLength={30} value={companyData.address1} onChange={handleFieldChange} className="mb-1" placeholder="Address 1" required />
                                 {Object.keys(companyError.addressErr).map((key) => {
                                     return <span className="error-message">{companyError.addressErr[key]}</span>
                                 })}
                                 <Form.Control id="txtCompanyAddress2" name="address2" maxLength={30} value={companyData.address2} onChange={handleFieldChange} className="mb-1" placeholder="Address 2" />
                                 <Form.Control id="txtCompanyAddress3" name="address3" maxLength={30} value={companyData.address3} onChange={handleFieldChange} className="mb-1" placeholder="Address 3" />
-                            </Row>
-                            <Row className="mb-3">
-                                <Form.Label>Pincode</Form.Label>
                                 <Form.Control id="txtPincode" name="pinCode" maxLength={10} value={companyData.pinCode} onChange={handleFieldChange} placeholder="Pincode" />
                             </Row>
-                        </Col>
-
-                        <Col className="me-3 ms-3">
                             <Row className="mb-3">
-                                <Form.Label>Country<span className="text-danger">*</span></Form.Label>
                                 <Form.Select id="txtCountry" name="encryptedCountryCode" defaultValue={companyData.countryCode} onChange={handleFieldChange} required>
                                     <option value=''>Select country</option>
                                     {countryList.map((option, index) => (
@@ -277,7 +263,6 @@ export const Maintenance = () => {
                                 })}
                             </Row>
                             <Row className="mb-3">
-                                <Form.Label>State<span className="text-danger">*</span></Form.Label>
                                 <Form.Select id="txtState" name="encryptedStateCode" defaultValue={companyData.stateCode} onChange={handleFieldChange} required>
                                     <option value=''>Select state</option>
                                     {stateList.map((option, index) => (
@@ -288,49 +273,68 @@ export const Maintenance = () => {
                                     return <span className="error-message">{companyError.stateErr[key]}</span>
                                 })}
                             </Row>
+                        </Col>
+
+                        <Col className="me-3 ms-3">
                             <Row className="mb-3">
-                                <Form.Label>Company Registration Date</Form.Label>
+                                <Form.Label>Company Shortname</Form.Label>
+                                <Form.Control id="txtCompanyShortName" name="companyShortName" maxLength={20} value={companyData.companyShortName} onChange={handleFieldChange} placeholder="Company Shortname" />
+                            </Row>
+                            <Row className="mb-3">
+                                <Form.Label>Company Credentials</Form.Label>
+                                <Form.Control id="txtPanNo" name="companyPan" maxLength={30} value={companyData.companyPan} onChange={handleFieldChange} placeholder="Company PAN No" />
+                                {Object.keys(companyError.panNoErr).map((key) => {
+                                    return <span className="error-message">{companyError.panNoErr[key]}</span>
+                                })}
+                                <Form.Control id="txtGstNo" name="companyGstNo" maxLength={30} value={companyData.companyGstNo} onChange={handleFieldChange} placeholder="Company GST No" />
+                                {Object.keys(companyError.gstNoErr).map((key) => {
+                                    return <span className="error-message">{companyError.gstNoErr[key]}</span>
+                                })}
+                                <Form.Control id="txtSalesTax" name="companySalesTax" maxLength={30} value={companyData.companySalesTax} onChange={handleFieldChange} placeholder="Company sales tax" />
+                                <Form.Control id="txtTinNo" name="companyTinNo" maxLength={30} value={companyData.companyTinNo} onChange={handleFieldChange} placeholder="Company TIN no" />
+                                <Form.Control id="txtLutNo" name="companyLutNo" maxLength={30} value={companyData.companyLutNo} onChange={handleFieldChange} placeholder="Company LUT no" />
+                                <Form.Control id="txtExpImpNo" name="companyExpImp" maxLength={30} value={companyData.companyExpImp} onChange={handleFieldChange} placeholder="Company Exp-Imp no" />
+                                <Form.Control id="txtRegNo" name="companyRegNo" maxLength={30} value={companyData.companyRegNo} onChange={handleFieldChange} placeholder="Company Registration no" />
+                            </Row>
+                            <Row className="mb-3">
+                                <Form.Label>Company Regestration Date</Form.Label>
                                 <Form.Control type='date' id="dtRegDate" name="companyRegDate" value={companyData.companyRegDate ? Moment(companyData.companyRegDate).format("YYYY-MM-DD") : ""} onChange={handleFieldChange} />
                                 {Object.keys(companyError.regDateErr).map((key) => {
                                     return <span className="error-message">{companyError.regDateErr[key]}</span>
                                 })}
                             </Row>
-                            <Row className="mb-3">
-                                <Form.Label>Company Registration No.</Form.Label>
-                                <Form.Control id="txtRegNo" name="companyRegNo" maxLength={30} value={companyData.companyRegNo} onChange={handleFieldChange} placeholder="Company registration no" />
-                            </Row>
-                            <Row className="mb-3">
-                                <Form.Label>Company Sales Tax</Form.Label>
-                                <Form.Control id="txtSalesTax" name="companySalesTax" maxLength={30} value={companyData.companySalesTax} onChange={handleFieldChange} placeholder="Company sales tax" />
-                            </Row>
-                            <Row className="mb-3">
-                                <Form.Label>Company Tin No.</Form.Label>
-                                <Form.Control id="txtTinNo" name="companyTinNo" maxLength={30} value={companyData.companyTinNo} onChange={handleFieldChange} placeholder="Company TIN no" />
-                            </Row>
-                            <Row className="mb-3">
-                                <Form.Label>Company PAN No.</Form.Label>
-                                <Form.Control id="txtPanNo" name="companyPan" maxLength={30} value={companyData.companyPan} onChange={handleFieldChange} placeholder="Enter PAN number in caps" />
-                                {Object.keys(companyError.panNoErr).map((key) => {
-                                    return <span className="error-message">{companyError.panNoErr[key]}</span>
-                                })}
-                            </Row>
+
                         </Col>
 
                         <Col className="me-3 ms-3">
                             <Row className="mb-3">
-                                <Form.Label>Company GST No.</Form.Label>
-                                <Form.Control id="txtGstNo" name="companyGstNo" maxLength={30} value={companyData.companyGstNo} onChange={handleFieldChange} placeholder="Enter GST number in caps" />
-                                {Object.keys(companyError.gstNoErr).map((key) => {
-                                    return <span className="error-message">{companyError.gstNoErr[key]}</span>
+                                <Form.Label>Company Type<span className="text-danger">*</span></Form.Label>
+                                <Form.Select id="txtCompanyType" name="companyType" value={companyData.companyType} onChange={handleFieldChange} required>
+                                    <option value=''>Select company type</option>
+                                    <option value="FPO">FPO</option>
+                                    <option value="FPC">FPC</option>
+                                    <option value="CTF">Contract Farming</option>
+                                    <option value="COP">Cooperative</option>
+                                    <option value="SOC">Society</option>
+                                    <option value="AML">Agri Machinary leasing</option>
+                                    <option value="PUB">Public Ltd</option>
+                                    <option value="LTD">Limited</option>
+                                    <option value="TRS">Trust</option>
+                                    <option value="GEN">General</option>
+                                </Form.Select>
+                                {Object.keys(companyError.companyTypeErr).map((key) => {
+                                    return <span className="error-message">{companyError.companyTypeErr[key]}</span>
                                 })}
                             </Row>
+                        </Col>
+                        <Col className="me-3 ms-3">
                             <Row className="mb-3">
-                                <Form.Label>Company LUT No.</Form.Label>
-                                <Form.Control id="txtLutNo" name="companyLutNo" maxLength={30} value={companyData.companyLutNo} onChange={handleFieldChange} placeholder="Company LUT no" />
-                            </Row>
-                            <Row className="mb-3">
-                                <Form.Label>Company Exp-Imp No.</Form.Label>
-                                <Form.Control id="txtExpImpNo" name="companyExpImp" maxLength={30} value={companyData.companyExpImp} onChange={handleFieldChange} placeholder="Company export-import no" />
+                                <Form.Label>Company Logo</Form.Label>
+                                <img src={companyData.companyLogoURl} id='imgCompanyLogo' width="50px" height="100px" />
+                                <Form.Control type="file" id='logoFile' name='companyLogo' onChange={handleFieldChange} />
+                                {Object.keys(companyError.imageTypeErr).map((key) => {
+                                    return <span className="error-message">{companyError.imageTypeErr[key]}</span>
+                                })}
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Status</Form.Label>

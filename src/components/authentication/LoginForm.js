@@ -86,11 +86,11 @@ const LoginForm = ({ hasLabel }) => {
     }
     localStorage.setItem('Token', JSON.stringify(config));
     localStorage.setItem('EncryptedSecurityUserId', data.encryptedSecurityUserId);
-    localStorage.setItem('EncryptedClientCode', data.encryptedClientCode);
-    // localStorage.setItem('ClientName', data.clientName);
+    localStorage.setItem('EncryptedClientCode', data.encryptedClientCode);    
     localStorage.setItem('LoginUserName', data.loginUserName);
     localStorage.setItem('LoginUserEmailId', data.loginUserEmailId);
     localStorage.setItem('LoginUserMobileNumber', data.loginUserMobileNumber);
+    localStorage.setItem('NoOfCompany', data.noOfCompany);
   };
 
   const handleFieldChange = e => {

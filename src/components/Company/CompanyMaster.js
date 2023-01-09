@@ -111,15 +111,23 @@ export const CompanyMaster = () => {
     })
 
     const newDetails = () => {
-        $('[data-rr-ui-event-key*="Maintenance"]').attr('disabled', false);
-        $('[data-rr-ui-event-key*="Maintenance"]').trigger('click');
-        $("#clientChkBoxRow").show();
-        $("#contactListChkBoxRow").show();
-        $('#clientChkBox').prop('checked', false);
-        $('#contactListChkBox').prop('checked', false);
-        $('#btnSave').attr('disabled', false);
-        $("#AddCompanyDetailsForm").data("changed", false);
-        clearCompanyReducers();
+        if (listData.length >= localStorage.getItem("NoOfCompany")) {
+            toast.error("Company limit is exceeded.", {
+                theme: 'colored',
+                autoClose: 10000
+            });
+        } else {
+            $('[data-rr-ui-event-key*="Maintenance"]').attr('disabled', false);
+            $('[data-rr-ui-event-key*="Maintenance"]').trigger('click');
+            $("#clientChkBoxRow").show();
+            $("#contactListChkBoxRow").show();
+            $("#imgCompanyLogo").hide();
+            $('#clientChkBox').prop('checked', false);
+            $('#contactListChkBox').prop('checked', false);
+            $('#btnSave').attr('disabled', false);
+            $("#AddCompanyDetailsForm").data("changed", false);
+            clearCompanyReducers();
+        }
     }
 
     const cancelClick = () => {
@@ -277,22 +285,20 @@ export const CompanyMaster = () => {
         formData.append("CompanyLogo", companyLogo);
         formData.append("EncryptedCompanyCode", encryptedCompanyCode)
         formData.append("IsUpdate", isUpdate)
-        debugger
         axios.post(process.env.REACT_APP_API_URL + '/upload-company-logo', formData, {
             headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
         })
             .then(res => {
                 setIsLoading(false);
                 if (res.data.status == 200) {
-                    if(!isUpdate)
-                    {
+                    if (!isUpdate) {
                         toast.success(res.data.message, {
                             theme: 'colored',
                             autoClose: 10000
                         });
                         $('[data-rr-ui-event-key*="Company List"]').click();
                     }
-                    updateCompanyCallback(!isUpdate);                    
+                    updateCompanyCallback(!isUpdate);
                 } else {
                     toast.error(res.data.message, {
                         theme: 'colored',
@@ -451,7 +457,7 @@ export const CompanyMaster = () => {
                     const commonContactDetails = commonContactDetailList[i];
                     if (!loopBreaked) {
 
-                        const keys = ['contactPerson', 'modifyUser']
+                        const keys = ['contactPerson', 'modifyUser', 'addUser']
                         for (const key of Object.keys(commonContactDetails).filter((key) => keys.includes(key))) {
                             commonContactDetails[key] = commonContactDetails[key] ? commonContactDetails[key].toUpperCase() : '';
                         }
@@ -471,7 +477,6 @@ export const CompanyMaster = () => {
                                 loopBreaked = true;
                             }
                             else if (commoncontactDetailIndex == commonContactDetailList.length && !loopBreaked && !deleteCommonContactDetailsId && !companyData.companyLogo.type) {
-                                debugger
                                 updateCompanyCallback();
                             }
                             else {
@@ -493,7 +498,6 @@ export const CompanyMaster = () => {
                                 loopBreaked = true;
                             }
                             else if (commoncontactDetailIndex == commonContactDetailList.length && !loopBreaked && !deleteCommonContactDetailsId && !companyData.companyLogo.type) {
-                                debugger
                                 updateCompanyCallback();
                             }
                             else {

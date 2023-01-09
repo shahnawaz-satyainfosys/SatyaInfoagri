@@ -21,6 +21,8 @@ import Maintenance from 'components/Company/Maintenance';
 import CommonContactDetails from 'components/Company/CommonContactDetails';
 import CommonContactDetailList from 'components/Company/CommonContactDetailList';
 
+import UserDetails from 'components/User/UserDetails';
+
 import $ from 'jquery';
 
 const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, newDetails, cancelClick, exitModule }) => {
@@ -163,8 +165,8 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
       >
         {Object.values(tabArray).map((tab, index) => {
           return (
-            <Tab eventKey={tab} title={tab} className={index == 0 ? "border p-1" : 
-                                                       tab != "Transaction Details" ? "border p-1 tab-page-tab" : ""}>
+            <Tab eventKey={tab} title={tab} className={index == 0 ? "border p-1" :
+              tab != "Transaction Details" ? "border p-1 tab-page-tab" : ""}>
               {index == 0 && listData && (
                 <>
                   <FalconComponentCard className="tab-page-list-card">
@@ -220,7 +222,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                   </FalconComponentCard>
                 </>
               )}
-               {index == 1 && module == "CompanyMaster" &&  (
+              {index == 1 && module == "CompanyMaster" && (
                 <>
                   <FalconComponentCard className="no-pb mb-2">
                     <FalconComponentCard.Body language="jsx">
@@ -232,13 +234,28 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                     <FalconComponentCard.Body language="jsx">
                       <CommonContactDetails />
                     </FalconComponentCard.Body>
-                  </FalconComponentCard>   
+                  </FalconComponentCard>
 
                   <FalconComponentCard id='CommonContactDetailsCard' className="tab-page-button-table-card no-pb">
                     <FalconComponentCard.Body language="jsx">
                       <CommonContactDetailList />
                     </FalconComponentCard.Body>
-                  </FalconComponentCard>         
+                  </FalconComponentCard>
+                </>
+              )}
+              {index == 1 && module == "User" && (
+                <>
+                  <FalconComponentCard className="no-pb mb-2">
+                    <FalconComponentCard.Body language="jsx">
+                      <UserDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard id='CommonContactDetailsForm'>
+                    <FalconComponentCard.Body language="jsx">
+                      <CommonContactDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
                 </>
               )}
             </Tab>

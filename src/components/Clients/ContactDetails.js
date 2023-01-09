@@ -186,6 +186,8 @@ const ContactDetails = () => {
                   return <span className="error-message">{contactNameErr[key]}</span>
                 })}
               </Row>
+            </Col>
+            <Col className="me-3 ms-3">
               <Row className="mb-3">
                 <Form.Label>Mobile No<span className="text-danger">*</span></Form.Label>
                 <Form.Control type='number' id="txtMobileno" name="mobileNo" maxLength={10} value={contactDetailData.mobileNo} onChange={handleFieldChange} placeholder="Mobile No" required />
@@ -193,6 +195,8 @@ const ContactDetails = () => {
                   return <span className="error-message">{contactMobileNoErr[key]}</span>
                 })}
               </Row>
+            </Col>
+            <Col className="me-3 ms-3">
               <Row className="mb-3">
                 <Form.Label>Email Id</Form.Label>
                 <Form.Control id="txtEmailId" name="emailId" maxLength={50} value={contactDetailData.emailId} onChange={handleFieldChange} placeholder="Email Id" />
@@ -206,6 +210,8 @@ const ContactDetails = () => {
                 <Form.Label>Designation</Form.Label>
                 <Form.Control id="txtDesignation" name="designation" maxLength={50} value={contactDetailData.designation} onChange={handleFieldChange} placeholder="Designation" />
               </Row>
+            </Col>
+            <Col className="me-3 ms-3">
               <Row className="mb-3">
                 <Form.Label>Send Mail</Form.Label>
                 <Form.Select id="txtSendMail" name="sendMail" value={contactDetailData.sendMail} onChange={handleFieldChange}>

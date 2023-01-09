@@ -28,6 +28,7 @@ const AdvanceTable = ({
       $('[data-rr-ui-event-key*="Maintenance"]').attr('disabled', false);
       $('[data-rr-ui-event-key*="Maintenance"]').trigger('click');
       $("#AddCompanyDetailsForm").trackChanges();
+      $('#btnSave').attr('disabled', true);
       getCommonContactDetailsList(rowData.encryptedCompanyCode);
       localStorage.setItem('EncryptedResponseCompanyCode', rowData.encryptedCompanyCode);
     }
