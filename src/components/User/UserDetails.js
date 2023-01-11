@@ -24,20 +24,20 @@ export const UserDetails = () => {
                 <Row>
                     <Col className="me-3 ms-3">
                         <Row className="mb-3">
-                            <Form.Label>Username</Form.Label>
+                            <Form.Label>Username<span className="text-danger">*</span></Form.Label>
                             <Form.Control id="txtUserName" name="loginUserName" maxLength={20} placeholder="Enter Username" required />
                         </Row>
                         <Row className="mb-3">
-                            <Form.Label>Email</Form.Label>
+                            <Form.Label>Email<span className="text-danger">*</span></Form.Label>
                             <Form.Control id="txtEmail" name="loginUserEmailId" maxLength={50} className="mb-1" placeholder="Enter email" />
                         </Row>
                         <Row className="mb-3">
-                            <Form.Label>Mobile Number</Form.Label>
+                            <Form.Label>Mobile Number<span className="text-danger">*</span></Form.Label>
                             <Form.Control id="txtMobile" name="loginUserMobileNumber" maxLength={10} className="mb-1" placeholder="Enter mobile number" />
                         </Row>
                     </Col>
                     <Col className="me-3 ms-3">
-                        <Form.Label>Password</Form.Label>
+                        <Form.Label>Password<span className="text-danger">*</span></Form.Label>
                         <Form.Control id="txtPassword" name="loginPassword" maxLength={20} className="mb-1" placeholder="Enter password" />
 
                         <Form.Label>Status</Form.Label>

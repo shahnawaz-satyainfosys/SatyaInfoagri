@@ -388,14 +388,14 @@ export const TransactionDetails = () => {
                         </Row>
                         <Row className="mb-3">
                             <Form.Label>Start Date<span className="text-danger">*</span></Form.Label>
-                            <Form.Control type='date' id="dtStartDate" name="startDate" onChange={handleFieldChange} required />
+                            <Form.Control type='date' id="dtStartDate" name="startDate" value={formData.startDate} onChange={handleFieldChange} required />
                             {Object.keys(startDateErr).map((key) => {
                                 return <span className="error-message">{startDateErr[key]}</span>
                             })}
                         </Row>
                         <Row className="mb-3">
                             <Form.Label>End Date<span className="text-danger">*</span></Form.Label>
-                            <Form.Control type='date' id="dtEndDate" name="endDate" onChange={handleFieldChange} required />
+                            <Form.Control type='date' id="dtEndDate" name="endDate" value={formData.endDate} onChange={handleFieldChange} required />
                             {Object.keys(endDateErr).map((key) => {
                                 return <span className="error-message">{endDateErr[key]}</span>
                             })}
@@ -426,7 +426,7 @@ export const TransactionDetails = () => {
                         </Row>
                         <Row className="mb-3 payment-mode-details">
                             <Form.Label id="lblPaymentModeDate">Cheque Date</Form.Label>
-                            <Form.Control type='date' id="txtChequeDate" name="chequeDate" onChange={handleFieldChange} placeholder="Select date" />
+                            <Form.Control type='date' id="txtChequeDate" name="chequeDate" value={formData.chequeDate} onChange={handleFieldChange} placeholder="Select date" />
                             {Object.keys(chequeDateErr).map((key) => {
                                 return <span className="error-message">{chequeDateErr[key]}</span>
                             })}

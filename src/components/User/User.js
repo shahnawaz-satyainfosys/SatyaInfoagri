@@ -12,12 +12,14 @@ const listColumnArray = [
     { accessor: 'status', Header: 'Active Status ' }
 ];
 
-const User = () => {
+export const User = () => {
 
     $('[data-rr-ui-event-key*="User Detail"]').click(function () {
         $("#btnNew").hide();
         $("#btnSave").show();
         $("#btnCancel").show();
+        $("#CommonContactDetailsForm").hide();
+        $("#CommonContactDetailsCard").show();
     })
 
     const newDetails = () => {

@@ -105,6 +105,7 @@ export const Client = () => {
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
     $('[data-rr-ui-event-key*="Customer List"]').attr('disabled', false);
     $('#AddClientDetailsForm').get(0).reset();
+    $('#AddClientTransactionDetailsForm').get(0).reset();
     localStorage.removeItem("EncryptedResponseClientCode")
     clearClientReducers();
   })

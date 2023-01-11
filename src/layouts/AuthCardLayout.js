@@ -10,6 +10,8 @@ import bgShape from 'assets/img/illustrations/bg-shape.png';
 import shape1 from 'assets/img/illustrations/shape-1.png';
 import halfCircle from 'assets/img/illustrations/half-circle.png';
 
+import Logo from 'components/common/Logo';
+
 const AuthCardLayout = ({ leftSideContent, children, footer = true }) => {
   return (
     <Section fluid className="py-0">
@@ -43,11 +45,7 @@ const AuthCardLayout = ({ leftSideContent, children, footer = true }) => {
                       >
                         Khalihan
                       </Link>
-                      <p className="opacity-75 text-white">
-                        With the power of Falcon, you can now focus only on
-                        functionaries for your digital products, while leaving
-                        the UI design on us!
-                      </p>
+                      <Logo width={200} />
                     </div>
                   </div>
                   <div className="mt-3 mb-4 mt-md-4 mb-md-5 light">
