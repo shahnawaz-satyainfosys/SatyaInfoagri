@@ -220,17 +220,17 @@ const ContactDetails = () => {
                   <option value="N">No</option>
                 </Form.Select>
               </Row>
-              <Row className="mb-3">
-                <Button variant="primary" id='btnAddContactDetail' type="button" onClick={() => addContactDetailInList()}>
+              <Row className="mb-2" id='btnAddContactDetail'>
+                <Button variant="primary" type="button" onClick={() => addContactDetailInList()}>
                   Add
                 </Button>
               </Row>
-              <Row className="mb-3">
-                <Button variant="primary" id='btnUpdateContactDetail' onClick={() => updateContactDetails()}>
+              <Row className="mb-2" id='btnUpdateContactDetail'>
+                <Button variant="primary" onClick={() => updateContactDetails()}>
                   Update
                 </Button>
               </Row>
-              <Row className="mb-3">
+              <Row className="mb-2">
                 <Button variant="danger" onClick={() => hideForm()}>
                   Cancel
                 </Button>

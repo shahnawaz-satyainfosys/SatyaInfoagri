@@ -37,14 +37,21 @@ export const UserDetails = () => {
                         </Row>
                     </Col>
                     <Col className="me-3 ms-3">
-                        <Form.Label>Password<span className="text-danger">*</span></Form.Label>
-                        <Form.Control id="txtPassword" name="loginPassword" maxLength={20} className="mb-1" placeholder="Enter password" />
-
-                        <Form.Label>Status</Form.Label>
-                        <Form.Select id="txtStatus" name="status" >
-                            <option value="Active">Active</option>
-                            <option value="Suspended">Suspended</option>
-                        </Form.Select>
+                        <Row className="mb-3">
+                            <Form.Label>Password<span className="text-danger">*</span></Form.Label>
+                            <Form.Control id="txtPassword" name="loginPassword" maxLength={20} className="mb-1" placeholder="Enter password" />
+                        </Row>
+                        <Row className="mb-3">
+                            <Form.Label>Confirm Password<span className="text-danger">*</span></Form.Label>
+                            <Form.Control id="txtConfirmPassword" name="loginConfirmPassword" maxLength={20} className="mb-1" placeholder="Enter confirm password" />
+                        </Row>
+                        <Row className="mb-3">
+                            <Form.Label>Status</Form.Label>
+                            <Form.Select id="txtStatus" name="status" >
+                                <option value="Active">Active</option>
+                                <option value="Suspended">Suspended</option>
+                            </Form.Select>
+                        </Row>
                     </Col>
                 </Row>
             </Form>
