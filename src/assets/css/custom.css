@@ -93,6 +93,11 @@
     border-top-right-radius: 0.375rem;
 }
 
+#TableSearchPanelCard .card-body{
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+}
+
 #TableFooterPanel, #ContactDetailsTable {
     margin-bottom: unset !important;
 }

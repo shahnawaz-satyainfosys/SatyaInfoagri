@@ -79,15 +79,19 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
         pagination
         perPage={10}
       >
-        
-        <FalconComponentCard className="list-card mb-1">
-          <FalconComponentCard.Body>
-        
-            <Row className="flex-end-center mb-2">
-              <Col xs="auto" sm={6} lg={4}>
+      
+        <FalconComponentCard id='TableSearchPanelCard' className="no-pad mb-1">
+            <FalconComponentCard.Body>
+            <Row className="flex-end-center  mt-1 mb-1">
+              <Col xs="auto" className="me-1" sm={6} lg={4}>
                 <AdvanceTableSearchBox table/>
               </Col>
             </Row>
+            </FalconComponentCard.Body>
+        </FalconComponentCard>
+
+        <FalconComponentCard className="list-card mb-1">
+          <FalconComponentCard.Body>
 
             <AdvanceTable
               table
