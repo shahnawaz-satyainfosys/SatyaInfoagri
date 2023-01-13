@@ -91,6 +91,7 @@ const LoginForm = ({ hasLabel }) => {
     localStorage.setItem('LoginUserEmailId', data.loginUserEmailId);
     localStorage.setItem('LoginUserMobileNumber', data.loginUserMobileNumber);
     localStorage.setItem('NoOfCompany', data.noOfCompany);
+    localStorage.setItem('GSTNumber', data.gstNumber);
   };
 
   const handleFieldChange = e => {

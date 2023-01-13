@@ -112,7 +112,7 @@ export const CompanyMaster = () => {
 
     const newDetails = () => {
         if (listData.length >= localStorage.getItem("NoOfCompany")) {
-            toast.error("Company limit is exceeded.", {
+            toast.error(`You have authorization to create only ${localStorage.getItem("NoOfCompany")} companies`, {
                 theme: 'colored',
                 autoClose: 10000
             });
@@ -223,15 +223,15 @@ export const CompanyMaster = () => {
         }
 
         if (companyData.companyLogo && companyData.companyLogo.type) {
-            var imageType = ['image/jpeg', 'image/jpg', 'image/png'];
+            var imageType = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp'];
             if (imageType.indexOf(companyData.companyLogo.type) === -1) {
                 imageTypeErr.invalidImage = "Selected image is invalid";
                 isValid = false;
                 setFormError(true);
             }
 
-            if (companyData.companyLogo.size > 1024 * 1024 * 10) {
-                imageTypeErr.invalidSize = "File size must be under 10 MB";
+            if (companyData.companyLogo.size > 1024 * 30) {
+                imageTypeErr.invalidSize = "File size must be under 30 KB";
                 isValid = false;
                 setFormError(true);
             }
