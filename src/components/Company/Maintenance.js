@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Form, Row, Spinner } from 'react-bootstrap';
+import { Col, Form, Row, Spinner, InputGroup } from 'react-bootstrap';
 import axios from 'axios';
 import { companyDetailsAction, clientDataAction } from 'actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -203,6 +203,14 @@ export const Maintenance = () => {
         }
     }
 
+    const removeLogo = () => {
+        $('#logoFile').val(null);
+        dispatch(companyDetailsAction({
+            ...companyData,
+            companyLogo: "",
+            companyLogoURl: ""
+        }))
+    }
 
     return (
         <>
@@ -330,11 +338,24 @@ export const Maintenance = () => {
                         <Col className="me-3 ms-3">
                             <Row className="mb-3">
                                 <Form.Label>Company Logo</Form.Label>
-                                <img src={companyData.companyLogoURl} id='imgCompanyLogo' width="50px" height="100px" />
-                                <Form.Control type="file" id='logoFile' name='companyLogo' onChange={handleFieldChange} />
-                                {Object.keys(companyError.imageTypeErr).map((key) => {
-                                    return <span className="error-message">{companyError.imageTypeErr[key]}</span>
-                                })}
+                                {companyData && companyData.companyLogoURl ? (
+                                    <img src={companyData.companyLogoURl} id='imgCompanyLogo' width="50px" height="100px" />
+                                ) : null}
+                                <InputGroup className="mb-3">
+                                    <Form.Control type="file" id='logoFile' name='companyLogo' onChange={handleFieldChange} />
+                                    {Object.keys(companyError.imageTypeErr).map((key) => {
+                                        return <span className="error-message">{companyError.imageTypeErr[key]}</span>
+                                    })}
+                                    {companyData && companyData.companyLogoURl ? (
+                                        <InputGroup.Text>
+                                            <i className="fa fa-trash"
+                                                onClick={() => { removeLogo() }}
+                                            />
+                                        </InputGroup.Text>
+                                    ) : null
+                                    }
+                                </InputGroup>
+
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Status</Form.Label>
