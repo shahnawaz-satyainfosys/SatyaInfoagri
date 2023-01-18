@@ -37,8 +37,8 @@ export const Client = () => {
       pageSize: size
     };
 
-    const response = 
-    setIsLoading(true);
+    const response =
+      setIsLoading(true);
     await axios
       .post(process.env.REACT_APP_API_URL + '/client-list', listFilter, {
         headers: { Authorization: `Bearer ${JSON.parse(token).value}` }
@@ -99,6 +99,13 @@ export const Client = () => {
   }
 
   $('[data-rr-ui-event-key*="Customer List"]').click(function () {
+    if ($("#AddClientDetailsForm").isChanged() ||
+      clientContactDetailChanged.contactDetailsChanged ||
+      transactionDetailChanged.transactionDetailChanged
+    ) {
+      setModalShow(true);
+    }
+
     $("#btnNew").show();
     $("#btnSave").hide();
     $("#btnCancel").hide();
@@ -395,6 +402,10 @@ export const Client = () => {
   }
 
   const updateCallback = (isAddClient = false) => {
+
+    if (clientData.gstNumber === localStorage.getItem("GSTNumber")) {
+      localStorage.setItem("NoOfCompany", parseInt(clientData.noOfComapnies))
+    }
 
     $("#AddClientDetailsForm").data("changed", false);
     $('#AddClientDetailsForm').get(0).reset();

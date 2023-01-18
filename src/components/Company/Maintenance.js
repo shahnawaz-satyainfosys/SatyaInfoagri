@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Form, Row, Spinner, InputGroup } from 'react-bootstrap';
+import { Col, Form, Row, Spinner, InputGroup} from 'react-bootstrap';
 import axios from 'axios';
 import { companyDetailsAction, clientDataAction } from 'actions';
 import { useDispatch, useSelector } from 'react-redux';
 import Moment from "moment";
+import { toast } from 'react-toastify';
 
 export const Maintenance = () => {
 
@@ -141,7 +142,7 @@ export const Maintenance = () => {
             dispatch(companyDetailsAction({
                 ...companyData,
                 companyLogo: e.target.files[0],
-                companyLogoURl: URL.createObjectURL(e.target.files[0])
+                companyLogoURL: URL.createObjectURL(e.target.files[0])
             }));
             $("#imgCompanyLogo").show();
         }
@@ -208,7 +209,7 @@ export const Maintenance = () => {
         dispatch(companyDetailsAction({
             ...companyData,
             companyLogo: "",
-            companyLogoURl: ""
+            companyLogoURL: ""
         }))
     }
 
@@ -338,15 +339,15 @@ export const Maintenance = () => {
                         <Col className="me-3 ms-3">
                             <Row className="mb-3">
                                 <Form.Label>Company Logo</Form.Label>
-                                {companyData && companyData.companyLogoURl ? (
-                                    <img src={companyData.companyLogoURl} id='imgCompanyLogo' width="50px" height="100px" />
+                                {companyData && companyData.companyLogoURL ? (
+                                    <img src={companyData.companyLogoURL} id='imgCompanyLogo' width="50px" height="100px" />
                                 ) : null}
                                 <InputGroup className="mb-3">
                                     <Form.Control type="file" id='logoFile' name='companyLogo' onChange={handleFieldChange} />
                                     {Object.keys(companyError.imageTypeErr).map((key) => {
                                         return <span className="error-message">{companyError.imageTypeErr[key]}</span>
                                     })}
-                                    {companyData && companyData.companyLogoURl ? (
+                                    {companyData && companyData.companyLogoURL ? (
                                         <InputGroup.Text>
                                             <i className="fa fa-trash"
                                                 onClick={() => { removeLogo() }}
