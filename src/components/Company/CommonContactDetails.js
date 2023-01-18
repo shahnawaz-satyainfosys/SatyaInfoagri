@@ -28,6 +28,12 @@ const CommonContactDetails = () => {
     const commonContactDetailsReducer = useSelector((state) => state.rootReducer.commonContactDetailsReducer)
     var commonContactDetailData = commonContactDetailsReducer.commonContactDetails;
 
+    const companyDetailsReducer = useSelector((state) => state.rootReducer.companyDetailsReducer)
+    const companyData = companyDetailsReducer.companyDetails;
+
+    const userDetailsReducer = useSelector((state) => state.rootReducer.userDetailsReducer)
+    const userData = userDetailsReducer.userDetails;
+
     if (!commonContactDetailsReducer.commonContactDetails ||
         commonContactDetailsReducer.commonContactDetails.length <= 0) {
         resetCommonContactDetailData();
@@ -76,13 +82,13 @@ const CommonContactDetails = () => {
     const addCommonContactDetailInList = () => {
         if (validateCommonContactDetailForm()) {
             const contactData = {
-                encryptedClientCode: localStorage.getItem("EncryptedClientCode"),
-                encryptedCompanyCode: localStorage.getItem("EncryptedResponseCompanyCode"),
+                encryptedClientCode: companyData.encryptedClientCode ? companyData.encryptedClientCode : userData.encryptedClientCode,
+                encryptedCompanyCode: companyData.encryptedCompanyCode != null ? companyData.encryptedCompanyCode : "",
                 contactPerson: commonContactDetailData.contactPerson,
                 contactType: commonContactDetailData.contactType,
                 contactDetails: commonContactDetailData.contactDetails,
                 flag: commonContactDetailData.flag == "1" ? "1" : "0",
-                originatedFrom: commonContactDetailData.originatedFrom,
+                originatedFrom: companyData.encryptedCompanyCode != null ? "CM" : "SU",
                 addUser: localStorage.getItem("LoginUserName"),
             }
 
@@ -111,7 +117,7 @@ const CommonContactDetails = () => {
             const commonContactDetail = {
                 encryptedCommonContactDetailsId: commonContactDetailData.encryptedCommonContactDetailsId,
                 encryptedClientCode: commonContactDetailData.encryptedClientCode,
-                encryptedCompanyCode: commonContactDetailData.encryptedCompanyCode ? commonContactDetailData.encryptedCompanyCode : localStorage.getItem("EncryptedResponseCompanyCode"),
+                encryptedCompanyCode: commonContactDetailData.encryptedCompanyCode ? commonContactDetailData.encryptedCompanyCode : "",
                 contactPerson: commonContactDetailData.contactPerson,
                 contactType: commonContactDetailData.contactType,
                 contactDetails: commonContactDetailData.contactDetails,

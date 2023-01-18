@@ -116,3 +116,10 @@ export const userDetailsAction = (payload) => {
     payload
   };
 };
+
+export const userDetailsErrorAction = (payload) => {
+  return {
+    type: 'USERDETAILSERROR',
+    payload
+  };
+};

@@ -46,14 +46,13 @@ const CommonContactDetailList = () => {
         var objectIndex = commonContactDetailListReducer.commonContactDetailsList.findIndex(x => x.contactDetails == paramsData.contactDetailsToDelete);
         commonContactDetailListReducer.commonContactDetailsList.splice(objectIndex, 1)
 
-        if(paramsData.encryptedCommonContactDetailsId)
-        {
+        if (paramsData.encryptedCommonContactDetailsId) {
             var deleteCommonContactDetailId = localStorage.getItem("DeleteCommonContactDetailsId");
 
             var deleteCommonContactDetail = deleteCommonContactDetailId ? deleteCommonContactDetailId + "," + paramsData.encryptedCommonContactDetailsId : paramsData.encryptedCommonContactDetailsId;
-    
+
             localStorage.setItem("DeleteCommonContactDetailsId", deleteCommonContactDetail);
-    
+
             dispatch(commonContactDetailsListAction(commonContactDetailListReducer.commonContactDetailsList));
         }
 
@@ -245,20 +244,5 @@ const CommonContactDetailList = () => {
         </>
     )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export default CommonContactDetailList;

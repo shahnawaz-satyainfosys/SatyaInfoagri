@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import { Badge, Table } from 'react-bootstrap';
 import axios from 'axios';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { clientContactDetailsAction, companyDetailsAction, commonContactDetailsListAction } from '../../../actions/index';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { clientContactDetailsAction, companyDetailsAction, commonContactDetailsListAction, userDetailsAction } from '../../../actions/index';
 import { transactionDetailsAction } from '../../../actions/index';
 import { clientDetailsAction } from '../../../actions/index';
 import $ from 'jquery'
@@ -19,6 +19,8 @@ const AdvanceTable = ({
 }) => {
 
   const dispatch = useDispatch();
+  const clientDataReducer = useSelector((state) => state.rootReducer.clientDataReducer)
+  var clientUserData = clientDataReducer.clientData;
 
   const toTabPage = (rowData) => {
     if (rowData.hasOwnProperty('encryptedCompanyCode')) {
@@ -31,6 +33,16 @@ const AdvanceTable = ({
       $('#btnSave').attr('disabled', true);
       getCommonContactDetailsList(rowData.encryptedCompanyCode);
       localStorage.setItem('EncryptedResponseCompanyCode', rowData.encryptedCompanyCode);
+    }
+    else if (rowData.hasOwnProperty('encryptedSecurityUserId')) {
+      dispatch(userDetailsAction(rowData));
+      $('[data-rr-ui-event-key*="User Detail"]').attr('disabled', false);
+      $('[data-rr-ui-event-key*="User Detail"]').trigger('click');
+      localStorage.setItem('EncryptedResponseSecurityUserId', rowData.encryptedSecurityUserId);
+      $("#UserDetailsForm").trackChanges();
+      $('#btnSave').attr('disabled', true);
+      getUserContactDetailsList(rowData.encryptedClientCode);
+      getClientDetail(rowData.clientName);
     }
     else if (!rowData.hasOwnProperty('encryptedCompanyCode')) {
       dispatch(clientDetailsAction(rowData));
@@ -46,6 +58,7 @@ const AdvanceTable = ({
       getContactDetailsList(rowData.encryptedClientCode);
       getTransactionDetailsList(rowData.encryptedClientCode);
     }
+
   }
 
   const getContactDetailsList = async (encryptedClientCode) => {
@@ -116,11 +129,12 @@ const AdvanceTable = ({
 
   const getCommonContactDetailsList = async (encryptedCompanyCode) => {
     const request = {
-      EncryptedCompanyCode: encryptedCompanyCode
+      EncryptedCompanyCode: encryptedCompanyCode,
+      OriginatedFrom: "CM"
     }
 
     axios
-      .post(process.env.REACT_APP_API_URL + '/get-common-contact-detail-list', request,{
+      .post(process.env.REACT_APP_API_URL + '/get-common-contact-detail-list', request, {
         headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
       })
       .then(res => {
@@ -143,6 +157,44 @@ const AdvanceTable = ({
           $("#CompanyContactDetailsTable").hide();
         }
       });
+  }
+
+  const getUserContactDetailsList = async (encryptedClientCode) => {
+    const request = {
+      EncryptedClientCode: encryptedClientCode,
+      OriginatedFrom: "SU"
+    }
+
+    axios
+      .post(process.env.REACT_APP_API_URL + '/get-common-contact-detail-list', request, {
+        headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+      })
+      .then(res => {
+
+        if (res.data.status == 200) {
+          let commonContactDetailsData = [];
+          if ($('#CommonContactDetailsCard tbody tr').length > 1) {
+            $('#CommonContactDetailsCard tbody tr').remove();
+          }
+          commonContactDetailsData = res.data.data;
+          dispatch(commonContactDetailsListAction(commonContactDetailsData));
+
+          if (res.data && res.data.data.length > 0) {
+            $("#CompanyContactDetailsTable").show();
+          } else {
+            $("#CompanyContactDetailsTable").hide();
+          }
+        }
+        else {
+          $("#CompanyContactDetailsTable").hide();
+        }
+      });
+  }
+
+  const getClientDetail = (clientName) => {
+    const newTransactions = clientUserData.find(x => x.customerName == clientName);
+    $('#txtCountry').val(newTransactions.country);
+    $('#txtState').val(newTransactions.state);
   }
 
   return (

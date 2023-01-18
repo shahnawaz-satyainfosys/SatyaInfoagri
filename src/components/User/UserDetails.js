@@ -1,62 +1,156 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { Col, Form, Row } from 'react-bootstrap';
+import axios from 'axios';
+import { userDetailsAction, clientDataAction } from '../../actions/index';
+import { toast } from 'react-toastify';
 
 
 export const UserDetails = () => {
+
+    const [formHasError, setFormError] = useState(false);
+    const [clientList, setClientList] = useState([]);
     const dispatch = useDispatch();
 
     const resetUserDetail = () => {
         dispatch(userDetailsAction({
+            "encryptedClientCode": "",
             "loginUserName": "",
             "loginUserEmailId": "",
             "loginUserMobileNumber": "",
-            "loginPassword": "",
             "status": "Active"
         }))
     }
 
-    const [formHasError, setFormError] = useState(false);
+    const userDetailsReducer = useSelector((state) => state.rootReducer.userDetailsReducer)
+    var userData = userDetailsReducer.userDetails;
+
+    if (!userDetailsReducer.userDetails ||
+        userDetailsReducer.userDetails.length <= 0) {
+        resetUserDetail();
+    }
+
+    const userDetailsErrorReducer = useSelector((state) => state.rootReducer.userDetailsErrorReducer)
+    const userError = userDetailsErrorReducer.userDetailsError;
+
+    const clientDataReducer = useSelector((state) => state.rootReducer.clientDataReducer)
+    var clientUserData = clientDataReducer.clientData;
+
+    const getClientList = async () => {
+        axios
+            .get(process.env.REACT_APP_API_URL + '/get-client-list', {
+                headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+            })
+            .then(res => {
+                if (res.data.status == 200) {
+                    let clientListData = [];
+                    if (res.data && res.data.data.length > 0) {
+
+                        res.data.data.forEach(client => {
+                            clientListData.push({
+                                key: client.customerName,
+                                value: client.encryptedClientCode
+                            });
+                        });
+                        setClientList(clientListData);
+                        dispatch(clientDataAction(res.data.data))
+                    }
+                } else {
+                    toast.error(res.data.message, {
+                        theme: 'colored'
+                    })
+                }
+            });
+    }
+
+    useEffect(() => {
+        getClientList();
+    }, []);
+
+    if (userData.clientName && !$('#txtClient').val()) {
+        $('#txtClient option:contains(' + userData.clientName + ')').prop('selected', true);
+    }
+
+    const handleFieldChange = e => {     
+        const newTransactions = clientUserData.find(x => x.customerName == $('#txtClient option:selected').text());
+
+        if(e.target.name == 'encryptedClientCode'){
+            dispatch(userDetailsAction({
+                ...userData,
+                encryptedClientCode: newTransactions.encryptedClientCode,
+                loginUserEmailId: newTransactions.emailId,
+                loginUserMobileNumber: newTransactions.mobileNo,                
+            }))
+
+            $('#txtCountry').val(newTransactions.country)
+            $('#txtState').val(newTransactions.state)
+        }
+        else{
+            dispatch(userDetailsAction({
+                ...userData,
+                [e.target.name]: e.target.value
+            }));
+        }
+    };
+
 
     return (
         <>
-            <Form noValidate validated={formHasError} className="details-form" id='UserDetailsForm'>
-                <Row>
-                    <Col className="me-3 ms-3">
-                        <Row className="mb-3">
-                            <Form.Label>Username<span className="text-danger">*</span></Form.Label>
-                            <Form.Control id="txtUserName" name="loginUserName" maxLength={20} placeholder="Enter Username" required />
-                        </Row>
-                        <Row className="mb-3">
-                            <Form.Label>Email<span className="text-danger">*</span></Form.Label>
-                            <Form.Control id="txtEmail" name="loginUserEmailId" maxLength={50} className="mb-1" placeholder="Enter email" />
-                        </Row>
-                        <Row className="mb-3">
-                            <Form.Label>Mobile Number<span className="text-danger">*</span></Form.Label>
-                            <Form.Control id="txtMobile" name="loginUserMobileNumber" maxLength={10} className="mb-1" placeholder="Enter mobile number" />
-                        </Row>
-                    </Col>
-                    <Col className="me-3 ms-3">
-                        <Row className="mb-3">
-                            <Form.Label>Password<span className="text-danger">*</span></Form.Label>
-                            <Form.Control id="txtPassword" name="loginPassword" maxLength={20} className="mb-1" placeholder="Enter password" />
-                        </Row>
-                        <Row className="mb-3">
-                            <Form.Label>Confirm Password<span className="text-danger">*</span></Form.Label>
-                            <Form.Control id="txtConfirmPassword" name="loginConfirmPassword" maxLength={20} className="mb-1" placeholder="Enter confirm password" />
-                        </Row>
-                        <Row className="mb-3">
-                            <Form.Label>Status</Form.Label>
-                            <Form.Select id="txtStatus" name="status" >
-                                <option value="Active">Active</option>
-                                <option value="Suspended">Suspended</option>
-                            </Form.Select>
-                        </Row>
-                    </Col>
-                </Row>
-            </Form>
+            {userData &&
+
+                <Form noValidate validated={formHasError} className="details-form" id='UserDetailsForm'>
+                    <Row>
+                        <Col className="me-3 ms-3">
+                            <Row className="mb-3">
+                                <Form.Label>Client<span className="text-danger">*</span></Form.Label>
+                                <Form.Select id="txtClient" name="encryptedClientCode" onChange={handleFieldChange} required>
+                                    <option value=''>Select Client</option>
+                                    {clientList.map((option, index) => (
+                                        <option key={index} value={option.value}>{option.key}</option>
+                                    ))}
+                                </Form.Select>
+                                {Object.keys(userError.clientErr).map((key) => {
+                                    return <span className="error-message">{userError.clientErr[key]}</span>
+                                })}
+                            </Row>
+                            <Row className="mb-3">
+                                <Form.Label>Country</Form.Label>
+                                <Form.Control id="txtCountry" name="country" readOnly/>
+                            </Row>
+                            <Row className="mb-3">
+                                <Form.Label>State</Form.Label>
+                                <Form.Control id="txtState" name="state" readOnly/>
+                            </Row>
+                        </Col>
+                        <Col className="me-3 ms-3">
+                            <Row className="mb-3">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control id="txtEmail" name="loginUserEmailId" maxLength={50} value={userData.loginUserEmailId} onChange={handleFieldChange} className="mb-1" placeholder="Enter email" readOnly/>
+                            </Row>
+                            <Row className="mb-3">
+                                <Form.Label>Mobile Number</Form.Label>
+                                <Form.Control id="txtMobile" name="loginUserMobileNumber" maxLength={10} value={userData.loginUserMobileNumber} onChange={handleFieldChange} className="mb-1" placeholder="Enter mobile number" readOnly/>
+                            </Row>
+                            <Row className="mb-3">
+                                <Form.Label>Username<span className="text-danger">*</span></Form.Label>
+                                <Form.Control id="txtUserName" name="loginUserName" maxLength={20} value={userData.loginUserName} onChange={handleFieldChange} placeholder="Enter Username" required />
+                                {Object.keys(userError.loginUserNameErr).map((key) => {
+                                    return <span className="error-message">{userError.loginUserNameErr[key]}</span>
+                                })}
+                            </Row>
+                            <Row className="mb-3">
+                                <Form.Label>Status</Form.Label>
+                                <Form.Select id="txtStatus" name="status" >
+                                    <option value="Active">Active</option>
+                                    <option value="Suspended">Suspended</option>
+                                </Form.Select>
+                            </Row>
+                        </Col>
+                    </Row>
+                </Form>
+            }
         </>
     )
 }
 
-export default UserDetails
+export default UserDetails;

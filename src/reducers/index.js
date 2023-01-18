@@ -16,6 +16,7 @@ import commonContactDetailChangedReducer from './commonContactDetailChangedReduc
 import clientDataReducer from './clientDataReducer'
 import clientContactListReducer from './clientContactListReducer'
 import userDetailsReducer from './userDetailsReducer'
+import userDetailsErrorReducer from './userDetailsErrorReducer'
 
 const rootReducer = combineReducers({
   loginReducer,
@@ -34,7 +35,8 @@ const rootReducer = combineReducers({
   commonContactDetailChangedReducer,
   clientDataReducer,
   clientContactListReducer,
-  userDetailsReducer
+  userDetailsReducer,
+  userDetailsErrorReducer
 });
 
 export default rootReducer;

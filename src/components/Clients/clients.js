@@ -99,6 +99,7 @@ export const Client = () => {
   }
 
   $('[data-rr-ui-event-key*="Customer List"]').click(function () {
+    $('#btnExit').attr('isExit', 'false');
     if ($("#AddClientDetailsForm").isChanged() ||
       clientContactDetailChanged.contactDetailsChanged ||
       transactionDetailChanged.transactionDetailChanged
@@ -113,7 +114,7 @@ export const Client = () => {
     $('[data-rr-ui-event-key*="Customer List"]').attr('disabled', false);
     $('#AddClientDetailsForm').get(0).reset();
     $('#AddClientTransactionDetailsForm').get(0).reset();
-    localStorage.removeItem("EncryptedResponseClientCode")
+    localStorage.removeItem("EncryptedResponseClientCode");
     clearClientReducers();
   })
 
