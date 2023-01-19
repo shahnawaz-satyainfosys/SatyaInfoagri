@@ -254,18 +254,6 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                       <UserDetails />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
-
-                  <FalconComponentCard id='CommonContactDetailsForm'>
-                    <FalconComponentCard.Body language="jsx">
-                      <CommonContactDetails />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
-
-                  <FalconComponentCard id='CommonContactDetailsCard' className="tab-page-button-table-card no-pb">
-                    <FalconComponentCard.Body language="jsx">
-                      <CommonContactDetailList />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
                 </>
               )}
             </Tab>

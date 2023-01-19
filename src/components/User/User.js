@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import TabPage from 'components/common/TabPage';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { userDetailsAction, userDetailsErrorAction, commonContactDetailsListAction, commonContactDetailChangedAction } from '../../actions/index';
+import { userDetailsAction, userDetailsErrorAction } from '../../actions/index';
 import { toast } from 'react-toastify';
 import { Spinner, Modal, Button } from 'react-bootstrap';
 
@@ -10,6 +10,7 @@ const tabArray = ['User List', 'User Detail'];
 
 const listColumnArray = [
     { accessor: 'sl', Header: 'S. No' },
+    { accessor: 'clientName', Header: 'Client Name' },
     { accessor: 'loginUserName', Header: 'Username' },
     { accessor: 'loginUserEmailId', Header: 'Email Id' },
     { accessor: 'loginUserMobileNumber', Header: 'Mobile Number' },
@@ -32,7 +33,6 @@ export const User = () => {
         const listFilter = {
             pageNumber: page,
             pageSize: size,
-            EncryptedClientCode: localStorage.getItem("EncryptedClientCode")
         };
 
         const response =
@@ -45,7 +45,7 @@ export const User = () => {
                 setIsLoading(false);
                 if (res.data.status == 200) {
                     setListData(res.data.data);
-                }                
+                }
             });
     };
 
@@ -56,12 +56,6 @@ export const User = () => {
 
     const userDetailsReducer = useSelector((state) => state.rootReducer.userDetailsReducer)
     const userData = userDetailsReducer.userDetails;
-
-    const commonContactDetailListReducer = useSelector((state) => state.rootReducer.commonContactDetailsListReducer)
-    const commonContactDetailList = commonContactDetailListReducer.commonContactDetailsList;
-
-    const commonContactChanged = useSelector((state) => state.rootReducer.commonContactDetailChangedReducer)
-    let commonContactDetailChanged = commonContactChanged.commonContactDetailChanged;
 
     $.fn.extend({
         trackChanges: function () {
@@ -80,8 +74,6 @@ export const User = () => {
     const clearUserDetailsReducer = () => {
         dispatch(userDetailsAction(undefined));
         dispatch(userDetailsErrorAction(undefined));
-        dispatch(commonContactDetailsListAction(undefined));
-        dispatch(commonContactDetailChangedAction(undefined));
         $("#UserDetailsForm").data("changed", false);
     }
 
@@ -103,9 +95,7 @@ export const User = () => {
 
     const cancelClick = () => {
         $('#btnExit').attr('isExit', 'false');
-        if ($("#UserDetailsForm").isChanged() ||
-            commonContactDetailChanged.commonContactDetailsChanged
-        ) {
+        if ($("#UserDetailsForm").isChanged()) {
             setModalShow(true);
         }
         else {
@@ -115,8 +105,7 @@ export const User = () => {
 
     const exitModule = () => {
         $('#btnExit').attr('isExit', 'true');
-        if (($("#UserDetailsForm").isChanged()) ||
-            commonContactDetailChanged.commonContactDetailsChanged) {
+        if ($("#UserDetailsForm").isChanged()) {
             setModalShow(true);
         }
         else {
@@ -136,8 +125,7 @@ export const User = () => {
 
     $('[data-rr-ui-event-key*="User List"]').click(function () {
         $('#btnExit').attr('isExit', 'false');
-        if (($("#UserDetailsForm").isChanged()) ||
-            commonContactDetailChanged.commonContactDetailsChanged) {
+        if ($("#UserDetailsForm").isChanged()) {
             setModalShow(true);
         }
 
@@ -183,12 +171,6 @@ export const User = () => {
 
         dispatch(userDetailsErrorAction(undefined));
 
-        commonContactDetailChanged = {
-            commonContactDetailChanged: false
-        }
-
-        dispatch(commonContactDetailChangedAction(commonContactDetailChanged));
-
         localStorage.removeItem("DeleteCommonContactDetailsId");
 
         if (!isAddUser) {
@@ -210,25 +192,12 @@ export const User = () => {
                 loginUserMobileNumber: userData.loginUserMobileNumber,
                 loginUserName: userData.loginUserName,
                 activeStatus: userData.status == null || userData.status == "Active" ? "A" : "S",
-                addUser: localStorage.getItem("LoginUserName"),
-                commonContactDetails: commonContactDetailList
+                addUser: localStorage.getItem("LoginUserName")
             }
 
             const keys = ['loginUserName', 'addUser']
             for (const key of Object.keys(requestData).filter((key) => keys.includes(key))) {
                 requestData[key] = requestData[key] ? requestData[key].toUpperCase() : '';
-            }
-
-            const contactKeys = ['contactPerson', 'addUser']
-            var index = 0;
-            for (var obj in requestData.commonContactDetails) {
-                var contactDetailObj = requestData.commonContactDetails[obj];
-
-                for (const key of Object.keys(contactDetailObj).filter((key) => contactKeys.includes(key))) {
-                    contactDetailObj[key] = contactDetailObj[key] ? contactDetailObj[key].toUpperCase() : '';
-                }
-                requestData.commonContactDetails[index] = contactDetailObj;
-                index++;
             }
 
             setIsLoading(true);
@@ -266,7 +235,7 @@ export const User = () => {
                 ActiveStatus: !userData.status || userData.status == "Active" ? "A" : "S",
                 ModifyUser: localStorage.getItem("LoginUserName")
             }
-            var updateRequired = $("#UserDetailsForm").isChanged() || commonContactDetailChanged.commonContactDetailsChanged;
+            var updateRequired = $("#UserDetailsForm").isChanged();
 
             if (!updateRequired) {
                 toast.warning("Nothing to change!", {
@@ -293,101 +262,10 @@ export const User = () => {
                                 theme: 'colored',
                                 autoClose: 10000
                             });
-                        } else if (!commonContactDetailChanged.commonContactDetailsChanged) {
+                        } else {
                             updateUserCallback();
                         }
                     })
-            }
-
-            var deleteCommonContactDetailsId = localStorage.getItem("DeleteCommonContactDetailsId");
-
-            if (commonContactDetailChanged.commonContactDetailsChanged) {
-                var loopBreaked = false;
-                var commoncontactDetailIndex = 1;
-
-                for (let i = 0; i < commonContactDetailList.length; i++) {
-                    const commonContactDetails = commonContactDetailList[i];
-                    if (!loopBreaked) {
-
-                        const keys = ['contactPerson', 'modifyUser', 'addUser']
-                        for (const key of Object.keys(commonContactDetails).filter((key) => keys.includes(key))) {
-                            commonContactDetails[key] = commonContactDetails[key] ? commonContactDetails[key].toUpperCase() : '';
-                        }
-
-                        if (commonContactDetails.encryptedCommonContactDetailsId) {
-                            setIsLoading(true);
-                            const updateCommonContactDetailResponse =
-                                await axios.post(process.env.REACT_APP_API_URL + '/update-common-contact-detail', commonContactDetails, {
-                                    headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
-                                });
-                            setIsLoading(false);
-                            if (updateCommonContactDetailResponse.data.status != 200) {
-                                toast.error(updateCommonContactDetailResponse.data.message, {
-                                    theme: 'colored',
-                                    autoClose: 10000
-                                });
-                                loopBreaked = true;
-                            }
-                            else if (commoncontactDetailIndex == commonContactDetailList.length && !loopBreaked && !deleteCommonContactDetailsId) {
-                                updateUserCallback();
-                            }
-                            else {
-                                commoncontactDetailIndex++;
-                            }
-                        }
-                        else if (!commonContactDetails.encryptedCommonContactDetailsId) {
-                            setIsLoading(true);
-                            const addCommonContactDetailResponse =
-                                await axios.post(process.env.REACT_APP_API_URL + '/add-common-contact-details', commonContactDetails, {
-                                    headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
-                                });
-                            setIsLoading(false);
-                            if (addCommonContactDetailResponse.data.status != 200) {
-                                toast.error(addCommonContactDetailResponse.data.message, {
-                                    theme: 'colored',
-                                    autoClose: 10000
-                                });
-                                loopBreaked = true;
-                            }
-                            else if (commoncontactDetailIndex == commonContactDetailList.length && !loopBreaked && !deleteCommonContactDetailsId) {
-                                updateUserCallback();
-                            }
-                            else {
-                                commoncontactDetailIndex++;
-                            }
-                        }
-                    }
-                }
-
-                var deleteCommonContactDetailList = deleteCommonContactDetailsId ? deleteCommonContactDetailsId.split(',') : null;
-
-                if (deleteCommonContactDetailList) {
-                    var deleteContactDetailIndex = 1;
-
-                    deleteCommonContactDetailList.forEach(async deleteCommonContactDetailsId => {
-                        if (!loopBreaked) {
-
-                            const data = { encryptedCommonContactDetailsId: deleteCommonContactDetailsId }
-                            const headers = { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
-                            setIsLoading(true);
-                            const deleteCommonContactResponse = await axios.delete(process.env.REACT_APP_API_URL + '/delete-common-contact-detail', { headers, data });
-                            setIsLoading(false);
-                            if (deleteCommonContactResponse.data.status != 200) {
-                                toast.error(deleteCommonContactResponse.data.message, {
-                                    theme: 'colored',
-                                    autoClose: 10000
-                                });
-                                loopBreaked = true;
-                            }
-                            else if (deleteContactDetailIndex == deleteCommonContactDetailList.length && !loopBreaked) {
-                                updateUserCallback();
-                            }
-                            else {
-                                deleteContactDetailIndex++;
-                            }
-                        }
-                    });
-                }
             }
         }
     }
@@ -416,7 +294,7 @@ export const User = () => {
                         <h4>Do you want to save changes?</h4>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="success" onClick={addUserDetails}>Save</Button>
+                        <Button variant="success" onClick={!userData.encryptedSecurityUserId ? addUserDetails : updateUserDetails}>Save</Button>
                         <Button variant="danger" onClick={discardChanges}>Discard</Button>
                     </Modal.Footer>
                 </Modal>

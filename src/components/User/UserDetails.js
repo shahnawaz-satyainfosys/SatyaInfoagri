@@ -57,7 +57,8 @@ export const UserDetails = () => {
                     }
                 } else {
                     toast.error(res.data.message, {
-                        theme: 'colored'
+                        theme: 'colored',
+                        autoClose: 10000
                     })
                 }
             });
@@ -71,25 +72,36 @@ export const UserDetails = () => {
         $('#txtClient option:contains(' + userData.clientName + ')').prop('selected', true);
     }
 
-    const handleFieldChange = e => {     
+    const handleFieldChange = e => {
         const newTransactions = clientUserData.find(x => x.customerName == $('#txtClient option:selected').text());
 
-        if(e.target.name == 'encryptedClientCode'){
-            dispatch(userDetailsAction({
-                ...userData,
-                encryptedClientCode: newTransactions.encryptedClientCode,
-                loginUserEmailId: newTransactions.emailId,
-                loginUserMobileNumber: newTransactions.mobileNo,                
-            }))
+        if (newTransactions.noOfCreatedUser > 0) {
+            toast.error("You have reached the user limit", {
+                theme: 'colored',
+                autoClose: 5000
+            })
+            dispatch(userDetailsAction(undefined))
+            $("#UserDetailsForm").data("changed", false);
+            $('#UserDetailsForm').get(0).reset();
+        } else {
+            if (e.target.name == 'encryptedClientCode') {
+                dispatch(userDetailsAction({
+                    ...userData,
+                    encryptedClientCode: newTransactions.encryptedClientCode,
+                    loginUserEmailId: newTransactions.emailId,
+                    loginUserMobileNumber: newTransactions.mobileNo,
+                    noOfUser: newTransactions.noOfCreatedUser
+                }))
 
-            $('#txtCountry').val(newTransactions.country)
-            $('#txtState').val(newTransactions.state)
-        }
-        else{
-            dispatch(userDetailsAction({
-                ...userData,
-                [e.target.name]: e.target.value
-            }));
+                $('#txtCountry').val(newTransactions.country)
+                $('#txtState').val(newTransactions.state)
+            }
+            else {
+                dispatch(userDetailsAction({
+                    ...userData,
+                    [e.target.name]: e.target.value
+                }));
+            }
         }
     };
 
@@ -115,21 +127,21 @@ export const UserDetails = () => {
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Country</Form.Label>
-                                <Form.Control id="txtCountry" name="country" readOnly/>
+                                <Form.Control id="txtCountry" name="country" readOnly />
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>State</Form.Label>
-                                <Form.Control id="txtState" name="state" readOnly/>
+                                <Form.Control id="txtState" name="state" readOnly />
                             </Row>
                         </Col>
                         <Col className="me-3 ms-3">
                             <Row className="mb-3">
                                 <Form.Label>Email</Form.Label>
-                                <Form.Control id="txtEmail" name="loginUserEmailId" maxLength={50} value={userData.loginUserEmailId} onChange={handleFieldChange} className="mb-1" placeholder="Enter email" readOnly/>
+                                <Form.Control id="txtEmail" name="loginUserEmailId" maxLength={50} value={userData.loginUserEmailId} onChange={handleFieldChange} className="mb-1" placeholder="Enter email" readOnly />
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Mobile Number</Form.Label>
-                                <Form.Control id="txtMobile" name="loginUserMobileNumber" maxLength={10} value={userData.loginUserMobileNumber} onChange={handleFieldChange} className="mb-1" placeholder="Enter mobile number" readOnly/>
+                                <Form.Control id="txtMobile" name="loginUserMobileNumber" maxLength={10} value={userData.loginUserMobileNumber} onChange={handleFieldChange} className="mb-1" placeholder="Enter mobile number" readOnly />
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Username<span className="text-danger">*</span></Form.Label>
@@ -140,7 +152,7 @@ export const UserDetails = () => {
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Status</Form.Label>
-                                <Form.Select id="txtStatus" name="status" >
+                                <Form.Select id="txtStatus" name="status" value={userData.status} onChange={handleFieldChange}>
                                     <option value="Active">Active</option>
                                     <option value="Suspended">Suspended</option>
                                 </Form.Select>
