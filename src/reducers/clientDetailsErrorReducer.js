@@ -11,6 +11,7 @@ const initialState = {
     gstNoErr:{},
     noOfCompaniesErr:{},
     noOfUsersErr: {},
+    roleErr:{},
     contactDetailErr: {},
     transactionDetailErr: {}
   }

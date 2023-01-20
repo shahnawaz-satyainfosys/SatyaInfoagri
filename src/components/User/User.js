@@ -81,8 +81,6 @@ export const User = () => {
         $("#btnNew").hide();
         $("#btnSave").show();
         $("#btnCancel").show();
-        $("#CommonContactDetailsForm").hide();
-        $("#CommonContactDetailsCard").show();
     })
 
     const newDetails = () => {
@@ -171,7 +169,6 @@ export const User = () => {
 
         dispatch(userDetailsErrorAction(undefined));
 
-        localStorage.removeItem("DeleteCommonContactDetailsId");
 
         if (!isAddUser) {
             toast.success("User details updated successfully!", {

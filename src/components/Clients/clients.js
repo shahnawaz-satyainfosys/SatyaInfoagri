@@ -151,7 +151,7 @@ export const Client = () => {
       setModalShow(true);
     }
     else {
-      $('[data-rr-ui-event-key*="List"]').trigger('click');
+      $('[data-rr-ui-event-key*="Customer List"]').trigger('click');
     }
   }
 
@@ -169,6 +169,7 @@ export const Client = () => {
     const noOfUsersErr = {};
     const contactDetailErr = {};
     const transactionDetailErr = {};
+    const roleErr = {};
 
     let isValid = true;
     let isClientValid = true;
@@ -248,7 +249,7 @@ export const Client = () => {
       setFormError(true);
     }
 
-    if (clientData.noOfComapnies <= 0 || clientData.noOfComapnies === null) {
+    if (clientData.noOfComapnies <= 0 || clientData.noOfComapnies === undefined) {
       noOfCompaniesErr.noOfCompaniesEmpty = "Number of companies must be greater than 0";
       isValid = false;
       isClientValid = false;
@@ -259,7 +260,7 @@ export const Client = () => {
       setFormError(true);
     }
 
-    if (clientData.noOfUsers <= 0 || clientData.noOfUsers === null) {
+    if (clientData.noOfUsers <= 0 || clientData.noOfUsers === undefined) {
       noOfUsersErr.noOfUsersEmpty = "Number of users must be greater than 0";
       isValid = false;
       isClientValid = false;
@@ -267,6 +268,13 @@ export const Client = () => {
     } else if (!(/^\d{1,3}$/.test(clientData.noOfUsers))) {
       noOfUsersErr.noOfUsersInvalid = "Number of users can not be greater than 999";
       isValid = false;
+      setFormError(true);
+    }
+
+    if (!clientData.role) {
+      roleErr.empty = "Select role";
+      isValid = false;
+      isClientValid = false;
       setFormError(true);
     }
 
@@ -330,7 +338,8 @@ export const Client = () => {
         noOfCompaniesErr,
         noOfUsersErr,
         contactDetailErr,
-        transactionDetailErr
+        transactionDetailErr,
+        roleErr
       }
       dispatch(clientDetailsErrorAction(errorObject))
     }
@@ -356,6 +365,7 @@ export const Client = () => {
         EncryptedBillStateCode: clientData.encryptedBillStateCode,
         ClientPANNO: clientData.panNumber,
         ClientGSTNO: clientData.gstNumber,
+        Role: clientData.role,
         ActiveStatus: clientData.status == null || clientData.status == "Active" ? "A" : "S",
         NoOfCompany: parseInt(clientData.noOfComapnies),
         NoOfUsers: parseInt(clientData.noOfUsers),
@@ -457,6 +467,7 @@ export const Client = () => {
         EncryptedBillStateCode: clientData.encryptedBillStateCode,
         ClientPANNO: clientData.panNumber,
         ClientGSTNO: clientData.gstNumber,
+        Role: clientData.role,
         ActiveStatus: !clientData.status || clientData.status == "Active" ? "A" : "S",
         NoOfCompany: parseInt(clientData.noOfComapnies),
         NoOfUsers: parseInt(clientData.noOfUsers),

@@ -209,8 +209,10 @@ export const Maintenance = () => {
         dispatch(companyDetailsAction({
             ...companyData,
             companyLogo: "",
-            companyLogoURL: ""
+            companyLogoURL: "",
+            isRemoved: true
         }))
+        $('#btnSave').attr('disabled', false);
     }
 
     return (

@@ -255,6 +255,7 @@ export const CompanyMaster = () => {
     }
 
     const updateCompanyCallback = (isAddCompany = false) => {
+        debugger
         $("#AddCompanyDetailsForm").data("changed", false);
         $('#AddCompanyDetailsForm').get(0).reset();
 
@@ -279,26 +280,29 @@ export const CompanyMaster = () => {
         fetchCompanyList(1);
     }
 
-    const uploadCompanyLogo = (companyLogo, encryptedCompanyCode, isUpdate) => {
-
+    const uploadCompanyLogo = async (companyLogo, encryptedCompanyCode, isUpdate, isRemoved) => {
+        debugger
         var formData = new FormData();
         formData.append("CompanyLogo", companyLogo);
         formData.append("EncryptedCompanyCode", encryptedCompanyCode)
         formData.append("IsUpdate", isUpdate)
-        axios.post(process.env.REACT_APP_API_URL + '/upload-company-logo', formData, {
+        formData.append("IsRemoved", isRemoved)
+        await axios.post(process.env.REACT_APP_API_URL + '/upload-company-logo', formData, {
             headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
         })
             .then(res => {
                 setIsLoading(false);
                 if (res.data.status == 200) {
-                    if (!isUpdate) {
-                        toast.success(res.data.message, {
-                            theme: 'colored',
-                            autoClose: 10000
-                        });
-                        $('[data-rr-ui-event-key*="Company List"]').click();
+                    if (!commonContactDetailChanged.commonContactDetailsChanged) {
+                        updateCompanyCallback();
                     }
-                    updateCompanyCallback(!isUpdate);
+                    // if (!isUpdate) {
+                    //     toast.success(res.data.message, {
+                    //         theme: 'colored',
+                    //         autoClose: 10000
+                    //     });
+                    //     $('[data-rr-ui-event-key*="Company List"]').click();
+                    // }
                 } else {
                     toast.error(res.data.message, {
                         theme: 'colored',
@@ -308,6 +312,33 @@ export const CompanyMaster = () => {
             })
     }
 
+    const deleteCompanyLogo = (encryptedCompanyCode, isRemoved, isUpdate) => {
+        var deleteRequest = {
+            EncryptedCompanyCode: encryptedCompanyCode,
+            IsRemoved: isRemoved
+        }
+
+        axios.post(process.env.REACT_APP_API_URL + '/delete-company-logo', deleteRequest, {
+            headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
+        })
+            .then(res => {
+                setIsLoading(false);
+                if (res.data.status == 200) {
+                    dispatch(companyDetailsAction({
+                        ...companyData,
+                        isRemoved: false
+                    }))
+                    if (!commonContactDetailChanged.commonContactDetailsChanged) {
+                        updateCompanyCallback();
+                    }
+                } else {
+                    toast.error(res.data.message, {
+                        theme: 'colored',
+                        autoClose: 10000
+                    });
+                }
+            })
+    }
     const addCompanyDetails = () => {
         if (companyValidation()) {
             const requestData = {
@@ -409,7 +440,7 @@ export const CompanyMaster = () => {
                 ActiveStatus: !companyData.status || companyData.status == "Active" ? "A" : "S",
                 ModifyUser: localStorage.getItem("LoginUserName")
             }
-            var updateRequired = $("#AddCompanyDetailsForm").isChanged() || commonContactDetailChanged.commonContactDetailsChanged;
+            var updateRequired = $("#AddCompanyDetailsForm").isChanged() || commonContactDetailChanged.commonContactDetailsChanged || companyData.isRemoved == true;
 
             if (!updateRequired) {
                 toast.warning("Nothing to change!", {
@@ -440,11 +471,18 @@ export const CompanyMaster = () => {
                             if (companyData.companyLogo.type) {
                                 uploadCompanyLogo(companyData.companyLogo, companyData.encryptedCompanyCode, true);
                             }
+                            if (companyData.IsRemoved) {
+                                deleteCompanyLogo(companyData.encryptedCompanyCode, companyData.isRemoved)
+                            }
                             else if (!commonContactDetailChanged.commonContactDetailsChanged) {
                                 updateCompanyCallback();
                             }
                         }
                     })
+            }
+
+            if (companyData.isRemoved) {                
+                deleteCompanyLogo(companyData.encryptedCompanyCode, companyData.isRemoved)
             }
 
             var deleteCommonContactDetailsId = localStorage.getItem("DeleteCommonContactDetailsId");
@@ -564,7 +602,7 @@ export const CompanyMaster = () => {
                         <h4>Do you want to save changes?</h4>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="success" onClick={addCompanyDetails}>Save</Button>
+                        <Button variant="success" onClick={!companyData.encryptedCompanyCode ? addCompanyDetails : updateCompanyDetails}>Save</Button>
                         <Button variant="danger" onClick={discardChanges}>Discard</Button>
                     </Modal.Footer>
                 </Modal>

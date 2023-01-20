@@ -40,7 +40,8 @@ export const ClientDetails = () => {
       "pinCode": "",
       "state": "",
       "stateCode": "",
-      "status": "Active"
+      "status": "Active",
+      "role": ""
     }));
   }
 
@@ -263,7 +264,18 @@ export const ClientDetails = () => {
                 })}
               </Row>
               <Row className="mb-3">
-                <Form.Label>Status</Form.Label>
+                <Form.Label>Role</Form.Label>
+                <Form.Select id="txtRole" name="role" value={clientData.role} onChange={handleFieldChange}>
+                  <option value="">Select Role</option>
+                  <option value="SUPER ADMIN">Super Admin</option>
+                  <option value="CLIENT">Client</option>
+                </Form.Select>
+                {Object.keys(clientError.roleErr).map((key) => {
+                  return <span className="error-message">{clientError.roleErr[key]}</span>
+                })}
+              </Row>
+              <Row className="mb-3">
+                <Form.Label>Status<span className="text-danger">*</span></Form.Label>
                 <Form.Select id="txtStatus" name="status" value={clientData.status} onChange={handleFieldChange}>
                   <option value="Active">Active</option>
                   <option value="Suspended">Suspended</option>

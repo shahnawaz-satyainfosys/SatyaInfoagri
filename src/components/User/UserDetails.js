@@ -10,6 +10,7 @@ export const UserDetails = () => {
 
     const [formHasError, setFormError] = useState(false);
     const [clientList, setClientList] = useState([]);
+    const [isAdmin, setIsAdmin] = useState(false);
     const dispatch = useDispatch();
 
     const resetUserDetail = () => {
@@ -73,28 +74,31 @@ export const UserDetails = () => {
     }
 
     const handleFieldChange = e => {
-        const newTransactions = clientUserData.find(x => x.customerName == $('#txtClient option:selected').text());
+        const client = clientUserData.find(x => x.customerName == $('#txtClient option:selected').text());
 
-        if (newTransactions.noOfCreatedUser > 0) {
-            toast.error("You have reached the user limit", {
+        !client || client.role == "CLIENT"? setIsAdmin(false) : setIsAdmin(true);
+
+        if (!client || (client.role == "CLIENT" && client.noOfCreatedUser > 0)) {
+            toast.error("User for this client is already created", {
                 theme: 'colored',
                 autoClose: 5000
             })
             dispatch(userDetailsAction(undefined))
             $("#UserDetailsForm").data("changed", false);
             $('#UserDetailsForm').get(0).reset();
+            $('#btnSave').attr('disabled', false);
+            setIsAdmin(false);
         } else {
             if (e.target.name == 'encryptedClientCode') {
                 dispatch(userDetailsAction({
                     ...userData,
-                    encryptedClientCode: newTransactions.encryptedClientCode,
-                    loginUserEmailId: newTransactions.emailId,
-                    loginUserMobileNumber: newTransactions.mobileNo,
-                    noOfUser: newTransactions.noOfCreatedUser
+                    encryptedClientCode: client.encryptedClientCode,
+                    loginUserEmailId: client.emailId,
+                    loginUserMobileNumber: client.mobileNo,
+                    noOfUser: client.noOfCreatedUser
                 }))
-
-                $('#txtCountry').val(newTransactions.country)
-                $('#txtState').val(newTransactions.state)
+                $('#txtCountry').val(client.country)
+                $('#txtState').val(client.state)
             }
             else {
                 dispatch(userDetailsAction({
@@ -137,11 +141,11 @@ export const UserDetails = () => {
                         <Col className="me-3 ms-3">
                             <Row className="mb-3">
                                 <Form.Label>Email</Form.Label>
-                                <Form.Control id="txtEmail" name="loginUserEmailId" maxLength={50} value={userData.loginUserEmailId} onChange={handleFieldChange} className="mb-1" placeholder="Enter email" readOnly />
+                                <Form.Control id="txtEmail" name="loginUserEmailId" maxLength={50} value={userData.loginUserEmailId} onChange={handleFieldChange} className="mb-1" placeholder={isAdmin ? null : "Enter email"} readOnly={!isAdmin} />
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Mobile Number</Form.Label>
-                                <Form.Control id="txtMobile" name="loginUserMobileNumber" maxLength={10} value={userData.loginUserMobileNumber} onChange={handleFieldChange} className="mb-1" placeholder="Enter mobile number" readOnly />
+                                <Form.Control id="txtMobile" name="loginUserMobileNumber" maxLength={10} value={userData.loginUserMobileNumber} onChange={handleFieldChange} className="mb-1" placeholder="Enter mobile number" readOnly={!isAdmin} />
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Username<span className="text-danger">*</span></Form.Label>
