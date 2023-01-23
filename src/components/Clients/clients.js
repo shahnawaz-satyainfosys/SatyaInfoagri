@@ -229,7 +229,7 @@ export const Client = () => {
       isClientValid = false;
       setFormError(true);
     }
-    else if (!(/^[A-Z]{3}[ABCFGHLJPT][A-Z][0-9]{4}[A-Z]$/.test(clientData.panNumber))) {
+    else if (!(/^[a-zA-Z]{3}[abcfghljptABCFGHLJPT][a-zA-Z][0-9]{4}[a-zA-Z]$/.test(clientData.panNumber))) {
       panNoErr.panNoInvalid = "Enter valid PAN number";
       isValid = false;
       isClientValid = false;
@@ -242,7 +242,7 @@ export const Client = () => {
       isClientValid = false;
       setFormError(true);
     }
-    else if (!(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(clientData.gstNumber))) {
+    else if (!(/^[0-9]{2}[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ][0-9a-zA-Z]{1}$/.test(clientData.gstNumber))) {
       gstNoErr.gstNoInvalid = "Enter valid GST number";
       isValid = false;
       isClientValid = false;
@@ -365,7 +365,7 @@ export const Client = () => {
         EncryptedBillStateCode: clientData.encryptedBillStateCode,
         ClientPANNO: clientData.panNumber,
         ClientGSTNO: clientData.gstNumber,
-        Role: clientData.role,
+        Role: clientData.role == "Super Admin" ? "S" : "C",
         ActiveStatus: clientData.status == null || clientData.status == "Active" ? "A" : "S",
         NoOfCompany: parseInt(clientData.noOfComapnies),
         NoOfUsers: parseInt(clientData.noOfUsers),
@@ -467,7 +467,7 @@ export const Client = () => {
         EncryptedBillStateCode: clientData.encryptedBillStateCode,
         ClientPANNO: clientData.panNumber,
         ClientGSTNO: clientData.gstNumber,
-        Role: clientData.role,
+        Role: clientData.role == "Super Admin" ? "S" : "C",
         ActiveStatus: !clientData.status || clientData.status == "Active" ? "A" : "S",
         NoOfCompany: parseInt(clientData.noOfComapnies),
         NoOfUsers: parseInt(clientData.noOfUsers),

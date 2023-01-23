@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Form, Row, Spinner, InputGroup} from 'react-bootstrap';
+import { Col, Form, Row, Spinner, InputGroup } from 'react-bootstrap';
 import axios from 'axios';
 import { companyDetailsAction, clientDataAction } from 'actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -342,13 +342,10 @@ export const Maintenance = () => {
                             <Row className="mb-3">
                                 <Form.Label>Company Logo</Form.Label>
                                 {companyData && companyData.companyLogoURL ? (
-                                    <img src={companyData.companyLogoURL} id='imgCompanyLogo' width="50px" height="100px" />
+                                    <img src={companyData.companyLogoURL} id='imgCompanyLogo' width="60px" height="100px" />
                                 ) : null}
-                                <InputGroup className="mb-3">
+                                <InputGroup className="mb-1">
                                     <Form.Control type="file" id='logoFile' name='companyLogo' onChange={handleFieldChange} />
-                                    {Object.keys(companyError.imageTypeErr).map((key) => {
-                                        return <span className="error-message">{companyError.imageTypeErr[key]}</span>
-                                    })}
                                     {companyData && companyData.companyLogoURL ? (
                                         <InputGroup.Text>
                                             <i className="fa fa-trash"
@@ -358,6 +355,9 @@ export const Maintenance = () => {
                                     ) : null
                                     }
                                 </InputGroup>
+                                {Object.keys(companyError.imageTypeErr).map((key) => {
+                                    return <span className="error-message">{companyError.imageTypeErr[key]}</span>
+                                })}
 
                             </Row>
                             <Row className="mb-3">

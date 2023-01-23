@@ -204,13 +204,13 @@ export const CompanyMaster = () => {
             setFormError(true);
         }
 
-        if (companyData.companyPan && !(/^[A-Z]{3}[ABCFGHLJPT][A-Z][0-9]{4}[A-Z]$/.test(companyData.companyPan))) {
+        if (companyData.companyPan && !(/^[a-zA-Z]{3}[abcfghljptABCFGHLJPT][a-zA-Z][0-9]{4}[a-zA-Z]$/.test(companyData.companyPan))) {
             panNoErr.panNoInvalid = "Enter valid PAN number";
             isValid = false;
             setFormError(true);
         }
 
-        if (companyData.companyGstNo && !(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(companyData.companyGstNo))) {
+        if (companyData.companyGstNo && !(/^[0-9]{2}[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ][0-9a-zA-Z]{1}$/.test(companyData.companyGstNo))) {
             gstNoErr.gstNoEmpty = "Enter valid GST number";
             isValid = false;
             setFormError(true);
@@ -255,7 +255,6 @@ export const CompanyMaster = () => {
     }
 
     const updateCompanyCallback = (isAddCompany = false) => {
-        debugger
         $("#AddCompanyDetailsForm").data("changed", false);
         $('#AddCompanyDetailsForm').get(0).reset();
 
@@ -281,7 +280,6 @@ export const CompanyMaster = () => {
     }
 
     const uploadCompanyLogo = async (companyLogo, encryptedCompanyCode, isUpdate, isRemoved) => {
-        debugger
         var formData = new FormData();
         formData.append("CompanyLogo", companyLogo);
         formData.append("EncryptedCompanyCode", encryptedCompanyCode)
@@ -296,13 +294,14 @@ export const CompanyMaster = () => {
                     if (!commonContactDetailChanged.commonContactDetailsChanged) {
                         updateCompanyCallback();
                     }
-                    // if (!isUpdate) {
-                    //     toast.success(res.data.message, {
-                    //         theme: 'colored',
-                    //         autoClose: 10000
-                    //     });
-                    //     $('[data-rr-ui-event-key*="Company List"]').click();
-                    // }
+                    else if (!isUpdate) {
+                        toast.success(res.data.message, {
+                            theme: 'colored',
+                            autoClose: 10000
+                        });
+                        updateCompanyCallback(true);
+                        $('[data-rr-ui-event-key*="Company List"]').click();
+                    }
                 } else {
                     toast.error(res.data.message, {
                         theme: 'colored',
@@ -312,13 +311,13 @@ export const CompanyMaster = () => {
             })
     }
 
-    const deleteCompanyLogo = (encryptedCompanyCode, isRemoved, isUpdate) => {
+    const deleteCompanyLogo = async (encryptedCompanyCode, isRemoved) => {
         var deleteRequest = {
             EncryptedCompanyCode: encryptedCompanyCode,
             IsRemoved: isRemoved
         }
 
-        axios.post(process.env.REACT_APP_API_URL + '/delete-company-logo', deleteRequest, {
+        await axios.post(process.env.REACT_APP_API_URL + '/delete-company-logo', deleteRequest, {
             headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
         })
             .then(res => {
@@ -471,17 +470,17 @@ export const CompanyMaster = () => {
                             if (companyData.companyLogo.type) {
                                 uploadCompanyLogo(companyData.companyLogo, companyData.encryptedCompanyCode, true);
                             }
-                            if (companyData.IsRemoved) {
+                            if (companyData.isRemoved) {
                                 deleteCompanyLogo(companyData.encryptedCompanyCode, companyData.isRemoved)
                             }
-                            else if (!commonContactDetailChanged.commonContactDetailsChanged) {
+                            else if (!commonContactDetailChanged.commonContactDetailsChanged && !companyData.companyLogo.type && !companyData.isRemoved) {
                                 updateCompanyCallback();
                             }
                         }
                     })
             }
 
-            if (companyData.isRemoved) {                
+            if (companyData.isRemoved) {
                 deleteCompanyLogo(companyData.encryptedCompanyCode, companyData.isRemoved)
             }
 

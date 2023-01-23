@@ -134,6 +134,10 @@ export const ClientDetails = () => {
     $('#txtStatus option:contains(' + clientData.status + ')').prop('selected', true);
   }
 
+  if (clientData.role && $('#txtRole').val()) {
+    $('#txtRole option:contains(' + clientData.role + ')').prop('selected', true);
+  }
+
   const handleFieldChange = e => {
     dispatch(clientDetailsAction({
       ...clientData,
@@ -267,8 +271,8 @@ export const ClientDetails = () => {
                 <Form.Label>Role</Form.Label>
                 <Form.Select id="txtRole" name="role" value={clientData.role} onChange={handleFieldChange}>
                   <option value="">Select Role</option>
-                  <option value="SUPER ADMIN">Super Admin</option>
-                  <option value="CLIENT">Client</option>
+                  <option value="Super Admin">Super Admin</option>
+                  <option value="Client">Client</option>
                 </Form.Select>
                 {Object.keys(clientError.roleErr).map((key) => {
                   return <span className="error-message">{clientError.roleErr[key]}</span>
