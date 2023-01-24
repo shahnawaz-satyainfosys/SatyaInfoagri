@@ -76,9 +76,9 @@ export const UserDetails = () => {
     const handleFieldChange = e => {
         const client = clientUserData.find(x => x.customerName == $('#txtClient option:selected').text());
 
-        !client || client.role == "CLIENT"? setIsAdmin(false) : setIsAdmin(true);
+        !client || client.role == "Client"? setIsAdmin(false) : setIsAdmin(true);
 
-        if (!client || (client.role == "CLIENT" && client.noOfCreatedUser > 0)) {
+        if (!client || (client.role == "Client" && client.noOfCreatedUser > 0)) {
             toast.error("User for this client is already created", {
                 theme: 'colored',
                 autoClose: 5000
