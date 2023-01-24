@@ -14,8 +14,8 @@ const ProfileDropdown = () => {
 
       <Dropdown.Menu className="dropdown-caret dropdown-menu-card  dropdown-menu-end">
         <div className="bg-white rounded-2 py-2 dark__bg-1000">
-          <Dropdown.Item as={Link}>
-            {userName}
+          <Dropdown.Item disabled>
+            <b>{userName}</b>
           </Dropdown.Item>
           <Dropdown.Item as={Link} to="/logout">
             Logout

@@ -8,7 +8,6 @@ import FalconComponentCard from 'components/common/FalconComponentCard';
 import ClientDetails from '../Clients/ClientDetails';
 import ContactDetails from '../Clients/ContactDetails';
 import ContactDetailsList from '../Clients/ContactDetailsList';
-
 import TransactionDetails from '../Clients/TransactionDetails';
 import TransactionDetailList from '../Clients/TransactionDetailList';
 
@@ -17,11 +16,13 @@ import AdvanceTable from 'components/common/advance-table/AdvanceTable';
 import AdvanceTableFooter from 'components/common/advance-table/AdvanceTableFooter';
 import AdvanceTableSearchBox from 'components/common/advance-table/AdvanceTableSearchBox';
 
-import Maintenance from 'components/Company/Maintenance';
-import CommonContactDetails from 'components/Company/CommonContactDetails';
 import CommonContactDetailList from 'components/Company/CommonContactDetailList';
+import CommonContactDetails from 'components/Company/CommonContactDetails';
+import Maintenance from 'components/Company/Maintenance';
 
 import UserDetails from 'components/User/UserDetails';
+
+import ProductDetails from 'components/Product/ProductDetails';
 
 import $ from 'jquery';
 
@@ -256,6 +257,16 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                   </FalconComponentCard>
                 </>
               )}
+              {index == 1 && module == "Product" && (
+                <>
+                  <FalconComponentCard className="w-40">
+                    <FalconComponentCard.Body language="jsx">
+                      <ProductDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+                </>
+              )
+              }
             </Tab>
           );
         })}

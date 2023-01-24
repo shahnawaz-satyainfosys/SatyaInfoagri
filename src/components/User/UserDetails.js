@@ -131,21 +131,21 @@ export const UserDetails = () => {
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Country</Form.Label>
-                                <Form.Control id="txtCountry" name="country" readOnly />
+                                <Form.Control id="txtCountry" name="country" disabled />
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>State</Form.Label>
-                                <Form.Control id="txtState" name="state" readOnly />
+                                <Form.Control id="txtState" name="state" disabled />
                             </Row>
                         </Col>
                         <Col className="me-3 ms-3">
                             <Row className="mb-3">
                                 <Form.Label>Email</Form.Label>
-                                <Form.Control id="txtEmail" name="loginUserEmailId" maxLength={50} value={userData.loginUserEmailId} onChange={handleFieldChange} className="mb-1" placeholder={isAdmin ? null : "Enter email"} readOnly={!isAdmin} />
+                                <Form.Control id="txtEmail" name="loginUserEmailId" maxLength={50} value={userData.loginUserEmailId} onChange={handleFieldChange} className="mb-1" placeholder={isAdmin ? null : "Enter email"} disabled={!isAdmin} />
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Mobile Number</Form.Label>
-                                <Form.Control id="txtMobile" name="loginUserMobileNumber" maxLength={10} value={userData.loginUserMobileNumber} onChange={handleFieldChange} className="mb-1" placeholder="Enter mobile number" readOnly={!isAdmin} />
+                                <Form.Control id="txtMobile" name="loginUserMobileNumber" maxLength={10} value={userData.loginUserMobileNumber} onChange={handleFieldChange} className="mb-1" placeholder="Enter mobile number" disabled={!isAdmin} />
                             </Row>
                             <Row className="mb-3">
                                 <Form.Label>Username<span className="text-danger">*</span></Form.Label>
