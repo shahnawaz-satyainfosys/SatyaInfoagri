@@ -259,7 +259,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
               )}
               {index == 1 && module == "Product" && (
                 <>
-                  <FalconComponentCard className="w-40">
+                  <FalconComponentCard>
                     <FalconComponentCard.Body language="jsx">
                       <ProductDetails />
                     </FalconComponentCard.Body>
