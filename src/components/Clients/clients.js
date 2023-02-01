@@ -518,7 +518,7 @@ export const Client = () => {
           const contactDetails = contactDetailData[i];
           if (!loopBreaked) {
 
-            const keys = ['contactPerson', 'designation']
+            const keys = ['contactPerson', 'designation', 'modifyUser']
             for (const key of Object.keys(contactDetails).filter((key) => keys.includes(key))) {
               contactDetails[key] = contactDetails[key] ? contactDetails[key].toUpperCase() : '';
             }

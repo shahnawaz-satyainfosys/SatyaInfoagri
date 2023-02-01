@@ -102,7 +102,8 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
               tableProps={{
                 bordered: true,
                 striped: true,
-                className: 'mb-0 overflow-hidden'
+                className: 'mb-0 overflow-hidden',
+                responsive: true
               }}
             />
 

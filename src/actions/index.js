@@ -123,3 +123,17 @@ export const userDetailsErrorAction = (payload) => {
     payload
   };
 };
+
+export const productDetailsAction = (payload) => {
+  return {
+    type: 'PRODUCTDETAILS',
+    payload
+  };
+};
+
+export const productDetailsErrorAction = (payload) => {
+  return {
+    type: 'PRODUCTDETAILSERROR',
+    payload
+  };
+};

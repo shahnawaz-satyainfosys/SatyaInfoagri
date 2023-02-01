@@ -3,7 +3,7 @@ import { Badge, Table } from 'react-bootstrap';
 import axios from 'axios';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clientContactDetailsAction, companyDetailsAction, commonContactDetailsListAction, userDetailsAction } from '../../../actions/index';
+import { clientContactDetailsAction, companyDetailsAction, commonContactDetailsListAction, userDetailsAction, productDetailsAction } from '../../../actions/index';
 import { transactionDetailsAction } from '../../../actions/index';
 import { clientDetailsAction } from '../../../actions/index';
 import $ from 'jquery'
@@ -41,8 +41,15 @@ const AdvanceTable = ({
       localStorage.setItem('EncryptedResponseSecurityUserId', rowData.encryptedSecurityUserId);
       $("#UserDetailsForm").trackChanges();
       $('#btnSave').attr('disabled', true);
-      getUserContactDetailsList(rowData.encryptedClientCode);
       getClientDetail(rowData.clientName);
+    }
+    else if (rowData.hasOwnProperty('encryptedModuleCode')) {
+      dispatch(productDetailsAction(rowData))
+      $('[data-rr-ui-event-key*="Product Detail"]').attr('disabled', false);
+      $('[data-rr-ui-event-key*="Product Detail"]').trigger('click');
+      $("#AddProductDetailsForm").trackChanges();
+      $('#btnSave').attr('disabled', true);
+      localStorage.setItem('EncryptedResponseModuleCode', rowData.encryptedModuleCode);
     }
     else if (!rowData.hasOwnProperty('encryptedCompanyCode')) {
       dispatch(clientDetailsAction(rowData));
@@ -159,42 +166,10 @@ const AdvanceTable = ({
       });
   }
 
-  const getUserContactDetailsList = async (encryptedClientCode) => {
-    const request = {
-      EncryptedClientCode: encryptedClientCode,
-      OriginatedFrom: "SU"
-    }
-
-    axios
-      .post(process.env.REACT_APP_API_URL + '/get-common-contact-detail-list', request, {
-        headers: { Authorization: `Bearer ${JSON.parse(localStorage.getItem('Token')).value}` }
-      })
-      .then(res => {
-
-        if (res.data.status == 200) {
-          let commonContactDetailsData = [];
-          if ($('#CommonContactDetailsCard tbody tr').length > 1) {
-            $('#CommonContactDetailsCard tbody tr').remove();
-          }
-          commonContactDetailsData = res.data.data;
-          dispatch(commonContactDetailsListAction(commonContactDetailsData));
-
-          if (res.data && res.data.data.length > 0) {
-            $("#CompanyContactDetailsTable").show();
-          } else {
-            $("#CompanyContactDetailsTable").hide();
-          }
-        }
-        else {
-          $("#CompanyContactDetailsTable").hide();
-        }
-      });
-  }
-
   const getClientDetail = (clientName) => {
-    const newTransactions = clientUserData.find(x => x.customerName == clientName);
-    $('#txtCountry').val(newTransactions.country);
-    $('#txtState').val(newTransactions.state);
+    const clientDetail = clientUserData.find(x => x.customerName == clientName);
+    $('#txtCountry').val(clientDetail.country);
+    $('#txtState').val(clientDetail.state);
   }
 
   return (

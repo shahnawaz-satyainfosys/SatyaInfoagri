@@ -39,16 +39,16 @@ const TabPageMainMenu = ({newClick, cancelClick, exitClick, saveClick} ) => {
           <Row>
             <Col>
               <div style={{ display: "flex", justifyContent: "left", backgroundColor: "#c9ebcd", borderRadius: "8px" }}>
-                <Button className='btn btn-primary me-1' id='btnNew' onClick={newClick}>
+                <Button className='btn btn-info me-1' id='btnNew' onClick={newClick}>
                   <span class="fas fa-plus me-1" data-fa-transform="shrink-3"></span>New
                 </Button>
                 <Button className='btn btn-success me-1' id='btnSave' onClick={saveClick}>
                   <span class="fas fa-save me-1" data-fa-transform="shrink-3"></span>Save
                 </Button>
-                <Button className='btn btn-danger me-1' id='btnCancel'  onClick={cancelClick}>
+                <Button className='btn btn-secondary me-1' id='btnCancel'  onClick={cancelClick}>
                   <span class="fas fa-times me-1" data-fa-transform="shrink-3"></span>Cancel
                 </Button>
-                <Button className='btn btn-info mr-4' id='btnExit' onClick={exitClick}>
+                <Button className='btn btn-danger mr-4' id='btnExit' onClick={exitClick}>
                   <span class="fas fa-sign-out-alt me-1" data-fa-transform="shrink-3"></span>Exit
                 </Button>
               </div>

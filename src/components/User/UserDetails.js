@@ -76,7 +76,7 @@ export const UserDetails = () => {
     const handleFieldChange = e => {
         const client = clientUserData.find(x => x.customerName == $('#txtClient option:selected').text());
 
-        !client || client.role == "Client"? setIsAdmin(false) : setIsAdmin(true);
+        !client || client.role == "Client" ? setIsAdmin(false) : setIsAdmin(true);
 
         if (!client || (client.role == "Client" && client.noOfCreatedUser > 0)) {
             toast.error("User for this client is already created", {
@@ -88,7 +88,18 @@ export const UserDetails = () => {
             $('#UserDetailsForm').get(0).reset();
             $('#btnSave').attr('disabled', false);
             setIsAdmin(false);
-        } else {
+        } else if (client.status == "Suspended") {
+            toast.error("Client’s account is not active", {
+                theme: 'colored',
+                autoClose: 10000
+            })
+            dispatch(userDetailsAction(undefined))
+            $("#UserDetailsForm").data("changed", false);
+            $('#UserDetailsForm').get(0).reset();
+            $('#btnSave').attr('disabled', false);
+            setIsAdmin(false);
+        }
+        else {
             if (e.target.name == 'encryptedClientCode') {
                 dispatch(userDetailsAction({
                     ...userData,
