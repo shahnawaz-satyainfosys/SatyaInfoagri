@@ -165,15 +165,22 @@ export const User = () => {
     const updateUserCallback = (isAddUser = false) => {
 
         $("#UserDetailsForm").data("changed", false);
+        if(!isAddUser)
+        {
+            var country = $('#txtCountry').val();
+            var state = $('#txtState').val();
+        }
         $('#UserDetailsForm').get(0).reset();
 
         dispatch(userDetailsErrorAction(undefined));
-
 
         if (!isAddUser) {
             toast.success("User details updated successfully!", {
                 theme: 'colored'
             });
+
+            $('#txtCountry').val(country);
+            $('#txtState').val(state);
         }
 
         $('#btnSave').attr('disabled', true)

@@ -167,9 +167,12 @@ const AdvanceTable = ({
   }
 
   const getClientDetail = (clientName) => {
-    const clientDetail = clientUserData.find(x => x.customerName == clientName);
-    $('#txtCountry').val(clientDetail.country);
-    $('#txtState').val(clientDetail.state);
+    if(clientUserData)
+    {
+      const clientDetail = clientUserData.find(x => x.customerName == clientName);
+      $('#txtCountry').val(clientDetail.country);
+      $('#txtState').val(clientDetail.state);
+    }
   }
 
   return (

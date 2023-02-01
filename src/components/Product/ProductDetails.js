@@ -4,7 +4,6 @@ import Treeview from 'components/common/Treeview';
 import { productDetailsAction } from '../../actions/index';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { useForm } from 'react-hook-form';
 
 export const ProductDetails = () => {
 
@@ -224,7 +223,7 @@ export const ProductDetails = () => {
   var productData = productDetailsReducer.productDetails;
 
   const productDetailsErrorReducer = useSelector((state) => state.rootReducer.productDetailsErrorReducer)
-  const productError = productDetailsErrorReducer.productDetailsError;  
+  const productError = productDetailsErrorReducer.productDetailsError;
 
   if (!productDetailsReducer.productDetails ||
     productDetailsReducer.productDetails.length <= 0) {
@@ -237,12 +236,6 @@ export const ProductDetails = () => {
       [e.target.name]: e.target.value
     }));
   }
-
-  // const {formState:{isDirty}} = useForm({defaultValues:{
-  //   resetProductDetail
-  // }})
-
-  // console.log("isDirty", isDirty);
 
   return (
     <>

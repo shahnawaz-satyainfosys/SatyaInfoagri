@@ -4,6 +4,7 @@ import { Col, Form, Row } from 'react-bootstrap';
 import axios from 'axios';
 import { userDetailsAction, clientDataAction } from '../../actions/index';
 import { toast } from 'react-toastify';
+// import { useForm } from 'react-hook-form';
 
 
 export const UserDetails = () => {
@@ -22,6 +23,8 @@ export const UserDetails = () => {
             "status": "Active"
         }))
     }
+
+    // const { formState: { isDirty } } = useForm({ defaultValues: resetUserDetail });
 
     const userDetailsReducer = useSelector((state) => state.rootReducer.userDetailsReducer)
     var userData = userDetailsReducer.userDetails;
@@ -74,33 +77,34 @@ export const UserDetails = () => {
     }
 
     const handleFieldChange = e => {
-        const client = clientUserData.find(x => x.customerName == $('#txtClient option:selected').text());
+        if (e.target.name == 'encryptedClientCode' && (!userData || $('#txtClient option:selected').val() != userData.encryptedClientCode)) {
+            
+            const client = clientUserData.find(x => x.customerName == $('#txtClient option:selected').text());
 
-        !client || client.role == "Client" ? setIsAdmin(false) : setIsAdmin(true);
+            !client || client.role == "Client" ? setIsAdmin(false) : setIsAdmin(true);
 
-        if (!client || (client.role == "Client" && client.noOfCreatedUser > 0)) {
-            toast.error("User for this client is already created", {
-                theme: 'colored',
-                autoClose: 5000
-            })
-            dispatch(userDetailsAction(undefined))
-            $("#UserDetailsForm").data("changed", false);
-            $('#UserDetailsForm').get(0).reset();
-            $('#btnSave').attr('disabled', false);
-            setIsAdmin(false);
-        } else if (client.status == "Suspended") {
-            toast.error("Client’s account is not active", {
-                theme: 'colored',
-                autoClose: 10000
-            })
-            dispatch(userDetailsAction(undefined))
-            $("#UserDetailsForm").data("changed", false);
-            $('#UserDetailsForm').get(0).reset();
-            $('#btnSave').attr('disabled', false);
-            setIsAdmin(false);
-        }
-        else {
-            if (e.target.name == 'encryptedClientCode') {
+            if (!userData.encryptedSecurityUserId && (!client || (client.role == "Client" && client.noOfCreatedUser > 0))) {
+                toast.error("User for this client is already created", {
+                    theme: 'colored',
+                    autoClose: 5000
+                })
+                dispatch(userDetailsAction(undefined))
+                $("#UserDetailsForm").data("changed", false);
+                $('#UserDetailsForm').get(0).reset();
+                $('#btnSave').attr('disabled', false);
+                setIsAdmin(false);
+            } else if (client.status == "Suspended") {
+                toast.error("Client’s account is not active", {
+                    theme: 'colored',
+                    autoClose: 10000
+                })
+                dispatch(userDetailsAction(undefined))
+                $("#UserDetailsForm").data("changed", false);
+                $('#UserDetailsForm').get(0).reset();
+                $('#btnSave').attr('disabled', false);
+                setIsAdmin(false);
+            }
+            else {
                 dispatch(userDetailsAction({
                     ...userData,
                     encryptedClientCode: client.encryptedClientCode,
@@ -111,14 +115,15 @@ export const UserDetails = () => {
                 $('#txtCountry').val(client.country)
                 $('#txtState').val(client.state)
             }
-            else {
-                dispatch(userDetailsAction({
-                    ...userData,
-                    [e.target.name]: e.target.value
-                }));
-            }
+
         }
-    };
+        else {
+            dispatch(userDetailsAction({
+                ...userData,
+                [e.target.name]: e.target.value
+            }));
+        }
+    }
 
 
     return (
