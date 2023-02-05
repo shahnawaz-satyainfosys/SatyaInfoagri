@@ -137,3 +137,10 @@ export const productDetailsErrorAction = (payload) => {
     payload
   };
 };
+
+export const selectedProductsAction = (payload) => {
+  return {
+    type: 'SELECTEDPRODUCTS',
+    payload
+  };
+};

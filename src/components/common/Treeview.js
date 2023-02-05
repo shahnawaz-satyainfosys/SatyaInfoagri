@@ -120,7 +120,7 @@ const TreeviewListItem = ({
               className={classNames('collapse-toggle', {
                 collapsed: open || item.expanded
               })}
-              href="#!"
+              href="javascript:void(0);"
               onClick={() => setOpen(!open)}
             >
               <p
@@ -167,7 +167,7 @@ const TreeviewListItem = ({
               checked={selectedItems.indexOf(item.id) !== -1}
             />
           )}
-          <a href="#!" className="flex-1">
+          <a href="javascript:void(0);" className="flex-1">
             <p className="treeview-text">
               <FontAwesomeIcon
                 icon={item.icon}

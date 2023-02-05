@@ -23,6 +23,10 @@ export const Product = () => {
     const [formHasError, setFormError] = useState(false);
     const dispatch = useDispatch();
 
+    
+  const selectedProductsReducer = useSelector((state) => state.rootReducer.selectedProductsReducer)
+  var selectedProductItems = selectedProductsReducer.selectedProducts;
+
     const fetchProductsList = async (page, size = perPage) => {
         let token = localStorage.getItem('Token');
 
