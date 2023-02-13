@@ -26,6 +26,11 @@ import ProductDetails from 'components/Product/ProductDetails';
 
 import $ from 'jquery';
 
+import AddFarmer from 'components/Farmers/AddFarmer';
+import Family from 'components/Farmers/Family';
+import FamilyMemberList from 'components/Farmers/FamilyMemberList';
+import FamilyCompositionDetail from 'components/Farmers/FamilyCompositonDetail';
+
 const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, newDetails, cancelClick, exitModule }) => {
 
   $.fn.extend({
@@ -268,6 +273,36 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                 </>
               )
               }
+              {index == 1 && module == "Farmers" && (
+                <>
+                  <FalconComponentCard>
+                    <FalconComponentCard.Body language="jsx">
+                      <AddFarmer />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+                </>
+              )}
+              {index == 2 && module == "Farmers" && (
+                <>
+                  <FalconComponentCard id='FamilyMembersForm'>
+                    <FalconComponentCard.Body language="jsx">
+                      <Family />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard id='FamilyMembersListCard'>
+                    <FalconComponentCard.Body language="jsx">
+                      <FamilyMemberList />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard id='FamilyCompositionDetails'>
+                    <FalconComponentCard.Body language="jsx">
+                      <FamilyCompositionDetail />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+                </>
+              )}
             </Tab>
           );
         })}
