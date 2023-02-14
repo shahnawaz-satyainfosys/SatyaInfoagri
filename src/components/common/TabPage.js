@@ -30,44 +30,64 @@ import AddFarmer from 'components/Farmers/AddFarmer';
 import Family from 'components/Farmers/Family';
 import FamilyMemberList from 'components/Farmers/FamilyMemberList';
 import FamilyCompositionDetail from 'components/Farmers/FamilyCompositonDetail';
+import BankDetails from 'components/Farmers/BankDetails';
+import BankDetailsList from 'components/Farmers/BankDetailsList';
+import FarmersCardDetails from 'components/Farmers/FarmersCardDetails';
+import FarmersCardDetailsList from 'components/Farmers/FarmersCardDetailsList';
+import FarmersLoanDetails from 'components/Farmers/FarmersLoan';
+import FarmersLoanDetailsList from 'components/Farmers/FarmersLoanList';
+import FarmersLandsDetails from 'components/Farmers/FarmersLands';
+import FarmersLandListCard from 'components/Farmers/FarmersLandList';
+import FarmersIrrigrationDetails from 'components/Farmers/FarmersIrrigrationDetails';
+import FarmersIrrigrationList from 'components/Farmers/FarmersIrrigrationList';
+import FarmersLiveStockDetails from 'components/Farmers/FarmersLiveStockDetails';
+import FarmersLiveStockList from 'components/Farmers/FarmersLiveStockList';
+import FarmersMachinaryDetails from 'components/Farmers/FarmersMachinaryDetails';
+import FarmersMachinaryDetailsList from 'components/Farmers/FarmersMachinaryDetailsList';
+import FarmersCropsDetails from 'components/Farmers/FarmersCrops';
 
-const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, newDetails, cancelClick, exitModule }) => {
-
+const TabPage = ({
+  listData,
+  listColumnArray,
+  tabArray,
+  module,
+  saveDetails,
+  newDetails,
+  cancelClick,
+  exitModule
+}) => {
   $.fn.extend({
     trackChanges: function () {
-      $(":input", this).change(function () {
-        $(this.form).data("changed", true);
-        if ($("#btnSave").attr('disabled'))
-          $("#btnSave").attr('disabled', false);
+      $(':input', this).change(function () {
+        $(this.form).data('changed', true);
+        if ($('#btnSave').attr('disabled'))
+          $('#btnSave').attr('disabled', false);
       });
-    }
-    ,
+    },
     isChanged: function () {
-      return this.data("changed");
+      return this.data('changed');
     }
   });
 
   useEffect(() => {
     $('[data-rr-ui-event-key*="Customer List"]').trigger('click');
     $('[data-rr-ui-event-key*="Details"]').attr('disabled', true);
-    $("#btnNew").show();
-    $("#btnSave").hide();
-    $('#btnSave').attr('disabled', true)
-    $("#btnCancel").hide();
+    $('#btnNew').show();
+    $('#btnSave').hide();
+    $('#btnSave').attr('disabled', true);
+    $('#btnCancel').hide();
 
     $('.tab-page-list-card').removeClass('card');
-    localStorage.removeItem("EncryptedResponseClientCode")
-
+    localStorage.removeItem('EncryptedResponseClientCode');
   }, []);
 
   const discardChanges = () => {
     if ($('#btnExit').attr('isExit') == 'true')
       window.location.href = '/dashboard';
-    else
-      $('[data-rr-ui-event-key*="List"]').trigger('click');
+    else $('[data-rr-ui-event-key*="List"]').trigger('click');
 
     setModalShow(false);
-  }
+  };
 
   const data = `const columns = ${JSON.stringify(listColumnArray)};
   
@@ -139,11 +159,11 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
   const save = () => {
     $('#btnSave').trigger('click');
     setModalShow(false);
-  }
+  };
 
   return (
     <>
-      {modalShow &&
+      {modalShow && (
         <Modal
           show={modalShow}
           onHide={() => setModalShow(false)}
@@ -153,31 +173,45 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
           backdrop="static"
         >
           <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title-vcenter">Confirmation</Modal.Title>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Confirmation
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <h4>Do you want to save changes?</h4>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="success" onClick={save}>Save</Button>
-            <Button variant="danger" onClick={discardChanges}>Discard</Button>
+            <Button variant="success" onClick={save}>
+              Save
+            </Button>
+            <Button variant="danger" onClick={discardChanges}>
+              Discard
+            </Button>
           </Modal.Footer>
         </Modal>
-      }
+      )}
 
-      <TabPageMainMenu newClick={newDetails}
+      <TabPageMainMenu
+        newClick={newDetails}
         saveClick={saveDetails}
         cancelClick={cancelClick}
-        exitClick={exitModule} />
+        exitClick={exitModule}
+      />
 
-      <Tabs
-        id="uncontrolled-tab-example"
-        className="mb-2 mt-2"
-      >
+      <Tabs id="uncontrolled-tab-example" className="mb-2 mt-2">
         {Object.values(tabArray).map((tab, index) => {
           return (
-            <Tab eventKey={tab} title={tab} className={index == 0 ? "border p-1" :
-              tab != "Transaction Details" ? "border p-1 tab-page-tab" : ""}>
+            <Tab
+              eventKey={tab}
+              title={tab}
+              className={
+                index == 0
+                  ? 'border p-1'
+                  : tab != 'Transaction Details'
+                  ? 'border p-1 tab-page-tab'
+                  : ''
+              }
+            >
               {index == 0 && listData && (
                 <>
                   <FalconComponentCard className="tab-page-list-card">
@@ -197,7 +231,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                   </FalconComponentCard>
                 </>
               )}
-              {index == 1 && module == "Client" && (
+              {index == 1 && module == 'Client' && (
                 <>
                   <FalconComponentCard className="mb-2 no-pb">
                     <FalconComponentCard.Body language="jsx">
@@ -205,35 +239,44 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard id='AddContactDetailsForm'>
+                  <FalconComponentCard id="AddContactDetailsForm">
                     <FalconComponentCard.Body language="jsx">
                       <ContactDetails />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard id='ContactDetailsTable' className="tab-page-button-table-card no-pb">
+                  <FalconComponentCard
+                    id="ContactDetailsTable"
+                    className="tab-page-button-table-card no-pb"
+                  >
                     <FalconComponentCard.Body language="jsx">
                       <ContactDetailsList />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
                 </>
               )}
-              {index == 2 && module == "Client" && (
+              {index == 2 && module == 'Client' && (
                 <>
-                  <FalconComponentCard id='TransactionDetailsListCard' className="tab-page-table-card mb-2 no-pad">
+                  <FalconComponentCard
+                    id="TransactionDetailsListCard"
+                    className="tab-page-table-card mb-2 no-pad"
+                  >
                     <FalconComponentCard.Body language="jsx">
                       <TransactionDetailList />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard id='AddTransactionDetailsForm' className="mb-0 no-pb">
+                  <FalconComponentCard
+                    id="AddTransactionDetailsForm"
+                    className="mb-0 no-pb"
+                  >
                     <FalconComponentCard.Body language="jsx">
                       <TransactionDetails />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
                 </>
               )}
-              {index == 1 && module == "CompanyMaster" && (
+              {index == 1 && module == 'CompanyMaster' && (
                 <>
                   <FalconComponentCard className="no-pb mb-2">
                     <FalconComponentCard.Body language="jsx">
@@ -241,20 +284,23 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard id='CommonContactDetailsForm'>
+                  <FalconComponentCard id="CommonContactDetailsForm">
                     <FalconComponentCard.Body language="jsx">
                       <CommonContactDetails />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard id='CommonContactDetailsCard' className="tab-page-button-table-card no-pb">
+                  <FalconComponentCard
+                    id="CommonContactDetailsCard"
+                    className="tab-page-button-table-card no-pb"
+                  >
                     <FalconComponentCard.Body language="jsx">
                       <CommonContactDetailList />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
                 </>
               )}
-              {index == 1 && module == "User" && (
+              {index == 1 && module == 'User' && (
                 <>
                   <FalconComponentCard className="no-pb mb-2">
                     <FalconComponentCard.Body language="jsx">
@@ -263,7 +309,7 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                   </FalconComponentCard>
                 </>
               )}
-              {index == 1 && module == "Product" && (
+              {index == 1 && module == 'Product' && (
                 <>
                   <FalconComponentCard>
                     <FalconComponentCard.Body language="jsx">
@@ -271,9 +317,8 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
                 </>
-              )
-              }
-              {index == 1 && module == "Farmers" && (
+              )}
+              {index == 1 && module == 'Farmers' && (
                 <>
                   <FalconComponentCard>
                     <FalconComponentCard.Body language="jsx">
@@ -282,23 +327,128 @@ const TabPage = ({ listData, listColumnArray, tabArray, module, saveDetails, new
                   </FalconComponentCard>
                 </>
               )}
-              {index == 2 && module == "Farmers" && (
+              {index == 2 && module == 'Farmers' && (
                 <>
-                  <FalconComponentCard id='FamilyMembersForm'>
+                  <FalconComponentCard id="FamilyMembersForm">
                     <FalconComponentCard.Body language="jsx">
                       <Family />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard id='FamilyMembersListCard'>
+                  <FalconComponentCard id="FamilyMembersListCard">
                     <FalconComponentCard.Body language="jsx">
                       <FamilyMemberList />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard id='FamilyCompositionDetails'>
+                  <FalconComponentCard id="FamilyCompositionDetails">
                     <FalconComponentCard.Body language="jsx">
                       <FamilyCompositionDetail />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+                </>
+              )}
+              {index == 3 && module == 'Farmers' && (
+                <>
+                  <FalconComponentCard id="BankDetailsForm">
+                    <FalconComponentCard.Body language="jsx">
+                      <BankDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard id="BankDetailsListCard">
+                    <FalconComponentCard.Body language="jsx">
+                      <BankDetailsList />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard id="FarmersCardDetailsForm">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersCardDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard id="FarmersCardDetailsListCard">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersCardDetailsList />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard id="FarmersLoanDetailsForm">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersLoanDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard id="FarmersLoanDetailsListCard">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersLoanDetailsList />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+                </>
+              )}
+
+              {index == 4 && module == 'Farmers' && (
+                <>
+                  <FalconComponentCard id="FarmersLandDetailsForm">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersLandsDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard id="FarmersLandDetailsListCard">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersLandListCard />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard id="FarmersIrrigrationDetailsForm">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersIrrigrationDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard id="FarmersIrrigrationDetailsListCard">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersIrrigrationList />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+                </>
+              )}
+
+              {index == 5 && module == 'Farmers' && (
+                <>
+                  <FalconComponentCard id="FarmersLiveStockDetailsForm">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersLiveStockDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard id="FarmersLiveStockDetailsListCard">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersLiveStockList />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard id="FarmersMachinaryDetailsForm">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersMachinaryDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+
+                  <FalconComponentCard id="FarmersMachinaryDetailsListCard">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersMachinaryDetailsList />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+                </>
+              )}
+
+              {index == 6 && module == 'Farmers' && (
+                <>
+                  <FalconComponentCard id="FarmersCropDetailsForm">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersCropsDetails />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
                 </>

@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 
-export const Family = () => {
+export const BankDetails = () => {
   const [formHasError, setFormError] = useState(false);
 
-  useEffect(() => {
-    $('#FamilyMembersForm').hide();
-  }, []);
-
   const hideForm = () => {
-    $('#FamilyMembersForm').hide();
-    $('#FamilyMembersListCard').show();
+    $('#BankDetailsForm').hide();
+    $('#BankDetailsListCard').show();
   };
   return (
     <>
@@ -18,57 +14,64 @@ export const Family = () => {
         noValidate
         validated={formHasError}
         className="details-form"
-        id="AddFamilyMembersForm"
+        id="AddBankDetailsForm"
       >
         <Row>
           <Col className="me-3 ms-3">
             <Row className="mb-3">
-              <Form.Label className="details-form">Name</Form.Label>
+              <Form.Label className="details-form">Bank Name</Form.Label>
               <Form.Control
-                id="txtMemberName"
-                name="memberName"
-                placeholder="Name"
+                id="txtBankName"
+                name="bankName"
+                placeholder="Bank Name"
               />
             </Row>
           </Col>
           <Col className="me-3 ms-3">
             <Row className="mb-3">
-              <Form.Label>Age</Form.Label>
+              <Form.Label>Bank Address</Form.Label>
+              <Form.Control
+                type="text"
+                id="txtBankAddress"
+                name="bankAddress"
+                placeholder="Bank Address"
+              />
+            </Row>
+          </Col>
+          <Col className="me-3 ms-3">
+            <Row className="mb-3">
+              <Form.Label>Account Number</Form.Label>
               <Form.Control
                 type="number"
-                id="txtAge"
-                name="age"
+                id="numAccountNumber"
+                name="accountNumber"
                 min={0}
-                placeholder="Age"
+                placeholder="Account Number"
               />
-            </Row>
-          </Col>
-          <Col className="me-3 ms-3">
-            <Row className="mb-3">
-              <Form.Label>Sex</Form.Label>
-              <Form.Select id="txtSex" name="sex">
-                <option value="">Select</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </Form.Select>
             </Row>
           </Col>
         </Row>
+
         <Row>
           <Col className="me-3 ms-3">
             <Row className="mb-3">
-              <Form.Label>Relation</Form.Label>
-              <Form.Select id="txtRelation" name="relation">
+              <Form.Label>Account Type</Form.Label>
+              <Form.Select id="txtAccountType" name="accountType">
                 <option value="">Select</option>
+                <option value="saving">Saving</option>
+                <option value="current">Current</option>
               </Form.Select>
             </Row>
           </Col>
           <Col className="me-3 ms-3">
             <Row className="mb-3">
-              <Form.Label>Education</Form.Label>
-              <Form.Select id="txtEducation" name="education">
-                <option value="">Select</option>
-              </Form.Select>
+              <Form.Label>IFSC Code</Form.Label>
+              <Form.Control
+                type="text"
+                id="txtIFSCCode"
+                name="ifscCode"
+                placeholder="IFSC Code"
+              />
             </Row>
           </Col>
           <Col className="me-3 ms-3">
@@ -79,12 +82,12 @@ export const Family = () => {
                 <option value="Suspended">Suspended</option>
               </Form.Select>
             </Row>
-            <Row className="mb-2" id="btnFamilyMember">
+            <Row className="mb-2" id="btnBankDetail">
               <Button variant="primary" type="button">
                 Add
               </Button>
             </Row>
-            {/* <Row className="mb-2" id='btnUpdateFamilyMembers'>
+            {/* <Row className="mb-2" id='btnUpdateBankDetail'>
                             <Button variant="primary">
                                 Update
                             </Button>
@@ -101,4 +104,4 @@ export const Family = () => {
   );
 };
 
-export default Family;
+export default BankDetails;
