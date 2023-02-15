@@ -26,7 +26,7 @@ export const FarmersLoanDetailsList = () => {
             <th>Loan Name</th>
             <th>Bank Name</th>
             <th>Branch Name</th>
-            <th>Loan Ammount</th>
+            <th>Loan Amount</th>
             <th>Active Status</th>
             <th>Action</th>
           </tr>

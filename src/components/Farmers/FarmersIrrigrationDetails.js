@@ -25,8 +25,8 @@ export const FarmersIrrigrationDetails = () => {
         <Row>
         <Col className="me-3 ms-3">
             <Row className="mb-3">
-            <Form.Label>Irrigrations Details</Form.Label>
-            <Form.Select id="txtEquipment" name="equipmentCategory">
+            <Form.Label>Irrigration Detail</Form.Label>
+            <Form.Select id="txtIrrigration" name="irrigration">
                  <option value="">Select</option>
                  <option value="irrigartions">IRRIGRATION1</option>
                  <option value="Card">Card</option>

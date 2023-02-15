@@ -54,13 +54,13 @@ export const FarmersLoanDetails = () => {
         </Col>
         <Col className="me-3 ms-3">
           <Row className="mb-3">
-          <Form.Label>Loan Ammount</Form.Label>
+          <Form.Label>Loan Amount</Form.Label>
             <Form.Control
               type="number"
-              id="txtLoanAmmount"
-              name="loanAmmount"
+              id="txtLoanAmount"
+              name="loanAmount"
               min={0}
-              placeholder="Loan Ammount"
+              placeholder="Loan Amount"
             />
           </Row>
         </Col>

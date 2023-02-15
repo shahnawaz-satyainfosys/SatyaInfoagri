@@ -26,7 +26,7 @@ export const FarmersLiveStockDetails = () => {
               <Form.Label className="details-form">Cattle Type</Form.Label>
               <Form.Select id="txtCattleType" name="cattleType">
                 <option value="">Select</option>
-                <option value="cType">cType</option>
+                <option value="">Select</option>
                 <option value="current">Current</option>
               </Form.Select>
             </Row>
@@ -48,7 +48,7 @@ export const FarmersLiveStockDetails = () => {
               <Form.Control
                 type="text"
                 id="txtProduction"
-                name="proDuction"
+                name="production"
                 placeholder="Prodcution"
               />
             </Row>

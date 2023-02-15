@@ -27,7 +27,7 @@ const FarmersIrrigrationList = () => {
     <Table striped responsive id="FarmersIrrigrationsDetailsListTable" className="no-pb">
       <thead>
         <tr>
-          <th>Irrigrations Details</th>
+          <th>Irrigration Detail</th>
           <th>Souce Of Water</th>
           <th>Active Status</th>
           <th>Action</th>
