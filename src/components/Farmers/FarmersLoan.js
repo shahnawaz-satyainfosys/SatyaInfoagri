@@ -27,7 +27,6 @@ export const FarmersLoanDetails = () => {
             <Form.Select id="txtLoanName" name="loanName">
               <option value="">Select</option>
               <option value="Home Loan">Home Loan</option>
-              <option value="current">Current</option>
             </Form.Select>
           </Row>
         </Col>
@@ -36,7 +35,7 @@ export const FarmersLoanDetails = () => {
             <Form.Label>Bank Name</Form.Label>
             <Form.Select id="txtLoanBankName" name="loanBankName">
               <option value="">Select</option>
-              <option value="Mahidra">Mahindra Bank</option>
+              <option value="PNB">PNB</option>
               <option value="HDFC">HDFC Bank</option>
             </Form.Select>
           </Row>
@@ -47,7 +46,7 @@ export const FarmersLoanDetails = () => {
             <Form.Control
               type="text"
               id="txtBrachName"
-              name="loanBankName"
+              name="loanBranchName"
               placeholder="Branch Name"
             />
           </Row>

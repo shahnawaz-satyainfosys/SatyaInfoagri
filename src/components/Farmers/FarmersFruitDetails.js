@@ -9,9 +9,8 @@ export const FarmersFruitDetails = () => {
           <Col className="me-3 ms-3">
             <Row className="mb-3">
               <Form.Label>Category Name</Form.Label>
-              <Form.Select id="txtCAtegoryName" name="categoryName">
-                <option value="select">Select</option>
-                <option value="Suspended">Suspended</option>
+              <Form.Select id="txtCategoryName" name="categoryName">
+                <option value="Select">Select</option>
               </Form.Select>
             </Row>
 
@@ -25,14 +24,18 @@ export const FarmersFruitDetails = () => {
                 >
                   <Col>
                     <Form.Control
+                      type="number"
                       id="txtArea"
                       name="area"
+                      min={0}
                       className="mb-1"
                       placeholder="Area"
                     />
                   </Col>
                   <Col>
                     <Form.Control
+                      type="number"
+                      min={0}
                       id="txtHA"
                       name="ha"
                       className="mb-1"
@@ -73,6 +76,8 @@ export const FarmersFruitDetails = () => {
                 >
                   <Col>
                     <Form.Control
+                      type="number"
+                      min={0}
                       id="txtTotalProduction"
                       name="totalProduction"
                       className="mb-1"
@@ -81,8 +86,10 @@ export const FarmersFruitDetails = () => {
                   </Col>
                   <Col>
                     <Form.Control
-                      id="txtProductionFruit"
-                      name="productionFruit"
+                      type="number"
+                      min={0}
+                      id="txtProductionFruit1"
+                      name="productionFruit1"
                       className="mb-1"
                       placeholder=""
                       disabled
@@ -91,18 +98,18 @@ export const FarmersFruitDetails = () => {
                 </Form.Group>
               </Col>
             </Row>
-            
+
             <Row className="mb-3">
               <Form.Label>Market Des.</Form.Label>
               <Form.Control
-                 as="textarea"
+                as="textarea"
                 id="txtMarketDes"
                 name="MarketDes"
                 placeholder="Market Des"
               />
             </Row>
           </Col>
-          
+
           <Col className="me-3 ms-3">
             <Row className="mb-3 my-4">
               <Form.Control
@@ -125,6 +132,8 @@ export const FarmersFruitDetails = () => {
                 >
                   <Col>
                     <Form.Control
+                      type="number"
+                      min={0}
                       id="txtAveragePrice"
                       name="averagePrice"
                       className="mb-1"
@@ -133,6 +142,8 @@ export const FarmersFruitDetails = () => {
                   </Col>
                   <Col>
                     <Form.Control
+                      type="number"
+                      min={0}
                       id="txtAveragePrice1"
                       name="averagePrice1"
                       className="mb-1"

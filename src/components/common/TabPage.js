@@ -52,6 +52,8 @@ import FarmersDocumentDetails from 'components/Farmers/FarmersDocumentDetails';
 
 import FarmersPremiumDetails from 'components/Farmers/FarmersPremiumDetails';
 import FarmersEventDetails from 'components/Farmers/FarmersEventDetails';
+import FarmersMktSmsDetails from 'components/Farmers/FarmersMktSmsDetails';
+import FarmersLedgerDetails from 'components/Farmers/FarmersLedgerDetails';
 
 const TabPage = ({
   listData,
@@ -507,7 +509,26 @@ const TabPage = ({
                 <>
                   <FalconComponentCard id="FarmersEventDetailsFrom">
                     <FalconComponentCard.Body language="jsx">
-                      <FarmersEventDetails/>
+                      <FarmersEventDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+                </>
+              )}
+
+              {index == 11 && module == 'Farmers' && (
+                <>
+                  <FalconComponentCard id="FarmersMktSmsDetailsFrom">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersMktSmsDetails />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+                </>
+              )}
+               {index == 12 && module == 'Farmers' && (
+                <>
+                  <FalconComponentCard id="FarmersLedger  DetailsFrom">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersLedgerDetails />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
                 </>

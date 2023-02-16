@@ -14,7 +14,7 @@ export const FarmersMachinaryDetailsList = () => {
           onClick={() => showAddFarmersMachianryDetailsForm()}
           className="mb-2"
         >
-          Add Live Stock Details
+          Add Machinary Details
         </Button>
       </div>
 

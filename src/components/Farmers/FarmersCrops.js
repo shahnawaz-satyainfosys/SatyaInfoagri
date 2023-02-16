@@ -3,13 +3,13 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 
 export const FarmersCropsDetails = () => {
   useEffect(() => {
-    $('#FarmersLoanDetailsForm').hide();
+    $('#FarmersCropDetailsForm').hide();
   }, []);
 
   const [formHasError, setFormError] = useState(false);
   const hideForm = () => {
-    $('#FarmersLoanDetailsForm').hide();
-    $('#FarmersLoanDetailsListCard').show();
+    $('#FarmersCropDetailsForm').hide();
+    $('#FarmersCropDetailsListCard').show();
   };
   return (
     <>
@@ -17,7 +17,7 @@ export const FarmersCropsDetails = () => {
         noValidate
         validated={formHasError}
         className="details-form"
-        id="AddFarmersLoanDetailsForm"
+        id="AddFarmersCropDetailsForm"
       >
         <Row>
           <Col className="me-3 ms-3">
@@ -139,9 +139,9 @@ export const FarmersCropsDetails = () => {
                 placeholder="Total Production"
               />
             </Row>
-            <Row className="mb-3">
-              <Button variant="primary" type="submit">
-                Add
+            <Row className="mb-2">
+              <Button variant="danger" onClick={() => hideForm()}>
+                Cancel
               </Button>
             </Row>
           </Col>

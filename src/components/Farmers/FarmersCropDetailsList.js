@@ -1,15 +1,32 @@
 import React from 'react';
-import { Table } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
+import { useEffect } from 'react';
 
 
 export const FarmersCropDetailsList = () => {
 
   
+  useEffect(() => {
+    $('#FarmersCropDetailsForm').hide();
+  }, []);
+
+  const showAddFarmersCropDetailsForm = () => {
+    $('#FarmersCropDetailsForm').show();
+    $('#FarmersCropDetailsListCard').hide();
+    
+}
+
      
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'end' }}>
-       
+        <div style={{ display: 'flex', justifyContent: 'end' }}>
+        <Button
+          id="btnAddFarmersCropDetailsForm"
+          onClick={() => showAddFarmersCropDetailsForm()}
+          className="mb-2"
+        >
+          Add Crop Details
+        </Button>
       </div>
 
       <Table striped responsive id="FarmersCropsDetailsListTable" className="no-pb">

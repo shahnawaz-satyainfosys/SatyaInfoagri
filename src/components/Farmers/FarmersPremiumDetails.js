@@ -6,21 +6,34 @@ export const FarmersPremiumDetails = () => {
     <>
       <Form>
         <Row>
-          <Col>
-            <Form.Group as={Row} className="mb-2">
-              <Form.Label column sm={4}>
-                Premium Eligible
-              </Form.Label>
-              <Col sm={8}>
-                <Form.Control
-                  type="text"
-                  min={0}
-                  id="txtImageUpload"
-                  name="imageUplod"
-                  placeholder="Premium"
-                />
-              </Col>
-            </Form.Group>
+          <Col sm={3}>
+            
+            <Form.Label className="me-2">Premium Eligible</Form.Label>
+            <Form.Check
+              inline
+              className="me-2"
+              type="radio"
+              id="defaultRadio"
+              label="Yes"
+              name="radio"
+            />
+
+            <Form.Check
+              inline
+              type="radio"
+              id="defaultRadio"
+              label="No"
+              name="radio"
+            />
+          </Col>
+          <Col sm={4}>
+          <Form.Control
+              type="text"
+              id="txtPremiumEligible"
+              name="premiumEligible"
+              placeholder="Premium Eligible"
+            />
+          
           </Col>
         </Row>
       </Form>

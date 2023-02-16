@@ -26,8 +26,6 @@ export const FarmersLiveStockDetails = () => {
               <Form.Label className="details-form">Cattle Type</Form.Label>
               <Form.Select id="txtCattleType" name="cattleType">
                 <option value="">Select</option>
-                <option value="">Select</option>
-                <option value="current">Current</option>
               </Form.Select>
             </Row>
           </Col>
@@ -35,9 +33,10 @@ export const FarmersLiveStockDetails = () => {
             <Row className="mb-3">
               <Form.Label>No Of Cattle</Form.Label>
               <Form.Control
-                type="text"
+                type="number"
                 id="txtNoOfCattle"
                 name="noOfCattle"
+                min={0}
                 placeholder="No Of Cattle"
               />
             </Row>
@@ -57,9 +56,11 @@ export const FarmersLiveStockDetails = () => {
             <Row className="mb-3">
               <Form.Label className="details-form">Rate Per Litter</Form.Label>
               <Form.Control
-                id="txtRatePerLitter"
-                name="ratePerLitter"
-                placeholder="Rate Per Litter"
+                type="number"
+                min={0}
+                id="numRatePerLiter"
+                name="ratePerLiter"
+                placeholder="Rate Per Liter"
               />
             </Row>
           </Col>
@@ -69,17 +70,22 @@ export const FarmersLiveStockDetails = () => {
           <Col className="me-3 ms-3">
             <Row className="mb-3">
               <Form.Label>Age</Form.Label>
-              <Form.Control id="txtAge" name="age" min={0} placeholder="Age" />
+              <Form.Control
+                type="number"
+                id="numAge"
+                name="age"
+                min={0}
+                placeholder="Age"
+              />
             </Row>
           </Col>
 
           <Col className="me-3 ms-3">
             <Row className="mb-3">
               <Form.Label>Milk Type</Form.Label>
-              <Form.Select id="txtUsages" name="usaGes">
+              <Form.Select id="txtMilkType" name="milkType">
                 <option value="">Select</option>
-                <option value="select1">select1</option>
-                <option value="current">Current</option>
+                <option value="Select">Select</option>                
               </Form.Select>
             </Row>
           </Col>

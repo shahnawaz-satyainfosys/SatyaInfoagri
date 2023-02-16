@@ -9,33 +9,55 @@ export const FarmersDocumentDetails = () => {
           <Col className="me-3 ms-3">
             <Row className="mb-3">
               <Form.Label>Card No</Form.Label>
-              <Form.Select id="txtCardNo" name="cardNo">
-                <option value="select">Select</option>
-              </Form.Select>
+              <Form.Control
+                type="number"
+                id="numCardNo"
+                name="cardNo"
+                min={0}
+                placeholder="Card No"
+                disabled
+              />
             </Row>
             <Row className="mb-3">
               <Form.Label>Registration Fee</Form.Label>
-              <Form.Select id="txtRegistrationFee" name="registrationFee">
-                <option value="select">Select</option>
-              </Form.Select>
+              <Form.Control
+                type="number"
+                id="numRegistrationFee"
+                name="cardNo"
+                min={0}
+                placeholder="Registration Fee"
+                disabled
+              />
             </Row>
             <Row className="mb-3">
               <Form.Label>Share Form</Form.Label>
-              <Form.Select id="txtShareForm" name="shareForm">
-                <option value="select">Select</option>
-              </Form.Select>
+              <Form.Control
+                type="text"
+                id="txtShareFrom"
+                name="shareFrom"
+                placeholder="Share From"
+                disabled
+              />
             </Row>
             <Row className="mb-3">
               <Form.Label>Share To</Form.Label>
-              <Form.Select id="txtShareTo" name="shareTo">
-                <option value="select">Select</option>
-              </Form.Select>
+              <Form.Control
+                type="text"
+                id="txtShareTo"
+                name="shareTo"
+                placeholder="Share To"
+                disabled
+              />
             </Row>
             <Row className="mb-3">
               <Form.Label>Total Share</Form.Label>
-              <Form.Select id="txtTotalShare" name="totalShare">
-                <option value="select">Select</option>
-              </Form.Select>
+              <Form.Control
+                type="text"
+                id="txtTotalShare"
+                name="totalShare"
+                placeholder="Total Share"
+                disabled
+              />
             </Row>
           </Col>
 
