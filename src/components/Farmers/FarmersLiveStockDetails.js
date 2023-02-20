@@ -54,7 +54,7 @@ export const FarmersLiveStockDetails = () => {
           </Col>
           <Col className="me-3 ms-3">
             <Row className="mb-3">
-              <Form.Label className="details-form">Rate Per Litter</Form.Label>
+              <Form.Label className="details-form">Rate Per Liter</Form.Label>
               <Form.Control
                 type="number"
                 min={0}

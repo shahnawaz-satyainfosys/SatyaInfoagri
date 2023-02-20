@@ -52,8 +52,8 @@ export const FarmersDocumentDetails = () => {
             <Row className="mb-3">
               <Form.Label>Total Share</Form.Label>
               <Form.Control
-                type="text"
-                id="txtTotalShare"
+                type="number"
+                id="numTotalShare"
                 name="totalShare"
                 placeholder="Total Share"
                 disabled
@@ -66,8 +66,8 @@ export const FarmersDocumentDetails = () => {
               <Form.Label>Farmer's Photo</Form.Label>
               <Form.Control
                 type="File"
-                id="fileImageUpload"
-                name="imageUplod"
+                id="fileFarmerPhoto"
+                name="farmerPhoto"
                 placeholder="Choose File"
               />
             </Row>
@@ -138,8 +138,8 @@ export const FarmersDocumentDetails = () => {
           <Row className="mb-3 my-4">
               <Form.Control
                 type="text"
-                id="txtUpload1"
-                name="Uplod1"
+                id="txtFarmerPhoto1"
+                name="textFarmerPhoto1"
                 placeholder=""
               />
             </Row>

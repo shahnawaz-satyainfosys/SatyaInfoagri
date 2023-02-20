@@ -172,7 +172,7 @@ export const FarmersFruitDetails = () => {
               </Form.Select>
             </Row>
             <Row className="mb-3">
-              <Button variant="primary" type="submit">
+              <Button variant="primary" type="s">
                 Add
               </Button>
             </Row>

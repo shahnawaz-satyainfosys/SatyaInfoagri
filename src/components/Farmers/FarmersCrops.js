@@ -51,7 +51,7 @@ export const FarmersCropsDetails = () => {
           </Col>
           <Col className="me-3 ms-3">
             <Row className="mb-3">
-              <Form.Label>For Month</Form.Label>
+              <Form.Label>Form Month</Form.Label>
               <Form.Select id="txtForMonth" name="forMonth">
                 <option value="select">Select</option>
               </Form.Select>
@@ -96,7 +96,7 @@ export const FarmersCropsDetails = () => {
               />
             </Row>
             <Row className="mb-3">
-              <Form.Label>Veriety Name</Form.Label>
+              <Form.Label>Variety Name</Form.Label>
               <Form.Select id="txtVarietyName" name="varietyName">
                 <option value="select">Select</option>
               </Form.Select>
@@ -139,6 +139,16 @@ export const FarmersCropsDetails = () => {
                 placeholder="Total Production"
               />
             </Row>
+            <Row className="mb-2" id="btnFarmersCropDetail">
+              <Button variant="primary" type="button">
+                Add
+              </Button>
+            </Row>
+            {/* <Row className="mb-2" id='btnUpdateFarmersCropDetail'>
+                            <Button variant="primary">
+                                Update
+                            </Button>
+                        </Row> */}
             <Row className="mb-2">
               <Button variant="danger" onClick={() => hideForm()}>
                 Cancel

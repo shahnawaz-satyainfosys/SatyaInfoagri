@@ -35,8 +35,8 @@ export const FarmersIrrigrationDetails = () => {
           </Col>
           <Col className="me-3 ms-3">
             <Row className="mb-3">
-            <Form.Label className="details-form">Souce Of Water</Form.Label>
-              <Form.Select id="txtSouceOfWater" name="souceOfWater">
+            <Form.Label className="details-form">Source Of Water</Form.Label>
+              <Form.Select id="txtSourceOfWater" name="sourceOfWater">
                 <option value="">Select</option>
                 <option value="Bore Well">BORE WELL</option>
                 <option value="bhada">BHADA</option>

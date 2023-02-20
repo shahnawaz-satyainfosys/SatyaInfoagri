@@ -23,7 +23,7 @@ export const FarmersLiveStockList = () => {
             <th>Cattle Type</th>
             <th>No Of Cattle</th>
             <th>Prodcution</th>
-            <th>Rate Per Litter</th>
+            <th>Rate Per Liter</th>
             <th>Age</th>
             <th>Milk Type</th>
             <th>Active Status</th>

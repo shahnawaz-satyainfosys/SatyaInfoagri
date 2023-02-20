@@ -36,12 +36,12 @@ export const FarmersCropDetailsList = () => {
             <th>Unit</th>
             <th>S Session</th>
             <th>S Year</th>
-            <th>S For Month</th>
+            <th>S Form Month</th>
             <th>S To Month</th>
             <th>Harvesting Year</th>
             <th>H From Month</th>
             <th>H To Month</th>
-            <th>Total Month</th>
+            <th>Total Land</th>
             <th>Total Production</th>
             <th>Approval Status</th>
             <th>Action</th>

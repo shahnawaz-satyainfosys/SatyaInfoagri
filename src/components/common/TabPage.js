@@ -30,30 +30,19 @@ import AddFarmer from 'components/Farmers/AddFarmer';
 import Family from 'components/Farmers/Family';
 import FamilyMemberList from 'components/Farmers/FamilyMemberList';
 import FamilyCompositionDetail from 'components/Farmers/FamilyCompositonDetail';
-import BankDetails from 'components/Farmers/BankDetails';
-import BankDetailsList from 'components/Farmers/BankDetailsList';
-import FarmersCardDetails from 'components/Farmers/FarmersCardDetails';
-import FarmersCardDetailsList from 'components/Farmers/FarmersCardDetailsList';
-import FarmersLoanDetails from 'components/Farmers/FarmersLoan';
-import FarmersLoanDetailsList from 'components/Farmers/FarmersLoanList';
-import FarmersLandsDetails from 'components/Farmers/FarmersLands';
-import FarmersLandListCard from 'components/Farmers/FarmersLandList';
-import FarmersIrrigrationDetails from 'components/Farmers/FarmersIrrigrationDetails';
-import FarmersIrrigrationList from 'components/Farmers/FarmersIrrigrationList';
-import FarmersLiveStockDetails from 'components/Farmers/FarmersLiveStockDetails';
-import FarmersLiveStockList from 'components/Farmers/FarmersLiveStockList';
-import FarmersMachinaryDetails from 'components/Farmers/FarmersMachinaryDetails';
-import FarmersMachinaryDetailsList from 'components/Farmers/FarmersMachinaryDetailsList';
-import FarmersCropsDetails from 'components/Farmers/FarmersCrops';
-import FarmersCropDetailsList from 'components/Farmers/FarmersCropDetailsList';
-import FarmersFruitDetails from 'components/Farmers/FarmersFruitDetails';
-import FarmersFruitDetailsList from 'components/Farmers/FarmersFruitDetailsList';
 import FarmersDocumentDetails from 'components/Farmers/FarmersDocumentDetails';
-
-import FarmersPremiumDetails from 'components/Farmers/FarmersPremiumDetails';
 import FarmersEventDetails from 'components/Farmers/FarmersEventDetails';
 import FarmersMktSmsDetails from 'components/Farmers/FarmersMktSmsDetails';
 import FarmersLedgerDetails from 'components/Farmers/FarmersLedgerDetails';
+
+import FarmersLiveStockTable from 'components/Farmers/FarmersLiveStockTable';
+import FarmersMachinaryDetailsTable from 'components/Farmers/FarmersMachinaryDetailsTable';
+import FarmersLandTable from 'components/Farmers/FarmersLandTable';
+import FarmersIrrigrationTable from 'components/Farmers/FarmersIrrigrationTable';
+import BankDetailsTable from 'components/Farmers/BankDetailsTable';
+import FarmersCardTable from 'components/Farmers/FarmersCardTable';
+import FarmersLoanTable from 'components/Farmers/FarmersLoanTable';
+import FamilyTable from 'components/Farmers/FamilyTable';
 
 const TabPage = ({
   listData,
@@ -343,10 +332,9 @@ const TabPage = ({
                       <Family />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
-
-                  <FalconComponentCard id="FamilyMembersListCard">
+                  <FalconComponentCard id="FamilyMemberTableDetails">
                     <FalconComponentCard.Body language="jsx">
-                      <FamilyMemberList />
+                      <FamilyTable />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
@@ -359,39 +347,20 @@ const TabPage = ({
               )}
               {index == 3 && module == 'Farmers' && (
                 <>
-                  <FalconComponentCard id="BankDetailsForm">
+                  <FalconComponentCard id="BankDetailsTable">
                     <FalconComponentCard.Body language="jsx">
-                      <BankDetails />
+                      <BankDetailsTable />
+                    </FalconComponentCard.Body>
+                  </FalconComponentCard>
+                  <FalconComponentCard id="FarmerCardDetailsTable">
+                    <FalconComponentCard.Body language="jsx">
+                      <FarmersCardTable />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard id="BankDetailsListCard">
+                  <FalconComponentCard id="FarmersLoanDetailsTable">
                     <FalconComponentCard.Body language="jsx">
-                      <BankDetailsList />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
-
-                  <FalconComponentCard id="FarmersCardDetailsForm">
-                    <FalconComponentCard.Body language="jsx">
-                      <FarmersCardDetails />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
-
-                  <FalconComponentCard id="FarmersCardDetailsListCard">
-                    <FalconComponentCard.Body language="jsx">
-                      <FarmersCardDetailsList />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
-
-                  <FalconComponentCard id="FarmersLoanDetailsForm">
-                    <FalconComponentCard.Body language="jsx">
-                      <FarmersLoanDetails />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
-
-                  <FalconComponentCard id="FarmersLoanDetailsListCard">
-                    <FalconComponentCard.Body language="jsx">
-                      <FarmersLoanDetailsList />
+                      <FarmersLoanTable />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
                 </>
@@ -399,27 +368,14 @@ const TabPage = ({
 
               {index == 4 && module == 'Farmers' && (
                 <>
-                  <FalconComponentCard id="FarmersLandDetailsForm">
+                  <FalconComponentCard id="FarmersLandDetailsTable">
                     <FalconComponentCard.Body language="jsx">
-                      <FarmersLandsDetails />
+                      <FarmersLandTable />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
-
-                  <FalconComponentCard id="FarmersLandDetailsListCard">
+                  <FalconComponentCard id="FarmersIrrigrationDetailsTable">
                     <FalconComponentCard.Body language="jsx">
-                      <FarmersLandListCard />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
-
-                  <FalconComponentCard id="FarmersIrrigrationDetailsForm">
-                    <FalconComponentCard.Body language="jsx">
-                      <FarmersIrrigrationDetails />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
-
-                  <FalconComponentCard id="FarmersIrrigrationDetailsListCard">
-                    <FalconComponentCard.Body language="jsx">
-                      <FarmersIrrigrationList />
+                      <FarmersIrrigrationTable />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
                 </>
@@ -427,65 +383,21 @@ const TabPage = ({
 
               {index == 5 && module == 'Farmers' && (
                 <>
-                  <FalconComponentCard id="FarmersLiveStockDetailsForm">
+                  <FalconComponentCard id="FarmersLiveStockTable">
                     <FalconComponentCard.Body language="jsx">
-                      <FarmersLiveStockDetails />
+                      <FarmersLiveStockTable />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard id="FarmersLiveStockDetailsListCard">
+                  <FalconComponentCard id="FarmersMachinaryTable">
                     <FalconComponentCard.Body language="jsx">
-                      <FarmersLiveStockList />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
-
-                  <FalconComponentCard id="FarmersMachinaryDetailsForm">
-                    <FalconComponentCard.Body language="jsx">
-                      <FarmersMachinaryDetails />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
-
-                  <FalconComponentCard id="FarmersMachinaryDetailsListCard">
-                    <FalconComponentCard.Body language="jsx">
-                      <FarmersMachinaryDetailsList />
+                      <FarmersMachinaryDetailsTable />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
                 </>
               )}
 
               {index == 6 && module == 'Farmers' && (
-                <>
-                  <FalconComponentCard id="FarmersCropDetailsListCard">
-                    <FalconComponentCard.Body language="jsx">
-                      <FarmersCropDetailsList />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
-
-                  <FalconComponentCard id="FarmersCropDetailsForm">
-                    <FalconComponentCard.Body language="jsx">
-                      <FarmersCropsDetails />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
-                </>
-              )}
-
-              {index == 7 && module == 'Farmers' && (
-                <>
-                  <FalconComponentCard id="FarmersFruitDetailsListCard">
-                    <FalconComponentCard.Body language="jsx">
-                      <FarmersFruitDetailsList />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
-
-                  <FalconComponentCard id="FarmersFruitDetailsFrom">
-                    <FalconComponentCard.Body language="jsx">
-                      <FarmersFruitDetails />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
-                </>
-              )}
-
-              {index == 8 && module == 'Farmers' && (
                 <>
                   <FalconComponentCard id="FarmersDocumentDetailsFrom">
                     <FalconComponentCard.Body language="jsx">
@@ -495,17 +407,7 @@ const TabPage = ({
                 </>
               )}
 
-              {index == 9 && module == 'Farmers' && (
-                <>
-                  <FalconComponentCard id="FarmersPremiumtDetailsFrom">
-                    <FalconComponentCard.Body language="jsx">
-                      <FarmersPremiumDetails />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
-                </>
-              )}
-
-              {index == 10 && module == 'Farmers' && (
+              {index == 7 && module == 'Farmers' && (
                 <>
                   <FalconComponentCard id="FarmersEventDetailsFrom">
                     <FalconComponentCard.Body language="jsx">
@@ -515,7 +417,7 @@ const TabPage = ({
                 </>
               )}
 
-              {index == 11 && module == 'Farmers' && (
+              {index == 8 && module == 'Farmers' && (
                 <>
                   <FalconComponentCard id="FarmersMktSmsDetailsFrom">
                     <FalconComponentCard.Body language="jsx">
@@ -524,9 +426,9 @@ const TabPage = ({
                   </FalconComponentCard>
                 </>
               )}
-               {index == 12 && module == 'Farmers' && (
+              {index == 9 && module == 'Farmers' && (
                 <>
-                  <FalconComponentCard id="FarmersLedger  DetailsFrom">
+                  <FalconComponentCard id="FarmersLedgerDetailsFrom">
                     <FalconComponentCard.Body language="jsx">
                       <FarmersLedgerDetails />
                     </FalconComponentCard.Body>

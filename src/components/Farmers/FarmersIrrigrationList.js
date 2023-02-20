@@ -28,7 +28,7 @@ const FarmersIrrigrationList = () => {
       <thead>
         <tr>
           <th>Irrigration Detail</th>
-          <th>Souce Of Water</th>
+          <th>Source Of Water</th>
           <th>Active Status</th>
           <th>Action</th>
         </tr>
