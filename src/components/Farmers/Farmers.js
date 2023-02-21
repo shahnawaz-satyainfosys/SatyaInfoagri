@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TabPage from 'components/common/TabPage';
 
-const tabArray = ['Farmers', 'Add Farmer', 'Family', 'Bank', 'Land', 'Cattle', 'Documents', 'Events', 'Mkt SMS','Ledger'];
+const tabArray = ['Farmers', 'Add Farmer', 'Family', 'Bank', 'Land', 'Cattle', 'Documents', 'Events', 'Mkt SMS'];
 
 const listColumnArray = [
     { accessor: 'sl', Header: 'S. No' },

@@ -25,16 +25,10 @@ import UserDetails from 'components/User/UserDetails';
 import ProductDetails from 'components/Product/ProductDetails';
 
 import $ from 'jquery';
-
 import AddFarmer from 'components/Farmers/AddFarmer';
-import Family from 'components/Farmers/Family';
-import FamilyMemberList from 'components/Farmers/FamilyMemberList';
-import FamilyCompositionDetail from 'components/Farmers/FamilyCompositonDetail';
 import FarmersDocumentDetails from 'components/Farmers/FarmersDocumentDetails';
 import FarmersEventDetails from 'components/Farmers/FarmersEventDetails';
 import FarmersMktSmsDetails from 'components/Farmers/FarmersMktSmsDetails';
-import FarmersLedgerDetails from 'components/Farmers/FarmersLedgerDetails';
-
 import FarmersLiveStockTable from 'components/Farmers/FarmersLiveStockTable';
 import FarmersMachinaryDetailsTable from 'components/Farmers/FarmersMachinaryDetailsTable';
 import FarmersLandTable from 'components/Farmers/FarmersLandTable';
@@ -327,22 +321,14 @@ const TabPage = ({
               )}
               {index == 2 && module == 'Farmers' && (
                 <>
-                  <FalconComponentCard id="FamilyMembersForm">
-                    <FalconComponentCard.Body language="jsx">
-                      <Family />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
+                 
                   <FalconComponentCard id="FamilyMemberTableDetails">
                     <FalconComponentCard.Body language="jsx">
                       <FamilyTable />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
 
-                  <FalconComponentCard id="FamilyCompositionDetails">
-                    <FalconComponentCard.Body language="jsx">
-                      <FamilyCompositionDetail />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
+                 
                 </>
               )}
               {index == 3 && module == 'Farmers' && (
@@ -426,15 +412,7 @@ const TabPage = ({
                   </FalconComponentCard>
                 </>
               )}
-              {index == 9 && module == 'Farmers' && (
-                <>
-                  <FalconComponentCard id="FarmersLedgerDetailsFrom">
-                    <FalconComponentCard.Body language="jsx">
-                      <FarmersLedgerDetails />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
-                </>
-              )}
+              
             </Tab>
           );
         })}

@@ -3,31 +3,39 @@ import { Button, Table, Form, Col, Row } from 'react-bootstrap';
 import { useState } from 'react';
 
 export const FamilyTable = () => {
-    const [formHasError, setFormError] = useState(false);
-    const [rowData, setRowData] = useState([{}]);
-    const columnsArray = [
-      'Name',
-      'Age',
-      'Sex',
-      'Relation',
-      'Education', 
-      '	Action'
-    ];
-  
-    const handleAddRow = () => {
-      const item = {
-        name: '',
-        mobile: '',
-        activeStatus: ''
-      };
-      setRowData([...rowData, item]);
+  let index = 0;
+  const [formHasError, setFormError] = useState(false);
+  const [rowData, setRowData] = useState([{}]);
+  const [list, setListData] = useState([]);
+  const columnsArray = [
+    'Name',
+    'Age',
+    'Sex',
+    'Relation',
+    'Education',
+    '	Action'
+  ];
+
+  const handleAddRow = () => {
+    const item = {
+      name: '',
+      mobile: '',
+      activeStatus: ''
     };
+    setRowData([...rowData, item]);
+  };
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'end' }}>
-        <Button id="btnAddFarmersFamilyTable" className="mb-2" onClick={handleAddRow}>
-          Add Family Details
-        </Button>
+        
+          <Button
+            id="btnAddFarmersFamilyTable"
+            className="mb-2"
+            onClick={handleAddRow}
+          >
+            Add Family Details
+          </Button>
+        
       </div>
 
       <Form
@@ -50,7 +58,7 @@ export const FamilyTable = () => {
           <tbody id="tbody" className="details-form">
             {rowData.map((item, idx) => (
               <tr key={idx}>
-                 <td key={idx}>
+                <td key={idx}>
                   <Form.Control
                     type="text"
                     id="txtFamilyName"
@@ -70,7 +78,7 @@ export const FamilyTable = () => {
                     placeholder="Age"
                     className="form-control"
                   />
-                </td>   
+                </td>
                 <td key={idx}>
                   <Form.Select
                     type="text"
@@ -102,7 +110,7 @@ export const FamilyTable = () => {
                   >
                     <option value={rowData[idx].name}>Select</option>
                   </Form.Select>
-                </td>              
+                </td>
                 <td>
                   <i className="fa fa-pencil me-2" />
                   <i className="fa fa-trash" />
@@ -113,7 +121,7 @@ export const FamilyTable = () => {
         </Table>
       </Form>
     </>
-  )
-}
+  );
+};
 
-export default FamilyTable
+export default FamilyTable;
