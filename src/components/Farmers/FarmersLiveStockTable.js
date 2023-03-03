@@ -4,11 +4,12 @@ import { useState } from 'react';
 
  export const FarmersLiveStockTable = () => {
   const [formHasError, setFormError] = useState(false);
-  const [rowData, setRowData] = useState([{}]);
+  const [rowData, setRowData] = useState([]);
+  const [data, setdata] = useState([]);
   const columnsArray = [
     'Cattle Type',
     'No Of Cattle',
-    'Prodcution',
+    'Production',
     'Rate Per Liter',
     'Age',
     'Milk Type',
@@ -18,13 +19,19 @@ import { useState } from 'react';
 
   const handleAddRow = () => {
     const item = {
-      name: '',
-      mobile: '',
+      cattleType:'',
+      noOfCattle: '',
+      production:'',
+      ratePerLiter:'',
+      age:'',
+      milkType:'',
       activeStatus: ''
     };
     setRowData([...rowData, item]);
   };
-
+  const changeHandle = e => {
+    setdata({ ...data, [e.target.name]: e.target.value });
+  };
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'end' }}>
@@ -55,78 +62,88 @@ import { useState } from 'react';
             </tr>
           </thead>
           <tbody id="tbody" className="details-form">
-            {rowData.map((item, idx) => (
-              <tr key={idx}>
-                <td key={idx}>
+          
+              <tr>
+                <td>
                   <Form.Select
                     type="text"
-                    id="txtcattleType"
+                    id="txtCattleType"
+                    value={rowData.cattleType}
+                    onChange={changeHandle}
                     name="cattleType"
                     className="form-control"
                   >
-                    <option value={rowData[idx].name}>Select</option>
+                    <option >Select</option>
                   </Form.Select>
                 </td>
 
-                <td key={idx}>
+                <td>
                   <Form.Control
                     type="number"
                     id="numNoOfCattle"
                     name="noOfCattle"
-                    value={rowData[idx].name}
+                    value={rowData.noOfCattle}
+                    onChange={changeHandle}
                     placeholder="No Of Cattle"
                     className="form-control"
-                  />
+                  /> 
                 </td>
 
-                <td key={idx}>
+                <td>
                   <Form.Control
                     type="number"
                     min={0}
-                    id="numProduction"
+                    id="numProduction"activeStatus
                     name="production"
-                    value={rowData[idx].name}
+                    value={rowData.production}
+                    onChange={changeHandle}
                     placeholder="Production"
                   />
                 </td>
-                <td key={idx}>
+                <td>
                   <Form.Control
                     type="number"
                     min={0}
                     id="numRatePerLiter"
                     name="ratePerLiter"
-                    value={rowData[idx].name}
+                    value={rowData.ratePerLiter}
+                    onChange={changeHandle}
                     placeholder="Rate Per Liter"
                   />
                 </td>
-                <td key={idx}>
+                <td>
                   <Form.Control
                     type="number"
                     min={0}
                     id="numAge"
                     name="age"
-                    value={rowData[idx].name}
+                    value={rowData.age}
+                    onChange={changeHandle}
                     placeholder="Age"
                   />
                 </td>
-                <td key={idx}>
+                <td>
                   <Form.Select
                     type="text"
                     id="txtMilkType"
                     name="milkType"
                     className="form-control"
+                    value={rowData.milkType}
+                    onChange={changeHandle}
                   >
-                    <option value={rowData[idx].name}>Select</option>
+                    <option >Select</option>
                   </Form.Select>
                 </td>
 
-                <td key={idx}>
+                <td>
                   <Form.Select
                     id="txtStatus"
-                    name="status"
+                    name="activeStatus"
                     className="form-control"
+                    value={rowData.activeStatus}
+                    onChange={changeHandle}
                   >
-                    <option value={rowData[idx].activeStatus}>Active</option>
+                    <option >Active</option>
                     <option value="Suspended">Suspended</option>
                   </Form.Select>
                 </td>
@@ -136,8 +153,22 @@ import { useState } from 'react';
                   <i className="fa fa-trash" />
                 </td>
               </tr>
-            ))}
+         
           </tbody>
+          <thead>
+            {rowData.map((item, idx) => (
+              <tr key={idx}>
+                <td key={idx}>{data.cattleType}</td>
+                <td key={idx}>{data.noOfCattle}</td>
+                <td key={idx}>{data.production}</td>
+                <td key={idx}>{data.ratePerLiter}</td>
+                <td key={idx}>{data.age}</td>
+                <td key={idx}>{data.milkType}</td>
+                <td key={idx}>{data.activeStatus}</td>
+                <td key={idx}> </td>
+              </tr>
+            ))}
+          </thead>
         </Table>
       </Form>
     </>

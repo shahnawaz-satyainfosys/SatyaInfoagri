@@ -3,10 +3,9 @@ import { Button, Table, Form, Col, Row } from 'react-bootstrap';
 import { useState } from 'react';
 
 export const FamilyTable = () => {
-  let index = 0;
   const [formHasError, setFormError] = useState(false);
-  const [rowData, setRowData] = useState([{}]);
-  const [list, setListData] = useState([]);
+  const [rowData, setRowData] = useState([]);
+  const [data, setdata] = useState({});
   const columnsArray = [
     'Name',
     'Age',
@@ -19,23 +18,28 @@ export const FamilyTable = () => {
   const handleAddRow = () => {
     const item = {
       name: '',
-      mobile: '',
+      age: '',
+      sex: '',
+      relation: '',
+      education: '',
       activeStatus: ''
     };
     setRowData([...rowData, item]);
   };
+  const changeHandle = e => {
+    setdata({ ...data, [e.target.name]: e.target.value });
+  };
+
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'end' }}>
-        
-          <Button
-            id="btnAddFarmersFamilyTable"
-            className="mb-2"
-            onClick={handleAddRow}
-          >
-            Add Family Details
-          </Button>
-        
+        <Button
+          id="btnAddFarmersFamilyTable"
+          className="mb-2"
+          onClick={handleAddRow}
+        >
+          Add Family Details
+        </Button>
       </div>
 
       <Form
@@ -56,68 +60,88 @@ export const FamilyTable = () => {
             </tr>
           </thead>
           <tbody id="tbody" className="details-form">
+            <tr>
+              <td>
+                <Form.Control
+                  type="text"
+                  id="txtFamilyName"
+                  name="name"
+                  value={rowData.name}
+                  onChange={changeHandle}
+                  placeholder="Name"
+                  className="form-control"
+                />
+              </td>
+              <td>
+                <Form.Control
+                  type="number"
+                  min={0}
+                  id="numAge"
+                  name="age"
+                  value={rowData.age}
+                  onChange={changeHandle}
+                  placeholder="Age"
+                  className="form-control"
+                />
+              </td>
+              <td>
+                <Form.Select
+                  type="text"
+                  id="txtSex"
+                  name="sex"
+                  onChange={changeHandle}
+                  value={rowData.sex}
+                  className="form-control"
+                >
+                  <option>Select</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                </Form.Select>
+              </td>
+              <td>
+                <Form.Select
+                  type="text"
+                  id="txtRelation"
+                  name="relation"
+                  className="form-control"
+                  onChange={changeHandle}
+                  value={rowData.relation}
+                >
+                  <option>Select</option>
+                  <option>Father</option>
+                </Form.Select>
+              </td>
+              <td>
+                <Form.Select
+                  type="text"
+                  id="txtEducation"
+                  name="education"
+                  className="form-control"
+                  onChange={changeHandle}
+                  value={rowData.education}
+                >
+                  <option>Select</option>
+                  <option>12</option>
+                </Form.Select>
+              </td>
+              <td>
+                <i className="fa fa-pencil me-2" />
+                <i className="fa fa-trash" />
+              </td>
+            </tr>
+          </tbody>
+          <thead>
             {rowData.map((item, idx) => (
               <tr key={idx}>
-                <td key={idx}>
-                  <Form.Control
-                    type="text"
-                    id="txtFamilyName"
-                    name="familyName"
-                    value={rowData[idx].name}
-                    placeholder="Name"
-                    className="form-control"
-                  />
-                </td>
-                <td key={idx}>
-                  <Form.Control
-                    type="number"
-                    min={0}
-                    id="numAge"
-                    name="age"
-                    value={rowData[idx].name}
-                    placeholder="Age"
-                    className="form-control"
-                  />
-                </td>
-                <td key={idx}>
-                  <Form.Select
-                    type="text"
-                    id="txtSex"
-                    name="sex"
-                    className="form-control"
-                  >
-                    <option value={rowData[idx].name}>Select</option>
-                    <option value={rowData[idx].name}>Male</option>
-                    <option value={rowData[idx].name}>Female</option>
-                  </Form.Select>
-                </td>
-                <td key={idx}>
-                  <Form.Select
-                    type="text"
-                    id="txtRelation"
-                    name="relation"
-                    className="form-control"
-                  >
-                    <option value={rowData[idx].name}>Select</option>
-                  </Form.Select>
-                </td>
-                <td key={idx}>
-                  <Form.Select
-                    type="text"
-                    id="txtEducation"
-                    name="education"
-                    className="form-control"
-                  >
-                    <option value={rowData[idx].name}>Select</option>
-                  </Form.Select>
-                </td>
-                <td>
-                  <i className="fa fa-pencil me-2" />
-                  <i className="fa fa-trash" />
-                </td>
+                <td key={idx}>{data.name}</td>
+                <td key={idx}>{data.age}</td>
+                <td key={idx}>{data.sex}</td>
+                <td key={idx}>{data.relation}</td>
+                <td key={idx}>{data.education}</td>
+                <td key={idx}>{data.activeStatus}</td>
               </tr>
             ))}
-          </tbody>
+          </thead>
         </Table>
       </Form>
     </>

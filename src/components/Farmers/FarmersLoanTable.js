@@ -3,29 +3,39 @@ import { Button, Table, Form, Col, Row } from 'react-bootstrap';
 import { useState } from 'react';
 
 export const FarmersLoanTable = () => {
-    const [formHasError, setFormError] = useState(false);
-    const [rowData, setRowData] = useState([{}]);
-    const columnsArray = [
-      'Loan Name',
-      'Bank Name',
-      '	Branch Name',
-      'Loan Amount',
-      'Active Status',
-      '	Action'
-    ];
-  
-    const handleAddRow = () => {
-      const item = {
-        name: '',
-        mobile: '',
-        activeStatus: ''
-      };
-      setRowData([...rowData, item]);
+  const [formHasError, setFormError] = useState(false);
+  const [rowData, setRowData] = useState([{}]);
+  const [data, setdata] = useState([]);
+  const columnsArray = [
+    'Loan Name',
+    'Bank Name',
+    '	Branch Name',
+    'Loan Amount',
+    'Active Status',
+    '	Action'
+  ];
+
+  const handleAddRow = () => {
+    const item = {
+      loanName: '',
+      bankName: '',
+      branchName: '',
+      loanAmount: '',
+      activeStatus: ''
     };
+    setRowData([...rowData, item]);
+  };
+  const changeHandle = e => {
+    setdata({ ...data, [e.target.name]: e.target.value });
+  };
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'end' }}>
-        <Button id="btnAddFarmersMachinaryTable" className="mb-2" onClick={handleAddRow}>
+        <Button
+          id="btnAddFarmersMachinaryTable"
+          className="mb-2"
+          onClick={handleAddRow}
+        >
           Add Loan Details
         </Button>
       </div>
@@ -48,72 +58,90 @@ export const FarmersLoanTable = () => {
             </tr>
           </thead>
           <tbody id="tbody" className="details-form">
+            <tr>
+              <td>
+                <Form.Select
+                  type="text"
+                  id="txtLoanName"
+                  name="loanName"
+                  value={rowData.loanName}
+                  onChange={changeHandle}
+                  className="form-control"
+                >
+                  <option >Select</option>
+                </Form.Select>
+              </td>
+              <td>
+                <Form.Select
+                  type="text"
+                  id="txtBankName"
+                  name="bankName"
+                  value={rowData.bankName}
+                  onChange={changeHandle}
+                  className="form-control"
+                >
+                  <option >Select</option>
+                </Form.Select>
+              </td>
+
+              <td>
+                <Form.Control
+                  type="text"
+                  id="txtBranchName"
+                  name="branchName"
+                  value={rowData.branchName}
+                  onChange={changeHandle}
+                  placeholder="Branch Name"
+                  className="form-control"
+                />
+              </td>
+
+              <td>
+                <Form.Control
+                  type="number"
+                  min={0}
+                  id="numLoanAmount"
+                  name="loanAmount"
+                  value={rowData.loanAmount}
+                  onChange={changeHandle}
+                  placeholder="Loan Amount"
+                />
+              </td>
+
+              <td>
+                <Form.Select
+                  id="txtStatus"
+                  name="activeStatus"
+                  className="form-control"
+                  value={rowData.activeStatus}
+                  onChange={changeHandle}
+                >
+                  <option>Active</option>
+                  <option value="Suspended">Suspended</option>
+                </Form.Select>
+              </td>
+              <td>
+                <i className="fa fa-pencil me-2" />
+                <i className="fa fa-trash" />
+              </td>
+            </tr>
+          </tbody>
+          <thead>
             {rowData.map((item, idx) => (
               <tr key={idx}>
-                <td key={idx}>
-                  <Form.Select
-                    type="text"
-                    id="txtLoanName"
-                    name="loanName"
-                    className="form-control"
-                  >
-                    <option value={rowData[idx].name}>Select</option>
-                  </Form.Select>
-                </td>
-                <td key={idx}>
-                  <Form.Select
-                    type="text"
-                    id="txtBankName"
-                    name="bankName"
-                    className="form-control"
-                  >
-                    <option value={rowData[idx].name}>Select</option>
-                  </Form.Select>
-                </td>
-
-                <td key={idx}>
-                  <Form.Control
-                    type="text"
-                    id="txtBranchName"
-                    name="branchName"
-                    value={rowData[idx].name}
-                    placeholder="Branch Name"
-                    className="form-control"
-                  />
-                </td>
-
-                <td key={idx}>
-                  <Form.Control
-                    type="number"
-                    min={0}
-                    id="numLoanAmount"
-                    name="loanAmount"
-                    value={rowData[idx].name}
-                    placeholder="Loan Amount"
-                  />
-                </td>
-
-                <td key={idx}>
-                  <Form.Select
-                    id="txtStatus"
-                    name="status"
-                    className="form-control"
-                  >
-                    <option value={rowData[idx].activeStatus}>Active</option>
-                    <option value="Suspended">Suspended</option>
-                  </Form.Select>
-                </td>
-                <td>
-                  <i className="fa fa-pencil me-2" />
-                  <i className="fa fa-trash" />
-                </td>
+                <td key={idx}>{data.loanName}</td>
+                <td key={idx}>{data.bankName}</td>
+                <td key={idx}>{data.branchName}</td>
+                <td key={idx}>{data.loanAmount}</td>
+                <td key={idx}>{data.activeStatus}</td>
+                <td key={idx}> </td>
               </tr>
             ))}
-          </tbody>
+          </thead>
         </Table>
       </Form>
     </>
-  )
-}
+  );
+};
 
-export default FarmersLoanTable
+export default FarmersLoanTable;

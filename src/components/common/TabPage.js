@@ -35,8 +35,8 @@ import FarmersLandTable from 'components/Farmers/FarmersLandTable';
 import FarmersIrrigrationTable from 'components/Farmers/FarmersIrrigrationTable';
 import BankDetailsTable from 'components/Farmers/BankDetailsTable';
 import FarmersCardTable from 'components/Farmers/FarmersCardTable';
-import FarmersLoanTable from 'components/Farmers/FarmersLoanTable';
 import FamilyTable from 'components/Farmers/FamilyTable';
+
 
 const TabPage = ({
   listData,
@@ -327,8 +327,6 @@ const TabPage = ({
                       <FamilyTable />
                     </FalconComponentCard.Body>
                   </FalconComponentCard>
-
-                 
                 </>
               )}
               {index == 3 && module == 'Farmers' && (
@@ -342,13 +340,7 @@ const TabPage = ({
                     <FalconComponentCard.Body language="jsx">
                       <FarmersCardTable />
                     </FalconComponentCard.Body>
-                  </FalconComponentCard>
-
-                  <FalconComponentCard id="FarmersLoanDetailsTable">
-                    <FalconComponentCard.Body language="jsx">
-                      <FarmersLoanTable />
-                    </FalconComponentCard.Body>
-                  </FalconComponentCard>
+                  </FalconComponentCard>      
                 </>
               )}
 

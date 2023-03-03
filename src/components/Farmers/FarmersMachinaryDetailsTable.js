@@ -3,28 +3,37 @@ import { Button, Table, Form, Col, Row } from 'react-bootstrap';
 import { useState } from 'react';
 
 export const FarmersMachinaryDetailsTable = () => {
-    const [formHasError, setFormError] = useState(false);
-    const [rowData, setRowData] = useState([{}]);
-    const columnsArray = [
-      'Equipment Category',
-      'Equipment Type',
-      'Quantity',
-      'Active Status',
-      '	Action'
-    ];
-  
-    const handleAddRow = () => {
-      const item = {
-        name: '',
-        mobile: '',
-        activeStatus: ''
-      };
-      setRowData([...rowData, item]);
+  const [formHasError, setFormError] = useState(false);
+  const [rowData, setRowData] = useState([]);
+  const [data, setdata] = useState([]);
+  const columnsArray = [
+    'Equipment Category',
+    'Equipment Type',
+    'Quantity',
+    'Active Status',
+    '	Action'
+  ];
+
+  const handleAddRow = () => {
+    const item = {
+      equipmentCategory: '',
+      equipmentType: '',
+      quantity: '',
+      activeStatus: ''
     };
+    setRowData([...rowData, item]);
+  };
+  const changeHandle = e => {
+    setdata({ ...data, [e.target.name]: e.target.value });
+  };
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'end' }}>
-        <Button id="btnAddFarmersMachinaryTable" className="mb-2" onClick={handleAddRow}>
+        <Button
+          id="btnAddFarmersMachinaryTable"
+          className="mb-2"
+          onClick={handleAddRow}
+        >
           Add Machinary Details
         </Button>
       </div>
@@ -47,62 +56,78 @@ export const FarmersMachinaryDetailsTable = () => {
             </tr>
           </thead>
           <tbody id="tbody" className="details-form">
+            <tr>
+              <td>
+                <Form.Select
+                  type="text"
+                  id="txtEquipment"
+                  name="equipmentCategory"
+                  className="form-control"
+                  value={rowData.equipmentCategory}
+                  onChange={changeHandle}
+                >
+                  <option>Select</option>
+                  <option>Select one</option>
+                </Form.Select>
+              </td>
+
+              <td>
+                <Form.Control
+                  type="text"
+                  className="form-control"
+                  id="txtequipmentType"
+                  name="equipmentType"                  
+                  value={rowData.equipmentType}
+                  onChange={changeHandle}
+                  placeholder="Equipment Type"
+                />
+              </td>
+
+              <td>
+                <Form.Control
+                  type="number"
+                  min={0}
+                  id="txtQuantity"
+                  name="quantity"
+                  value={rowData.quantity}
+                  onChange={changeHandle}
+                  placeholder="Quantity"
+                />
+              </td>
+
+              <td>
+                <Form.Select
+                  id="txtStatus"
+                  name="activeStatus"
+                  className="form-control"
+                  value={rowData.activeStatus}
+                  onChange={changeHandle}
+                >
+                  <option>Active</option>
+                  <option value="Suspended">Suspended</option>
+                </Form.Select>
+              </td>
+              <td>
+                <i className="fa fa-pencil me-2" />
+                <i className="fa fa-trash" />
+              </td>
+            </tr>
+          </tbody>
+          <thead>
             {rowData.map((item, idx) => (
               <tr key={idx}>
-                <td key={idx}>
-                  <Form.Select
-                    type="text"
-                    id="txtEquipment"
-                    name="equipmentCategory"
-                    className="form-control"
-                  >
-                    <option value={rowData[idx].name}>Select</option>
-                  </Form.Select>
-                </td>
-
-                <td key={idx}>
-                  <Form.Control
-                    type="text"
-                    id="txtequipmentType"
-                    name="equipmentType"
-                    value={rowData[idx].name}
-                    placeholder="Equipment Type"
-                    className="form-control"
-                  />
-                </td>
-
-                <td key={idx}>
-                  <Form.Control
-                    type="number"
-                    min={0}
-                    id="txtQuantity"
-                    name="quantity"
-                    value={rowData[idx].name}
-                    placeholder="Quantity"
-                  />
-                </td>
-
-                <td key={idx}>
-                  <Form.Select
-                    id="txtStatus"
-                    name="status"
-                    className="form-control"
-                  >
-                    <option value={rowData[idx].activeStatus}>Active</option>
-                    <option value="Suspended">Suspended</option>
-                  </Form.Select>
-                </td>
-                <td>
-                  <i className="fa fa-pencil me-2" />
-                  <i className="fa fa-trash" />
-                </td>
+                <td key={idx}>{data.equipmentCategory}</td>
+                <td key={idx}>{data.equipmentType}</td>
+                <td key={idx}>{data.quantity}</td>
+                <td key={idx}>{data.activeStatus}</td>
+                <td key={idx}> </td>
               </tr>
             ))}
-          </tbody>
+          </thead>
         </Table>
       </Form>
     </>
-  )
-}
+  );
+};
 
-export default FarmersMachinaryDetailsTable
+export default FarmersMachinaryDetailsTable;

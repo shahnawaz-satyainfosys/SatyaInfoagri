@@ -5,15 +5,19 @@ import { useState } from 'react';
 export const FarmersCardTable = () => {
   const [formHasError, setFormError] = useState(false);
   const [rowData, setRowData] = useState([{}]);
+  const [data, setdata] = useState([]);
   const columnsArray = ['Card Name', 'Card Number', 'Active Status', '	Action'];
 
   const handleAddRow = () => {
     const item = {
-      name: '',
-      mobile: '',
+      cardName: '',
+      cardNumber: '',
       activeStatus: ''
     };
     setRowData([...rowData, item]);
+  };
+  const changeHandle = e => {
+    setdata({ ...data, [e.target.name]: e.target.value });      
   };
   return (
     <>
@@ -45,38 +49,44 @@ export const FarmersCardTable = () => {
             </tr>
           </thead>
           <tbody id="tbody" className="details-form">
-            {rowData.map((item, idx) => (
-              <tr key={idx}>
-                <td key={idx}>
+            
+              <tr >
+                <td >
                   <Form.Select
                     type="text"
-                    id="txtEquipment"
-                    name="equipmentCategory"
+                    id="txtCardName"
+                    name="cardName"
                     className="form-control"
+                    value={rowData.cardName}
+                  onChange={changeHandle}
                   >
-                    <option value={rowData[idx].name}>Select</option>
+                    <option >Select</option>
+                    <option >ICC</option>
                   </Form.Select>
                 </td>
 
-                <td key={idx}>
+                <td >
                   <Form.Control
                     type="text"
                     id="numFarmersCardNumber"
-                    name="farmersCardNumber"
-                    value={rowData[idx].name}
+                    name="cardNumber"
+                    value={rowData.cardNumber}
+                  onChange={changeHandle}
                     placeholder="Card Name"
                     min={0}
                     className="form-control"
                   />
                 </td>
 
-                <td key={idx}>
+                <td >
                   <Form.Select
                     id="txtStatus"
                     name="status"
                     className="form-control"
+                    value={rowData.activeStatus}
+                  onChange={changeHandle}
                   >
-                    <option value={rowData[idx].activeStatus}>Active</option>
+                    <option >Active</option>
                     <option value="Suspended">Suspended</option>
                   </Form.Select>
                 </td>
@@ -85,8 +95,21 @@ export const FarmersCardTable = () => {
                   <i className="fa fa-trash" />
                 </td>
               </tr>
-            ))}
+            
           </tbody>
+          <thead>
+      
+            
+          {rowData.map((item, idx) => (
+             <tr key={idx}>
+             <td  key={idx}>{data.cardName}</td>
+            <td  key={idx}>{data.cardNumber}</td>
+            <td  key={idx}>{data.activeStatus}</td>
+            
+             </tr>
+            ))}
+
+        </thead>
         </Table>
       </Form>
     </>
